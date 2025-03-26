@@ -10,7 +10,26 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var autorizacaoField = document.getElementById("id_autorizacao");
+                var credenciadoField = document.getElementById("id_credenciado_a");
+    
+                function toggleCredenciadoField() {
+                    if (autorizacaoField.value === "Autorizado") {
+                        credenciadoField.style.display = "block";
+                    } else {
+                        credenciadoField.style.display = "none";
+                        credenciadoField.value = "";
+                    }
+                }
+    
+                autorizacaoField.addEventListener("change", toggleCredenciadoField);
+                toggleCredenciadoField();
+            });
+    </script>
         <button type="submit">Salvar</button>
     </form>
+    
 </body>
 </html>

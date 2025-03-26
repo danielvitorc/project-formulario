@@ -38,6 +38,12 @@ class Chamado(models.Model):
         ('Permanente', 'Permanente'),
         ('Sem Exposição', 'Sem Exposição'),
     ]
+    AUTORIZACAO_CHOICES = [
+        ('Nao Autorizado', 'Não Autorizado'),
+        ('Autorizado', 'Autorizado'),
+    ]
+    autorizacao = models.CharField(max_length=20, choices=AUTORIZACAO_CHOICES, default='Nao Autorizado')
+    credenciado_a = models.CharField(max_length=255, blank=True, null=True)  # Só aparece se "Autorizado"
     tipo_parecer = models.CharField(max_length=20, choices=PARECER_CHOICES, default='Sem Exposição')
     area_risco = models.CharField(max_length=3, choices=AREA_RISCO_CHOICES, default='Não')
 

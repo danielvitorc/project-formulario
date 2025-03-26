@@ -8,7 +8,15 @@ def cadastrar_chamado(request):
     if request.method == 'POST':
         form = ChamadoForm(request.POST)
         if form.is_valid():
-            chamado = form.save()  # Salva no banco
+            chamado = form.save(commit=False)  # Não salva no banco ainda
+
+            # Se a autorização não for "Autorizado", limpa o campo "credenciado_a"
+            if chamado.autorizacao != "Autorizado":
+                chamado.credenciado_a = ""
+
+            chamado.save()  # Agora salva no banco
+
+            # Gerar o documento Word atualizado
             docx_content = preencher_docx(chamado)
 
             # Retorna o documento Word para download
@@ -72,8 +80,25 @@ def preencher_docx(chamado):
             else:
                 texto = texto.replace(f"[ ] {opcao}", f"[ ] {opcao}")
         return texto
+        # Se não for autorizado, o campo "credenciado_a" fica vazio
+    credenciado_a_texto = chamado.credenciado_a if chamado.autorizacao == "Autorizado" else ""
+
+    # Define qual campo recebe o "[X]" e qual fica "[ ]"
+    autorizacao_sim = "[X]" if chamado.autorizacao == "Autorizado" else "[ ]"
+    autorizacao_nao = "[X]" if chamado.autorizacao == "Não Autorizado" else "[ ]"
 
 
+    def marcar_autorizacao(texto, valor_escolhido):
+        """
+        Substitui os checkboxes na Autorização:
+        - [X] Autorizado  [ ] Não Autorizado  (se autorizado for escolhido)
+        - [ ] Autorizado  [X] Não Autorizado  (se não autorizado for escolhido)
+        """
+        if valor_escolhido == "Autorizado":
+            texto = texto.replace("[ ] Autorizado", "[X] Autorizado").replace("[ ] Não Autorizado", "[ ] Não Autorizado")
+        else:
+            texto = texto.replace("[ ] Não Autorizado", "[X] Não Autorizado").replace("[ ] Autorizado", "[ ] Autorizado")
+        return texto
     # Substitui os placeholders pelos valores do chamado
     placeholders = {
         "{{nome}}": chamado.nome,
@@ -101,54 +126,33 @@ def preencher_docx(chamado):
         "{{data5}}": chamado.data5.strftime("%d/%m/%Y") if chamado.data5 else "",
         "{{nome6}}": chamado.nome6 or "",
         "{{data6}}": chamado.data6.strftime("%d/%m/%Y") if chamado.data6 else "",
+        "{{autorizacaosim}}": autorizacao_sim,
+        "{{autorizacaonao}}": autorizacao_nao,
+        "{{credenciado_a}}": credenciado_a_texto,
 
 
 
         
     }
 
-    # Substituir texto em parágrafos
+# Substituir texto em parágrafos
     for paragrafo in doc.paragraphs:
+        if "Autorização:" in paragrafo.text:
+            paragrafo.text = marcar_autorizacao(paragrafo.text, chamado.autorizacao)
         for chave, valor in placeholders.items():
             if chave in paragrafo.text:
-                for run in paragrafo.runs:
-                    run.text = run.text.replace(chave, valor)
+                paragrafo.text = paragrafo.text.replace(chave, valor)
 
-    # Substituir dentro das tabelas
+    # Substituir dentro das tabelas (se os checkboxes estiverem lá)
     for tabela in doc.tables:
         for linha in tabela.rows:
             for celula in linha.cells:
                 for paragrafo in celula.paragraphs:
+                    if "Autorização:" in paragrafo.text:
+                        paragrafo.text = marcar_autorizacao(paragrafo.text, chamado.autorizacao)
                     for chave, valor in placeholders.items():
                         if chave in paragrafo.text:
-                            for run in paragrafo.runs:
-                                run.text = run.text.replace(chave, valor)
-
-    for paragrafo in doc.paragraphs:
-        if "Tipo de Parecer:" in paragrafo.text:
-            paragrafo.text = marcar_opcao(paragrafo.text, chamado.tipo_parecer, ["Eventual", "Intermitente", "Permanente", "Sem Exposição"])
-
-        if "Área de Risco:" in paragrafo.text:
-            paragrafo.text = marcar_opcao(paragrafo.text, chamado.area_risco, ["Sim", "Não"])
-
-        # Se o parágrafo contém as opções ASO lado a lado, marcamos corretamente
-        if "Apto" in paragrafo.text and "Não apto" in paragrafo.text and "Não aplicável" in paragrafo.text:
-            marcar_opcao_lado_a_lado(paragrafo, chamado.aso, ["Apto", "Não apto", "Não aplicável"])
-
-        # Se o parágrafo contém as opções Treinamento lado a lado, marcamos corretamente
-        if "Treinamento" in paragrafo.text and "Apto" in paragrafo.text:
-            marcar_opcao_lado_a_lado(paragrafo, chamado.treinamentoa, ["Apto", "Não apto", "Não aplicável"])
-
-    # Substituir dentro das tabelas (para garantir que funcione também em tabelas)
-    for tabela in doc.tables:
-        for linha in tabela.rows:
-            for celula in linha.cells:
-                for paragrafo in celula.paragraphs:
-                    if "Apto" in paragrafo.text and "Não apto" in paragrafo.text and "Não aplicável" in paragrafo.text:
-                        marcar_opcao_lado_a_lado(paragrafo, chamado.aso, ["Apto", "Não apto", "Não aplicável"])
-
-                    if "Treinamento" in paragrafo.text and "Apto" in paragrafo.text:
-                        marcar_opcao_lado_a_lado(paragrafo, chamado.treinamentoa, ["Apto", "Não apto", "Não aplicável"])
+                            paragrafo.text = paragrafo.text.replace(chave, valor)
 
     # Salva o documento preenchido em memória
 

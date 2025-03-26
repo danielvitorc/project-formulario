@@ -14,4 +14,6 @@ class ChamadoForm(forms.ModelForm):
             'data6': forms.DateInput(attrs={'type': 'date'}),
             'area_risco': forms.Select(choices=Chamado.AREA_RISCO_CHOICES),
             'tipo_parecer': forms.Select(choices=Chamado.PARECER_CHOICES),
+            'autorizacao': forms.Select(choices=Chamado.AUTORIZACAO_CHOICES, attrs={'id': 'id_autorizacao'}),
+            'credenciado_a': forms.TextInput(attrs={'id': 'id_credenciado_a', 'style': 'display:none;'}),
         }
