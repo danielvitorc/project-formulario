@@ -29,77 +29,23 @@ def cadastrar_chamado(request):
 
     return render(request, 'formulario/chamado.html', {'form': form})
 
-
-def marcar_opcao_lado_a_lado(paragrafo, valor_escolhido, opcoes):
-    """
-    Substitui a opção correta em casos onde as opções estão lado a lado no Word, como:
-    
-        Apto        Não apto        Não aplicável
-        [  ]        [  ]            [  ]
-    
-    Se 'Apto' for selecionado no formulário, fica assim:
-    
-        Apto        Não apto        Não aplicável
-        [X]        [  ]            [  ]
-    """
-    
-    texto_original = paragrafo.text  # Guarda o texto original para debug
-    print(f"Antes: {texto_original}")  # TESTE DEBUG
-
-    # Criar uma cópia da string para modificar
-    novo_texto = texto_original
-
-    # Encontra a posição da opção selecionada
-    for i, opcao in enumerate(opcoes):
-        if opcao.lower() == valor_escolhido.lower():  # Ignora maiúsculas e minúsculas
-            # Substituir apenas o primeiro "[  ]" encontrado
-            partes = novo_texto.split("[  ]")
-            if len(partes) > i + 1:  # Garante que a opção existe
-                partes[i + 1] = "[X]" + partes[i + 1]  # Marca apenas a opção escolhida
-                novo_texto = "[  ]".join(partes)
-
-    print(f"Depois: {novo_texto}")  # TESTE DEBUG
-    paragrafo.text = novo_texto  # Atualiza o texto do parágrafo no Word
-
-
 def preencher_docx(chamado):
-    # Caminho do modelo Word
 
-    # Carrega o modelo
+    # Carrega o modelo do Word
     doc = Document('formulario/static/modelo.docx')
 
-    def marcar_opcao(texto, valor_escolhido, opcoes):
-        """
-        Substitui uma lista de opções do Word por uma versão onde apenas a escolhida está marcada.
-        Exemplo:
-            "[ ] Apto" -> "[X] Apto" (se 'Apto' for o valor escolhido)
-        """
-        for opcao in opcoes:
-            if opcao == valor_escolhido:
-                texto = texto.replace(f"[ ] {opcao}", f"[X] {opcao}")
-            else:
-                texto = texto.replace(f"[ ] {opcao}", f"[ ] {opcao}")
-        return texto
-        # Se não for autorizado, o campo "credenciado_a" fica vazio
+    # Se não for autorizado, o campo "credenciado_a" fica vazio
     credenciado_a_texto = chamado.credenciado_a if chamado.autorizacao == "Autorizado" else ""
 
-    # Define qual campo recebe o "[X]" e qual fica "[ ]"
-    autorizacao_sim = "[X]" if chamado.autorizacao == "Autorizado" else "[ ]"
-    autorizacao_nao = "[X]" if chamado.autorizacao == "Não Autorizado" else "[ ]"
+    # Define os valores para os campos de autorização
+    autorizacao_sim = "X" if chamado.autorizacao == "Autorizado" else ""
+    autorizacao_nao = "X" if chamado.autorizacao == "Nao Autorizado" else ""
 
+    # Define os valores para os campos de risco
+    risco_sim = "X" if chamado.area_risco == "Sim" else ""
+    risco_nao = "X" if chamado.area_risco == "Não" else ""
 
-    def marcar_autorizacao(texto, valor_escolhido):
-        """
-        Substitui os checkboxes na Autorização:
-        - [X] Autorizado  [ ] Não Autorizado  (se autorizado for escolhido)
-        - [ ] Autorizado  [X] Não Autorizado  (se não autorizado for escolhido)
-        """
-        if valor_escolhido == "Autorizado":
-            texto = texto.replace("[ ] Autorizado", "[X] Autorizado").replace("[ ] Não Autorizado", "[ ] Não Autorizado")
-        else:
-            texto = texto.replace("[ ] Não Autorizado", "[X] Não Autorizado").replace("[ ] Autorizado", "[ ] Autorizado")
-        return texto
-    # Substitui os placeholders pelos valores do chamado
+    # Dicionário com os placeholders e seus valores correspondentes
     placeholders = {
         "{{nome}}": chamado.nome,
         "{{matricula}}": chamado.matricula,
@@ -111,11 +57,9 @@ def preencher_docx(chamado):
         "{{frequencia}}": chamado.frequencia,
         "{{data}}": chamado.data.strftime("%d/%m/%Y") if chamado.data else "",
         "{{laudo}}": chamado.laudo,
-        "{{tipo_parecer}}": chamado.tipo_parecer,
         "{{area_risco}}": chamado.area_risco,
         "{{aso}}": chamado.aso,
         "{{treinamentoa}}": chamado.treinamentoa,
-        "{{nao_registrado}}": chamado.nao_registrado,
         "{{nome2}}": chamado.nome2 or "",
         "{{data2}}": chamado.data2.strftime("%d/%m/%Y") if chamado.data2 else "",
         "{{nome3}}": chamado.nome3 or "",
@@ -129,35 +73,28 @@ def preencher_docx(chamado):
         "{{autorizacaosim}}": autorizacao_sim,
         "{{autorizacaonao}}": autorizacao_nao,
         "{{credenciado_a}}": credenciado_a_texto,
-
-
-
-        
+        "{{riscosim}}": risco_sim,
+        "{{risconao}}": risco_nao,
     }
 
-# Substituir texto em parágrafos
+    # Substituir valores nos parágrafos
     for paragrafo in doc.paragraphs:
-        if "Autorização:" in paragrafo.text:
-            paragrafo.text = marcar_autorizacao(paragrafo.text, chamado.autorizacao)
         for chave, valor in placeholders.items():
             if chave in paragrafo.text:
                 paragrafo.text = paragrafo.text.replace(chave, valor)
 
-    # Substituir dentro das tabelas (se os checkboxes estiverem lá)
+    # Substituir dentro das tabelas (caso os checkboxes estejam lá)
     for tabela in doc.tables:
         for linha in tabela.rows:
             for celula in linha.cells:
                 for paragrafo in celula.paragraphs:
-                    if "Autorização:" in paragrafo.text:
-                        paragrafo.text = marcar_autorizacao(paragrafo.text, chamado.autorizacao)
                     for chave, valor in placeholders.items():
                         if chave in paragrafo.text:
                             paragrafo.text = paragrafo.text.replace(chave, valor)
 
     # Salva o documento preenchido em memória
-
     buffer = io.BytesIO()
     doc.save(buffer)
     buffer.seek(0)
-    
+
     return buffer.getvalue()
