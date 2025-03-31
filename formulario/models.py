@@ -1,4 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+# Modelo de Usuário Customizado
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = [
+        ('gestor', 'Gestor'),
+        ('diretor', 'Diretor'),
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
 class Chamado(models.Model):
     nome = models.CharField(max_length=255)

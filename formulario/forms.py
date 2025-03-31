@@ -1,5 +1,13 @@
 from django import forms
 from .models import Chamado
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'role']  # Campos que aparecerão no formulário de cadastro
 
 class ChamadoForm(forms.ModelForm):
     class Meta:

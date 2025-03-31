@@ -1,8 +1,38 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from .forms import ChamadoForm
 import io
 from docx import Document
+
+# View de Login
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect_user_by_role(user)
+        else:
+            return HttpResponse("Credenciais inválidas")
+    return render(request, 'formulario/login.html')
+
+# Redirecionamento por tipo de usuário
+def redirect_user_by_role(user):
+    if user.role == 'gestor':
+        return redirect('cadastrar_chamado')
+    elif user.role == 'diretor':
+        return redirect('diretor_dashboard')
+    return redirect('home')
+
+
+@login_required
+def diretor_dashboard(request):
+    return HttpResponse("Bem-vindo, Diretor!")
+
+
 
 def cadastrar_chamado(request):
     if request.method == 'POST':
