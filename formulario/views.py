@@ -24,8 +24,8 @@ def redirect_user_by_role(user):
     if user.role == 'gestor':
         return redirect('cadastrar_chamado')
     elif user.role == 'diretor':
-        return redirect('diretor_dashboard')
-    return redirect('home')
+        return redirect('cadastrar_chamado')
+    return redirect('cadastrar_chamado')
 
 
 @login_required

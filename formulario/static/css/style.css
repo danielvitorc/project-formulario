@@ -5,6 +5,9 @@ body {
     margin: 0;
     padding: 0;
 }
+h2 {
+    text-align: center;
+}
 
 /* Container do Formulário */
 .column {
@@ -68,6 +71,7 @@ h5 {
 
 /* Estilo dos botões */
 button {
+    margin-left: 378px;
     padding: 12px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -77,7 +81,8 @@ button {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
+    width: 50%;
+    margin-bottom: 40px;
     margin-top: 20px;
 }
 
