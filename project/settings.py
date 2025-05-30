@@ -128,3 +128,6 @@ AUTH_USER_MODEL = 'formulario.CustomUser'
 
 LOGIN_REDIRECT_URL = '/'  # Pode ser alterado para a dashboard principal
 LOGOUT_REDIRECT_URL = '/login/'  # Redireciona para a página de login ao deslogar
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

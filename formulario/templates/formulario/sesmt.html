@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Bem vindo sesmt</h1>
+    <h2>Chamados Aprovados</h2>
+    <ul>
+        {% for chamado in chamados %}
+            <li>
+                {{ chamado.nome_colaborador }} - 
+                {% if not chamado.sesmt_preenchido %}
+                    <a href="{% url 'sesmt_editar' chamado.id %}">Preencher SESMT</a>
+                {% else %}
+                    SESMT preenchido
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+
+</body>
+</html>

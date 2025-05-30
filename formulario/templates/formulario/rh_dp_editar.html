@@ -1,0 +1,8 @@
+<h2>Formulário RH/DP para {{ chamado.nome_colaborador }}</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form_rh_dp.as_p }}
+
+    <button type="submit">Salvar</button>
+</form>

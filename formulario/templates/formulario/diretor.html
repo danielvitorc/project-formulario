@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Bem vindo diretor</h1>
+    <h2>chamados com Assinatura do Gestor</h2>
+
+<table border="1">
+    <tr>
+        <th>Colaborador</th>
+        <th>Gestor</th>
+        <th>Assinatura do Gestor</th>
+        <th>Data</th>
+        <th>Aprovação Diretor</th>
+    </tr>
+    {% for chamado in chamados %}
+    <tr>
+        <td>{{ chamado.nome_colaborador }}</td>
+        <td>{{ chamado.gestor_imediato }}</td>
+        <td>
+            {% if chamado.assinatura_gestor %}
+                <img src="{{ chamado.assinatura_gestor.url }}" alt="Assinatura do Gestor" width="120">
+            {% else %}
+                Sem assinatura
+            {% endif %}
+        </td>
+        <td>{{ chamado.data_autorizacao_gestor }}</td>
+        <td>
+            <form method="post">
+                {% csrf_token %}
+                {{ form_diretor.diretor_aprovacao }}
+                <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
+                <button type="submit">Salvar</button>
+            </form>
+            {% if chamado.diretor_aprovacao %}
+                ✅ Aprovado
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

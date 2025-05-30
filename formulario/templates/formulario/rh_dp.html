@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>bem vindo rh dp</h1>
+    <h2>Chamados Aprovados</h2>
+    <ul>
+        {% for chamado in chamados %}
+            <li>
+                {{ chamado.nome_colaborador }} - 
+                {% if not chamado.rh_dp_preenchido %}
+                    <a href="{% url 'rh_dp_editar' chamado.id %}">Preencher RH/DP</a>
+                {% else %}
+                    RH/DP preenchido
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
