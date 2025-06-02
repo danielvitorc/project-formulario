@@ -44,7 +44,7 @@ class GestorForm(forms.ModelForm):
     class Meta:
         model = Chamado
         fields = [
-            'nome_colaborador', 'matricula', 'funcao', 'depto', 'gestor_imediato',
+            'nome_colaborador', 'matricula', 'funcao', 'depto', 'gestor_imediato','tipo_exposicao',
             'natureza_risco', 'outro_natureza_risco', 'descricao_atividades', 'atividade', 'locais_atuaçao', 'frequencia',
             'data_autorizacao_gestor', 'responsavel', 'assinatura_gestor' 
             ]
@@ -70,10 +70,11 @@ class GestorForm(forms.ModelForm):
         }
 
 class GestorUploadForm(forms.ModelForm):
+    chamado_id = forms.IntegerField(widget=forms.HiddenInput())
+
     class Meta:
         model = Chamado
         fields = ['upload_gestor']
-
 
 class DiretorForm(forms.ModelForm):
     class Meta:

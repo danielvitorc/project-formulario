@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import io
-from .forms import GestorForm, DiretorForm, SESMTForm, RHDPForm
+from .forms import GestorForm, DiretorForm, SESMTForm, RHDPForm, GestorUploadForm
 from .models import Chamado
 from docx import Document
 
@@ -39,15 +39,55 @@ def login_view(request):
 
 @login_required
 def gestor_view(request):
+    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False).exclude(assinatura_sesmt='')
+
+    gestor_form = GestorForm()
+    upload_form = GestorUploadForm()
+
     if request.method == 'POST':
-        form = GestorForm(request.POST, request.FILES)
+        if 'salvar_gestor' in request.POST:
+            gestor_form = GestorForm(request.POST, request.FILES)
+            if gestor_form.is_valid():
+                gestor_form.save()
+                return redirect('gestor_view')
+
+        # Verifica se é o formulário de upload
+        elif 'salvar_upload' in request.POST:
+            chamado_id = request.POST.get('chamado_id')
+            try:
+                chamado = Chamado.objects.get(id=chamado_id)
+            except Chamado.DoesNotExist:
+                chamado = None
+
+            if chamado:
+                upload_form = GestorUploadForm(request.POST, request.FILES)
+                if upload_form.is_valid():
+                    chamado.upload_gestor = upload_form.cleaned_data['upload_gestor']
+                    chamado.save()
+                    return redirect('gestor_view')
+
+    return render(request, 'formulario/gestor.html', {
+        'gestor_form': gestor_form,
+        'upload_form': upload_form,
+        'chamados': chamados,
+    })
+
+@login_required
+def upload_documento_gestor(request, chamado_id):
+    chamado = Chamado.objects.get(id=chamado_id)
+
+    if request.method == 'POST':
+        form = GestorUploadForm(request.POST, request.FILES, instance=chamado)
         if form.is_valid():
             form.save()
-            return redirect('gestor_view')  
+            return redirect('gestor_view')
     else:
-        form = GestorForm()
+        form = GestorUploadForm(instance=chamado)
 
-    return render(request, 'formulario/gestor.html', {'form': form})
+    return render(request, 'formulario/upload_gestor.html', {
+        'form': form,
+        'chamado': chamado
+    })
 
 @login_required
 def diretor_view(request):
@@ -93,7 +133,7 @@ def sesmt_editar(request, pk):
 
 @login_required
 def rh_dp_view(request):
-    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False).exclude(assinatura_sesmt='')
+    chamados = Chamado.objects.filter(upload_gestor__isnull=False).exclude(upload_gestor='')
 
     return render(request, 'formulario/rh_dp.html', {'chamados': chamados})
 

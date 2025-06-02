@@ -44,7 +44,7 @@ class Chamado(models.Model):
     responsavel = models.CharField(max_length=100)
     assinatura_gestor = models.ImageField(upload_to="assinaturas/gestor/chamado")
     
-    upload_gestor = models.FileField(upload_to='registros', null=True, blank=True)
+    upload_gestor = models.FileField(upload_to='registros/uploads', null=True, blank=True)
 
     # Campo cadastrado pelo Diretor
     diretor_aprovacao = models.BooleanField(default=False, null=True, blank=True)

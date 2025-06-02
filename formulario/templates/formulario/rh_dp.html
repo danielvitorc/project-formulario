@@ -11,7 +11,12 @@
     <ul>
         {% for chamado in chamados %}
             <li>
-                {{ chamado.nome_colaborador }} - 
+                {{ chamado.nome_colaborador }} -
+                {% if chamado.upload_gestor %}
+                    <p>Documento de Avaliação GPM: <a href="{{ chamado.upload_gestor.url }}" target="_blank">Download</a></p>
+                {% else %}
+                    <p><strong>Sem documento</strong></p>
+                {% endif %}
                 {% if not chamado.rh_dp_preenchido %}
                     <a href="{% url 'rh_dp_editar' chamado.id %}">Preencher RH/DP</a>
                 {% else %}

@@ -1,18 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestor</title>
 </head>
 <body>
-    <h1>Bem vindo gestor</h1>
 
-    <h1>Novo Chamado - Gestor</h1>
-    <form method="post" enctype="multipart/form-data">
+    <h1>Bem-vindo Gestor</h1>
+
+    <!-- Formulário de Dados do Gestor -->
+    <h2>Cadastro de Chamado</h2>
+     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Salvar</button>
+        {{ gestor_form.as_p }}
+        <button type="submit" name="salvar_gestor">Salvar Dados do Gestor</button>
     </form>
+
+    <hr>
+
+   <!-- Formulário de Upload para cada chamado -->
+    <h2>Upload de Documento para os Chamados</h2>
+
+    {% for chamado in chamados %}
+        <h3>{{ chamado.nome_colaborador }}</h3>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
+            {{ upload_form.upload_gestor }}
+            <button type="submit" name="salvar_upload">Enviar Documento</button>
+
+            {% if chamado.upload_gestor %}
+                <p>Documento atual: <a href="{{ chamado.upload_gestor.url }}" target="_blank">Download</a></p>
+            {% else %}
+                <p><strong>Sem documento</strong></p>
+            {% endif %}
+        </form>
+        <hr>
+    {% endfor %}
+
 </body>
 </html>
