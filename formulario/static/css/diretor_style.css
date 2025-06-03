@@ -1,0 +1,289 @@
+/* Estilos específicos para a página do Diretor */
+:root {
+  --primary-color: #134BF2; /* Azul primário forte */
+  --secondary-color: #acadaf; /* Cinza secundário */
+  --accent-color: #0C87F2; /* Azul acento */
+  --highlight-color: #1BA0F2; /* Azul destaque */
+  --bg-color: #F2F2F2; /* Cinza claro para fundo */
+  --text-color: #000000; /* Preto para texto principal */
+  --card-bg: #ffffff; /* Branco para cartões/contêineres */
+  --text-on-primary: #ffffff; /* Texto branco sobre cor primária */
+  --text-on-accent: #ffffff; /* Texto branco sobre cor de acento */
+  --border-color: #d0d0d0; /* Cor de borda sutil */
+
+  /* Mapeamento para variáveis existentes (ajustado para nova paleta) */
+  --navbar-bg: var(--primary-color);      /* Fundo da navbar */
+  --navbar-text-color: var(--text-on-primary);  /* Texto dos links da navbar */
+  --navbar-hover-bg: var(--accent-color);      /* Fundo do hover dos links da navbar */
+  --navbar-brand-color: var(--text-on-primary);/* Cor do brand/logo na navbar */
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+  margin: 0;
+  padding: 20px; /* Espaçamento geral */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centralizar conteúdo principal */
+  min-height: 100vh;
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #004aad, #0066ff);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0030a0, #004aad);
+}
+
+/* Estilo futurista adicional */
+.container {
+  background: var(--card-bg);
+  padding: 25px 40px; /* Ajuste no padding */
+  border-radius: 12px; /* Bordas mais suaves */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+  width: 100%;
+  max-width: 1200px; /* Aumentar a largura máxima para acomodar melhor a tabela */
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+}
+h1 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 2.2em; /* Tamanho ajustado */
+  font-weight: 700; /* Mais peso na fonte */
+  letter-spacing: 1px; /* Espaçamento entre letras */
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 10px;
+}
+
+h2 {
+  color: var(--accent-color);
+  text-align: center;
+  margin-top: 30px; /* Espaço antes do subtítulo */
+  margin-bottom: 20px;
+  font-size: 1.6em;
+  font-weight: 500;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  overflow: hidden; /* Para o border-radius funcionar nas bordas da tabela */
+}
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 12px 15px; /* Mais padding */
+  text-align: left;
+  vertical-align: middle; /* Alinhar verticalmente ao centro */
+}
+
+th {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  font-weight: 500; /* Peso da fonte dos cabeçalhos */
+  text-transform: uppercase; /* Caixa alta para cabeçalhos */
+  letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa; /* Cor de fundo suave para linhas pares */
+}
+
+tr:hover {
+  background-color: #e9ecef; /* Efeito hover sutil */
+}
+
+td img {
+  max-width: 100px; /* Limitar largura da imagem da assinatura */
+  height: auto;
+  border-radius: 4px; /* Bordas arredondadas para a imagem */
+  border: 1px solid var(--border-color);
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaço entre o select e o botão */
+}
+
+select, input[type="text"], input[type="date"], input[type="file"], textarea {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95em;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus, input[type="text"]:focus, input[type="date"]:focus, input[type="file"]:focus, textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(12, 135, 242, 0.2); /* Sombra de foco */
+  outline: none;
+}
+
+button[type="submit"] {
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px); /* Efeito de elevação no hover */
+}
+
+.container > a[href="{% url 'logout' %}"] {
+  display: block;
+  width: fit-content;
+  margin: 30px auto 10px auto; /* Centralizar e adicionar margem */
+  padding: 10px 25px;
+  background-color: var(--secondary-color);
+  color: var(--text-on-primary);
+  text-decoration: none;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.container > a[href="{% url 'logout' %}"]:hover {
+  background-color: #8c8e90; /* Escurecer um pouco o cinza no hover */
+}
+
+.aprovado-check {
+    color: #28a745; /* Verde para o check de aprovado */
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Melhorando a responsividade */
+@media (max-width: 992px) { /* Ajuste para tablets e telas menores */
+  .container {
+    padding: 20px;
+  }
+  th, td {
+    padding: 10px;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  h2 {
+    font-size: 1.4em;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+  .container {
+    padding: 15px;
+  }
+  h1 {
+    font-size: 1.6em;
+  }
+  h2 {
+    font-size: 1.3em;
+  }
+  table, thead, tbody, th, td, tr {
+    display: block; /* Transforma a tabela em blocos para melhor responsividade */
+  }
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  tr {
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: var(--card-bg); /* Fundo para cada "card" de linha */
+  }
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%; /* Espaço para o label do data-label */
+    text-align: right; /* Alinhar texto à direita */
+    white-space: normal; /* Permitir quebra de linha */
+  }
+  td:before {
+    content: attr(data-label); /* Pega o valor do atributo data-label */
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px); /* Largura do label */
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: left; /* Alinhar label à esquerda */
+  }
+  td img {
+    max-width: 80px;
+    display: block; /* Para centralizar com margin auto se necessário */
+    margin-left: auto; /* Alinhar imagem à direita com o texto */
+    margin-right: 0;
+  }
+  form {
+    flex-direction: column; /* Empilhar select e botão */
+    align-items: flex-end; /* Alinhar à direita */
+  }
+  select, button[type="submit"] {
+    width: 100%; /* Ocupar toda a largura disponível */
+    margin-bottom: 8px;
+  }
+  button[type="submit"] {
+    margin-bottom: 0;
+  }
+  .container > a[href="{% url 'logout' %}"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+  .container {
+    padding: 10px;
+  }
+  h1 {
+    font-size: 1.4em;
+  }
+  h2 {
+    font-size: 1.1em;
+  }
+  td {
+    padding-left: 40%;
+  }
+  td:before {
+    width: calc(40% - 15px);
+  }
+}

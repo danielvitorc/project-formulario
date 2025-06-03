@@ -1,8 +1,335 @@
-<h2>Formulário SESMT para {{ chamado.nome_colaborador }}</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
+    <title>{% block title %}Formulário SESMT - {{ chamado.nome_colaborador }}{% endblock %}</title>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <link rel="stylesheet" href="{% static 'css/sesmt_style.css' %}">
+    <!-- Adicionar link para uma biblioteca de ícones, como Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos herdados de sesmt_style.css e ajustes específicos */
+        body {
+            display: flex;
+            justify-content: center; /* Centraliza o container principal */
+            align-items: flex-start; /* Alinha ao topo para permitir scroll */
+            padding-top: 40px; /* Espaço no topo */
+            padding-bottom: 40px; /* Espaço na base */
+        }
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
 
-    <button type="submit">Salvar</button>
-</form>
+        body::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #004aad, #0066ff);
+            border-radius: 10px;
+            border: 2px solid #f0f0f0;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #0030a0, #004aad);
+        }
+        .container-forme {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #e0e0e0 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42);
+            width: 100%;
+            max-width: 900px;
+            }
+
+        .form-container {
+            background-color: var(--card-bg);
+            padding: 35px 40px; /* Aumenta o padding */
+            border-radius: 12px; /* Bordas mais suaves */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+            width: 100%;
+            max-width: 750px; /* Largura ajustada */
+            margin: 20px auto 0 auto; /* Centraliza horizontalmente, mantém margem superior de 20px */
+            border-top: 5px solid var(--primary-color); /* Detalhe de cor no topo */
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px; /* Mais espaço abaixo do título */
+            font-size: 2em; /* Título maior */
+        }
+
+        .form-field-group {
+            margin-bottom: 25px; /* Espaçamento entre grupos de campos */
+            position: relative; /* Para posicionamento de ícones */
+        }
+
+        .form-field-group label {
+            display: block;
+            margin-bottom: 10px; /* Mais espaço abaixo do label */
+            font-weight: 600; /* Fonte um pouco mais forte */
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+
+        .form-field-group input[type="text"],
+        .form-field-group input[type="email"],
+        .form-field-group input[type="date"],
+        .form-field-group input[type="file"],
+        .form-field-group select,
+        .form-field-group textarea {
+            width: 100%; /* Ocupa toda a largura disponível */
+            padding: 14px 20px; /* Padding interno maior */
+            padding-left: 45px; /* Espaço para o ícone */
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px; /* Bordas mais arredondadas */
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            background-color: #f9f9f9; /* Fundo levemente diferente */
+        }
+        
+        .form-field-group input[type="file"] {
+            padding-left: 14px; /* Arquivos não precisam de ícone interno da mesma forma */
+        }
+
+        .form-field-group input[type="text"]:focus,
+        .form-field-group input[type="email"]:focus,
+        .form-field-group input[type="date"]:focus,
+        .form-field-group input[type="file"]:focus,
+        .form-field-group select:focus,
+        .form-field-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 8px rgba(19, 75, 242, 0.35); /* Sombra de foco mais suave */
+            background-color: #fff;
+        }
+        
+        .form-field-group .input-icon {
+            position: absolute;
+            left: 15px;
+            top: calc(50% + 5px); /* Ajuste para alinhar com o input */
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            font-size: 1.1em;
+            pointer-events: none; /* Para não interferir com o clique no input */
+        }
+
+        .form-field-group input:focus + .input-icon,
+        .form-field-group textarea:focus + .input-icon, /* Embora textarea não tenha ícone por padrão aqui */
+        .form-field-group select:focus + .input-icon { /* Selects são mais complicados para ícones internos assim */
+            color: var(--primary-color);
+        }
+        
+        .form-field-group input[type="checkbox"] {
+            margin-right: 10px;
+            vertical-align: middle;
+            width: auto; /* Checkbox não ocupa 100% */
+            height: 1.2em; /* Tamanho do checkbox */
+            accent-color: var(--primary-color); /* Cor do checkbox quando marcado */
+        }
+        
+        .checkbox-label {
+            display: inline-flex; /* Para alinhar checkbox e texto */
+            align-items: center;
+            font-weight: normal;
+            color: var(--text-color);
+        }
+
+        .form-field-group .helptext {
+            font-size: 0.85em;
+            color: var(--secondary-color);
+            margin-top: 8px;
+            display: block;
+            padding-left: 5px; /* Pequeno recuo */
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 40px; /* Mais espaço acima dos botões */
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 35px; /* Botão maior */
+            border: none;
+            border-radius: 8px; /* Bordas mais suaves */
+            font-size: 1.15em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px); /* Efeito de elevação maior */
+            box-shadow: 0 6px 15px rgba(12, 135, 242, 0.4); /* Sombra no hover */
+        }
+
+        /* Estilizando a renderização {{ form.as_p }} do Django */
+        form > p { /* Seleciona os <p> diretamente dentro do <form> */
+            margin-bottom: 0; /* Remove margem padrão, será controlada por .form-field-group */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="notification" style="display:none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px 25px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-weight: bold; z-index: 9999;">
+        Formulário salvo com sucesso!
+    </div>
+
+    <div class="container-forme"> <!-- Mantém o container principal para consistência -->
+        <div class="form-container">
+            <h2><i class="fas fa-clipboard-list" style="margin-right: 10px; color: var(--primary-color);"></i>Formulário SESMT: {{ chamado.nome_colaborador }}</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Django form rendering - será estilizado pelo script e CSS -->
+                {{ form.as_p }}
+
+                <div class="form-actions">
+                    <button type="submit">
+                        <i class="fas fa-save" style="margin-right: 8px;"></i>Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            if (!form) return;
+
+            const notification = document.getElementById('notification');
+
+            form.addEventListener('submit', function(event) {
+                // Exibe a notificação
+                if (notification) {
+                    notification.style.display = 'block';
+                }
+
+                // Define um timeout para fechar a aba após 3 segundos
+                setTimeout(function() {
+                    // Tenta fechar a aba. Isso pode não funcionar em todos os navegadores
+                    // ou se a aba não foi aberta por um script.
+                    window.close();
+                }, 8000);
+
+                // Não previna o envio padrão do formulário, a menos que haja validação AJAX
+                // event.preventDefault(); // Removido ou comentado se o envio padrão for desejado
+            });
+
+            // Envolve cada campo gerado pelo Django (que está em um <p>) em uma div .form-field-group
+            // e adiciona ícones com base no tipo de input.
+            const formParagraphs = form.querySelectorAll('p');
+
+            formParagraphs.forEach(p => {
+                const label = p.querySelector('label');
+                const inputs = p.querySelectorAll('input, select, textarea');
+                const helpText = p.querySelector('.helptext');
+                
+                // Cria o wrapper
+                const fieldGroup = document.createElement('div');
+                fieldGroup.classList.add('form-field-group');
+
+                // Move o label para dentro do fieldGroup
+                if (label) {
+                    fieldGroup.appendChild(label);
+                }
+
+                inputs.forEach(input => {
+                    // Adiciona classes de controle
+                    input.classList.add('form-control');
+                    
+                    let iconClass = '';
+                    const inputType = input.getAttribute('type');
+                    const inputName = input.getAttribute('name'); // Para ícones mais específicos
+
+                    if (input.tagName.toLowerCase() === 'select') {
+                        iconClass = 'fas fa-chevron-down'; // Ícone para select
+                    } else if (input.tagName.toLowerCase() === 'textarea') {
+                        iconClass = 'fas fa-paragraph'; // Ícone para textarea
+                    } else {
+                        switch (inputType) {
+                            case 'text':
+                                if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
+                                else if (inputName && inputName.toLowerCase().includes('cargo')) iconClass = 'fas fa-briefcase';
+                                else if (inputName && inputName.toLowerCase().includes('setor')) iconClass = 'fas fa-building';
+                                else iconClass = 'fas fa-pencil-alt';
+                                break;
+                            case 'email':
+                                iconClass = 'fas fa-envelope';
+                                break;
+                            case 'date':
+                                iconClass = 'fas fa-calendar-alt';
+                                break;
+                            case 'file':
+                                iconClass = 'fas fa-file-upload'; // Ícone para upload
+                                // Para input file, o ícone não fica dentro, então não adicionamos o span.
+                                // O label pode ser estilizado para parecer um botão.
+                                if (label) label.classList.add('file-upload-label');
+                                break;
+                            case 'checkbox':
+                                input.classList.add('form-check-input');
+                                // Para checkboxes, o label é geralmente ao lado, não acima.
+                                // O script original já lida com isso, mas podemos ajustar o label.
+                                if (label) {
+                                    label.classList.add('checkbox-label');
+                                    // Envolve o input e o texto do label para melhor alinhamento
+                                    const checkboxWrapper = document.createElement('span');
+                                    checkboxWrapper.style.display = 'flex';
+                                    checkboxWrapper.style.alignItems = 'center';
+                                    input.parentNode.insertBefore(checkboxWrapper, input);
+                                    checkboxWrapper.appendChild(input);
+                                    // Se o texto do label estiver solto, move para dentro do wrapper
+                                    // Isso é um pouco complexo porque o Django renderiza o label e o input separados
+                                    // Vamos assumir que o texto do label está no conteúdo do label original
+                                }
+                                break;
+                            default:
+                                iconClass = 'fas fa-edit';
+                        }
+                    }
+                    
+                    // Adiciona o input ao fieldGroup
+                    fieldGroup.appendChild(input);
+
+                    // Adiciona o ícone (exceto para file e checkbox que são tratados de forma diferente)
+                    if (iconClass && inputType !== 'file' && inputType !== 'checkbox') {
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = `input-icon ${iconClass}`;
+                        fieldGroup.appendChild(iconSpan);
+                    }
+                });
+
+                // Move o helptext para dentro do fieldGroup
+                if (helpText) {
+                    fieldGroup.appendChild(helpText);
+                }
+                
+                // Substitui o <p> original pelo novo fieldGroup
+                p.parentNode.replaceChild(fieldGroup, p);
+            });
+
+            // Adiciona animação suave ao focar nos inputs
+            const allInputs = form.querySelectorAll('.form-control');
+            allInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.transform = 'scale(1.01)';
+                });
+                input.addEventListener('blur', () => {
+                    input.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

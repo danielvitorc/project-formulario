@@ -1,0 +1,418 @@
+:root {
+  --primary-color: #134BF2; /* Azul primário forte */
+  --secondary-color: #acadaf; /* Cinza secundário */
+  --accent-color: #0C87F2; /* Azul acento */
+  --highlight-color: #1BA0F2; /* Azul destaque */
+  --bg-color: #F2F2F2; /* Cinza claro para fundo */
+  --text-color: #000000; /* Preto para texto principal */
+  --card-bg: #ffffff; /* Branco para cartões/contêineres */
+  --text-on-primary: #ffffff; /* Texto branco sobre cor primária */
+  --text-on-accent: #ffffff; /* Texto branco sobre cor de acento */
+  --border-color: #d0d0d0; /* Cor de borda sutil */
+
+  /* Mapeamento para variáveis existentes (ajustado para nova paleta) */
+  --navbar-bg: var(--primary-color);      /* Fundo da navbar */
+  --navbar-text-color: var(--text-on-primary);  /* Texto dos links da navbar */
+  --navbar-hover-bg: var(--accent-color);      /* Fundo do hover dos links da navbar */
+  --navbar-brand-color: var(--text-on-primary);/* Cor do brand/logo na navbar */
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+  margin: 0;
+  padding-top: 80px; /* Aumentar espaço para navbar mais robusta */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #004aad, #0066ff);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0030a0, #004aad);
+}
+.navbar {
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  padding: 0 30px; /* Mais padding lateral */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Navbar mais alta */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  color: var(--navbar-brand-color);
+  font-size: 1.8em; /* Fonte maior */
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05); /* Efeito de zoom sutil */
+}
+
+.navbar-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-left: 20px; /* Espaçamento entre os links */
+}
+
+.navbar-links li a {
+  color: var(--navbar-text-color);
+  text-decoration: none;
+  padding: 10px 15px; /* Mais padding nos links */
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+  background-color: var(--navbar-hover-bg);
+  color: var(--text-on-accent); /* Garante contraste no hover */
+}
+
+.main-content {
+  padding: 30px; /* Mais padding no conteúdo principal */
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilo futurista adicional */
+.container {
+  background: linear-gradient(135deg, var(--bg-color) 0%, #e0e0e0 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.353);
+  width: 100%;
+  max-width: 900px;
+}
+
+h1, h2 {
+    position: relative;
+    text-align: center; /* Centraliza o texto dos títulos */
+}
+
+h1::before, h2::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    height: 3px;
+    background: var(--primary-color);
+    width: 80px;
+}
+
+h2::before {
+    background: var(--accent-color);
+    width: 60px;
+}
+
+/* Melhorando a responsividade */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  a, .sesmt-preenchido {
+    margin-top: 10px;
+    width: calc(100% - 30px); /* Ajusta para padding */
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+  .container {
+    padding: 20px;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  h2 {
+    font-size: 1.3em;
+  }
+  li {
+    padding: 15px;
+  }
+  a, .sesmt-preenchido {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+}
+
+body .btn-primary#openModalBtn { /* Maior especificidade se necessário */
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--branco-nort);
+}
+
+body .btn-primary#openModalBtn:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--azulEscuro-nort);
+}
+/* Estilos para a tabela de registros */
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-collapse: separate; /* Necessário para border-radius em células */
+  border-spacing: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Bordas arredondadas para a tabela */
+  overflow: hidden; /* Garante que o conteúdo não ultrapasse as bordas arredondadas */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  animation: slideUpIn 0.7s ease-out forwards;
+  opacity: 0; /* Começa invisível para animação */
+}
+
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table thead.table-dark th { /* Cabeçalho escuro do Bootstrap */
+  background-color: var(--primary-color);
+  border-bottom: 2px solid var(--accent-color);
+  font-weight: 600;
+  text-transform: uppercase; /* Deixa o texto do cabeçalho em maiúsculas */
+  letter-spacing: 0.5px;
+  padding: 15px 12px; /* Mais padding no cabeçalho */
+}
+
+.table th,
+.table td {
+  padding: 12px 15px; /* Aumenta o padding das células */
+  vertical-align: middle; /* Alinha o conteúdo verticalmente */
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: rgba(0,0,0,0.03); /* Zebrado sutil */
+}
+
+.table tbody tr:hover {
+  background-color: var(--highlight-color); /* Destaque no hover da linha */
+  cursor: default; /* Mantém o cursor padrão */
+}
+
+
+
+
+.table tbody tr td:last-child { /* Última célula (botão) */
+  text-align: center;
+}
+
+.table .btn { /* Botão dentro da tabela */
+  padding: 8px 15px;
+  font-size: 0.9em;
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.table .btn:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.05); /* Pequeno zoom no hover */
+}
+
+/* Estilos para os cards de chamados */
+.chamados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Layout responsivo em grade */
+  gap: 25px; /* Espaçamento entre os cards */
+  padding: 20px 0;
+}
+
+.chamado-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Bordas mais arredondadas */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada e suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Para que o header não ultrapasse o border-radius */
+  display: flex;
+  flex-direction: column; /* Organiza o conteúdo do card verticalmente */
+}
+
+.chamado-card:hover {
+  transform: translateY(-5px) scale(1.02); /* Efeito de elevação e leve zoom */
+  box-shadow: 0 12px 35px rgba(var(--primary-color-rgb, 19, 75, 242), 0.2); /* Sombra com cor primária */
+}
+
+.chamado-card .card-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: var(--text-on-primary);
+  padding: 15px 20px;
+  border-bottom: none; /* Remove a borda padrão se houver */
+  border-top-left-radius: 12px; /* Arredonda cantos superiores */
+  border-top-right-radius: 12px;
+}
+
+.chamado-card .card-header .card-title {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.chamado-card .card-body {
+  padding: 20px;
+  flex-grow: 1; /* Faz o corpo do card ocupar o espaço disponível */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaça os elementos internos */
+  align-items: center; /* Centraliza os itens horizontalmente */
+  text-align: center; /* Centraliza o texto */
+}
+
+.chamado-card .card-text {
+  margin-bottom: 15px;
+  font-size: 0.95em;
+  color: var(--text-color);
+  width: 100%; /* Garante que o text-align center funcione bem */
+}
+
+.chamado-card .card-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; /* Adiciona transições para background e border */
+}
+
+.chamado-card .card-link:hover {
+  color: var(--highlight-color);
+  text-decoration: underline;
+}
+
+.chamado-card .download-btn {
+  padding: 6px 15px; /* Ajuste de padding para o botão de download */
+  font-size: 0.85em;
+  border-radius: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--highlight-color); /* Borda com cor de destaque */
+  background-color: transparent; /* Fundo transparente */
+  color: var(--highlight-color); /* Texto com cor de destaque */
+  display: inline-block; /* Para que o padding e margin funcionem corretamente */
+  margin-top: 5px; /* Pequeno espaço acima */
+  text-decoration: none; /* Remove sublinhado padrão de link */
+}
+
+.chamado-card .download-btn:hover {
+  background-color: var(--highlight-color); /* Fundo com cor de destaque no hover */
+  color: var(--text-on-primary); /* Texto branco no hover */
+  text-decoration: none; /* Garante que não haja sublinhado no hover */
+  transform: scale(1.03);
+}
+
+
+.chamado-card .card-btn,
+.chamado-card .card-action-btn {
+  padding: 8px 18px;
+  font-size: 0.9em;
+  border-radius: 20px; /* Botões mais arredondados/pílula */
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px; /* Espaçamento para botões */
+}
+
+.chamado-card .btn-info.card-btn { /* Botão "Ver Detalhes" */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  align-self: flex-start; /* Alinha o botão de detalhes à esquerda */
+}
+
+.chamado-card .btn-info.card-btn:hover {
+  background-color: #9a9c9e; /* Um tom mais escuro do cinza secundário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.chamado-card .card-footer {
+  background-color: transparent; /* Fundo transparente para o rodapé do card */
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end; /* Alinha o botão de ação à direita */
+}
+
+.chamado-card .card-action-btn.btn-primary { /* Botão "Preencher SESMT" */
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.chamado-card .card-action-btn.btn-primary:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb, 12, 135, 242), 0.3);
+}
+
+.chamado-card .card-action-btn.btn-secondary { /* Botão "Editar SESMT" */
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.chamado-card .card-action-btn.btn-secondary:hover {
+  background-color: var(--accent-color); /* Pode usar o accent para hover ou um tom mais escuro do primário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb, 19, 75, 242), 0.3);
+}
+
+/* Adicionar variáveis RGB para sombras coloridas se não existirem */
+/* Se :root já tiver --primary-color-rgb e --accent-color-rgb, ignore esta parte */
+/* :root {
+  --primary-color-rgb: 19, 75, 242;
+  --accent-color-rgb: 12, 135, 242;
+} */
+

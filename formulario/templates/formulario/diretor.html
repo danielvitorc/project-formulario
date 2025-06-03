@@ -1,50 +1,58 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
+    <title>{% block title %}Diretor{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/diretor_style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Bem vindo diretor</h1>
-    <h2>chamados com Assinatura do Gestor</h2>
-
-<table border="1">
-    <tr>
-        <th>Colaborador</th>
-        <th>Gestor</th>
-        <th>Assinatura do Gestor</th>
-        <th>Data</th>
-        <th>Aprovação Diretor</th>
-    </tr>
-    {% for chamado in chamados %}
-    <tr>
-        <td>{{ chamado.nome_colaborador }}</td>
-        <td>{{ chamado.gestor_imediato }}</td>
-        <td>
-            {% if chamado.assinatura_gestor %}
-                <img src="{{ chamado.assinatura_gestor.url }}" alt="Assinatura do Gestor" width="120">
-            {% else %}
-                Sem assinatura
-            {% endif %}
-        </td>
-        <td>{{ chamado.data_autorizacao_gestor }}</td>
-        <td>
-            <form method="post">
-                {% csrf_token %}
-                {{ form_diretor.diretor_aprovacao }}
-                <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
-                <button type="submit">Salvar</button>
-            </form>
-            {% if chamado.diretor_aprovacao %}
-                ✅ Aprovado
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
+<div class="container">
+    <div class="column">
+        <h1>Bem vindo diretor</h1>
+        <h2>chamados com Assinatura do Gestor</h2>
+    <table border="1">
+        <tr>
+            <th>Colaborador</th>
+            <th>Gestor</th>
+            <th>Assinatura do Gestor</th>
+            <th>Data</th>
+            <th>Aprovação Diretor</th>
+        </tr>
+        {% for chamado in chamados %}
+        <tr>
+            <td data-label="Colaborador">{{ chamado.nome_colaborador }}</td>
+            <td data-label="Gestor">{{ chamado.gestor_imediato }}</td>
+            <td data-label="Assinatura do Gestor">
+                {% if chamado.assinatura_gestor %}
+                    <img src="{{ chamado.assinatura_gestor.url }}" alt="Assinatura do Gestor">
+                {% else %}
+                    Sem assinatura
+                {% endif %}
+            </td>
+            <td data-label="Data">{{ chamado.data_autorizacao_gestor }}</td>
+            <td data-label="Aprovação Diretor">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form_diretor.diretor_aprovacao }}
+                    <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
+                    <button type="submit">Salvar</button>
+                </form>
+                {% if chamado.diretor_aprovacao %}
+                    <span class="aprovado-check">✅ Aprovado</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     <a href="{% url 'logout' %}">Sair</a>
+    </div>
+
+</div>
 
 </body>
 </html>
