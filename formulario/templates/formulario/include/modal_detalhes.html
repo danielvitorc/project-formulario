@@ -1,0 +1,65 @@
+
+        <!-- 🔥 Modal -->
+        <div class="modal fade" id="modal{{ chamado.id }}" tabindex="-1" aria-labelledby="modalLabel{{ chamado.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel{{ chamado.id }}">Detalhes do Chamado - {{ chamado.nome_colaborador }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                <li class="list-group-item"><strong>Matrícula:</strong> {{ chamado.matricula }}</li>
+                <li class="list-group-item"><strong>Função:</strong> {{ chamado.funcao }}</li>
+                <li class="list-group-item"><strong>Departamento:</strong> {{ chamado.depto }}</li>
+                <li class="list-group-item"><strong>Gestor Imediato:</strong> {{ chamado.gestor_imediato }}</li>
+                <li class="list-group-item"><strong>Tipo de Exposição:</strong> {{ chamado.tipo_exposicao }}</li>
+                <li class="list-group-item"><strong>Natureza do Risco:</strong> {{ chamado.natureza_risco }}</li>
+                {% if chamado.outro_natureza_risco %}
+                <li class="list-group-item"><strong>Outro Natureza do Risco:</strong> {{ chamado.outro_natureza_risco }}</li>
+                {% endif %}
+                <li class="list-group-item"><strong>Descrição das Atividades:</strong> {{ chamado.descricao_atividades }}</li>
+                <li class="list-group-item"><strong>Atividade:</strong> {{ chamado.atividade }}</li>
+                <li class="list-group-item"><strong>Locais de Atuação:</strong> {{ chamado.locais_atuaçao }}</li>
+                <li class="list-group-item"><strong>Frequência:</strong> {{ chamado.frequencia }}</li>
+                <li class="list-group-item"><strong>Data Autorização Gestor:</strong> {{ chamado.data_autorizacao_gestor }}</li>
+                <li class="list-group-item"><strong>Responsável:</strong> {{ chamado.responsavel }}</li>
+                <li class="list-group-item">
+                    <strong>Diretor Aprovou:</strong>
+                        {% if chamado.diretor_aprovacao %}
+                             Aprovado
+                        {% else %}
+                             Pendente
+                        {% endif %}
+                </li>
+                <li class="list-group-item"><strong>ASO:</strong> {{ chamado.aso|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>EPI/EPC:</strong> {{ chamado.epi_epc|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Curso NR10:</strong> {{ chamado.curso_nr10|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Curso SEP:</strong> {{ chamado.curso_sep|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Curso NR35:</strong> {{ chamado.curso_nr35|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Observações de Cursos:</strong> {{ chamado.cursos_observacoes|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Data Autorização SESMT:</strong> {{ chamado.data_autorizacao_sesmt|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Nome SESMT:</strong> {{ chamado.nome_sesmt|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Procedimento RH/DP:</strong> {{ chamado.procedimento_rh_dp|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Data Autorização RH/DP:</strong> {{ chamado.data_autorizacao_rh_dp|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Nome RH/DP:</strong> {{ chamado.nome_rh_dp|default:"Ainda não preenchido" }}</li>
+
+                {% if chamado.assinatura_gestor %}
+                    <li class="list-group-item"><strong>Assinatura Gestor:</strong> <img src="{{ chamado.assinatura_gestor.url }}" width="200"></li>
+                {% endif %}
+
+                {% if chamado.assinatura_sesmt %}
+                    <li class="list-group-item"><strong>Assinatura SESMT:</strong> <img src="{{ chamado.assinatura_sesmt.url }}" width="200"></li>
+                {% endif %}
+
+                {% if chamado.assinatura_rh_dp %}
+                    <li class="list-group-item"><strong>Assinatura RH/DP:</strong> <img src="{{ chamado.assinatura_rh_dp.url }}" width="200"></li>
+                {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+            </div>
+        </div>
+        </div>

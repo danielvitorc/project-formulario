@@ -155,7 +155,7 @@ class RHDPForm(forms.ModelForm):
         ('Registro do adicional de periculosidade','Registro do adicional de periculosidade'),
     ]
 
-    curso_nr35 = forms.ChoiceField(
+    procedimento_rh_dp = forms.ChoiceField(
         choices =  PROCEDIMENTOS_CHOICES,
         widget=forms.RadioSelect(), 
         required = False,

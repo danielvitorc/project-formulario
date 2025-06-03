@@ -26,7 +26,7 @@ HASHES_ASSINATURAS_RH_DP = [
 ]  
 
 class Chamado(models.Model):
-
+    usuario_gestor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     # Campos cadastrados pelo Gestor
     nome_colaborador = models.CharField(max_length=255)
     matricula = models.CharField(max_length=50)
