@@ -8,7 +8,7 @@ from docx import Document
 
 @login_required
 def gestor_view(request):
-    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False).exclude(assinatura_sesmt='')
+    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, usuario_gestor=request.user).exclude(assinatura_sesmt='')
 
     gestor_form = GestorForm()
     upload_form = GestorUploadForm()

@@ -22,6 +22,8 @@
     <div class="main-content">
         <h1 class="mb-4">Registros</h1>
 
+        <input type="text" id="filtroMatricula" class="form-control mb-3" placeholder="Pesquisar pela matrícula...">
+
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
@@ -34,7 +36,7 @@
                     <th>Download Excel</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tabelaDados">
                 {% for chamado in chamados %}
                 {% include 'formulario/include/modal_detalhes.html' %}
                     <tr>
@@ -90,6 +92,44 @@
                     // row.style.transform = 'scale(1)';
                 });
             });
+        });
+    </script>
+    <script>
+        const input = document.getElementById('filtroMatricula');
+        const tabela = document.getElementById('tabelaDados');
+        const linhaNaoEncontrado = document.getElementById('linhaNaoEncontrado');
+
+        input.addEventListener('keyup', function() {
+            let filtro = input.value.toLowerCase();
+            let linhas = tabela.getElementsByTagName('tr');
+            let encontrou = false;
+
+            for (let i = 0; i < linhas.length; i++) {
+                const linha = linhas[i];
+
+                // Ignora a linha da mensagem 'Registro não encontrado'
+                if (linha.id === 'linhaNaoEncontrado') continue;
+
+                const celulaMatricula = linha.cells[1]; // Coluna matrícula
+
+                if (celulaMatricula) {
+                    const textoMatricula = celulaMatricula.textContent.toLowerCase();
+
+                    if (textoMatricula.includes(filtro)) {
+                        linha.style.display = '';
+                        encontrou = true;
+                    } else {
+                        linha.style.display = 'none';
+                    }
+                }
+            }
+
+            // Exibe ou oculta a linha "Registro não encontrado"
+            if (encontrou) {
+                linhaNaoEncontrado.style.display = 'none';
+            } else {
+                linhaNaoEncontrado.style.display = '';
+            }
         });
     </script>
 </body>

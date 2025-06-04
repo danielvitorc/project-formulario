@@ -22,7 +22,7 @@
                 <li class="list-group-item"><strong>Atividade:</strong> {{ chamado.atividade }}</li>
                 <li class="list-group-item"><strong>Locais de Atuação:</strong> {{ chamado.locais_atuaçao }}</li>
                 <li class="list-group-item"><strong>Frequência:</strong> {{ chamado.frequencia }}</li>
-                <li class="list-group-item"><strong>Data Autorização Gestor:</strong> {{ chamado.data_autorizacao_gestor }}</li>
+                <li class="list-group-item"><strong>Data Autorização Gestor:</strong> {{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}</li>
                 <li class="list-group-item"><strong>Responsável:</strong> {{ chamado.responsavel }}</li>
                 <li class="list-group-item">
                     <strong>Diretor Aprovou:</strong>
@@ -38,10 +38,10 @@
                 <li class="list-group-item"><strong>Curso SEP:</strong> {{ chamado.curso_sep|default:"Ainda não preenchido" }}</li>
                 <li class="list-group-item"><strong>Curso NR35:</strong> {{ chamado.curso_nr35|default:"Ainda não preenchido" }}</li>
                 <li class="list-group-item"><strong>Observações de Cursos:</strong> {{ chamado.cursos_observacoes|default:"Ainda não preenchido" }}</li>
-                <li class="list-group-item"><strong>Data Autorização SESMT:</strong> {{ chamado.data_autorizacao_sesmt|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Data Autorização SESMT:</strong> {{ chamado.data_autorizacao_sesmt|default:"Ainda não preenchido"|date:"d/m/Y" }}</li>
                 <li class="list-group-item"><strong>Nome SESMT:</strong> {{ chamado.nome_sesmt|default:"Ainda não preenchido" }}</li>
                 <li class="list-group-item"><strong>Procedimento RH/DP:</strong> {{ chamado.procedimento_rh_dp|default:"Ainda não preenchido" }}</li>
-                <li class="list-group-item"><strong>Data Autorização RH/DP:</strong> {{ chamado.data_autorizacao_rh_dp|default:"Ainda não preenchido" }}</li>
+                <li class="list-group-item"><strong>Data Autorização RH/DP:</strong> {{ chamado.data_autorizacao_rh_dp|default:"Ainda não preenchido"|date:"d/m/Y" }}</li>
                 <li class="list-group-item"><strong>Nome RH/DP:</strong> {{ chamado.nome_rh_dp|default:"Ainda não preenchido" }}</li>
 
                 {% if chamado.assinatura_gestor %}

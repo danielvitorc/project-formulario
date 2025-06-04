@@ -13,8 +13,8 @@
 <body>
 <div class="container">
     <div class="column">
-        <h1>Bem vindo diretor</h1>
-        <h2>chamados com Assinatura do Gestor</h2>
+        <h1>Bem vindo Diretor</h1>
+        <h2>Chamados com Assinatura do Gestor</h2>
     <table border="1">
         <tr>
             <th>Colaborador</th>
@@ -34,7 +34,7 @@
                     Sem assinatura
                 {% endif %}
             </td>
-            <td data-label="Data">{{ chamado.data_autorizacao_gestor }}</td>
+            <td data-label="Data">{{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}</td>
             <td data-label="Aprovação Diretor">
                 <form method="post">
                     {% csrf_token %}

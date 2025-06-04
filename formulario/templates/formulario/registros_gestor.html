@@ -21,6 +21,8 @@
     <div class="main-content">
         <h1 class="mb-4">Registros do Gestor</h1>
 
+        <input type="text" id="filtroMatricula" class="form-control mb-3" placeholder="Pesquisar pela matrícula...">
+
         <table class="table table-striped table-bordered">
         <thead class="table-dark">
             <tr>
@@ -33,7 +35,7 @@
                 <th>Download Excel</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tabelaDados">
             {% for chamado in chamados %}
                 <tr>
                     <td>{{ chamado.nome_colaborador }}</td>
@@ -58,6 +60,10 @@
                 </tr>
             {% endfor %}
                 
+                <tr id="linhaNaoEncontrado" style="display: none;">
+                    <td colspan="7" class="text-center text-danger">Registro não encontrado.</td>
+                </tr>
+                
         </tbody>
     </table>
 
@@ -66,32 +72,41 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Adiciona classes para animação em elementos específicos ao carregar
-            const table = document.querySelector('.table');
-            if (table) {
-                // A animação slideUpIn já está no CSS, apenas garantindo que a classe está lá
-                // Se precisar de um delay ou gatilho específico, pode ser feito aqui.
+        const input = document.getElementById('filtroMatricula');
+        const tabela = document.getElementById('tabelaDados');
+        const linhaNaoEncontrado = document.getElementById('linhaNaoEncontrado');
+
+        input.addEventListener('keyup', function() {
+            let filtro = input.value.toLowerCase();
+            let linhas = tabela.getElementsByTagName('tr');
+            let encontrou = false;
+
+            for (let i = 0; i < linhas.length; i++) {
+                const linha = linhas[i];
+
+                // Ignora a linha da mensagem 'Registro não encontrado'
+                if (linha.id === 'linhaNaoEncontrado') continue;
+
+                const celulaMatricula = linha.cells[1]; // Coluna matrícula
+
+                if (celulaMatricula) {
+                    const textoMatricula = celulaMatricula.textContent.toLowerCase();
+
+                    if (textoMatricula.includes(filtro)) {
+                        linha.style.display = '';
+                        encontrou = true;
+                    } else {
+                        linha.style.display = 'none';
+                    }
+                }
             }
 
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                button.addEventListener('mouseover', () => {
-                    // Efeito de partículas ou brilho sutil no hover, se desejado
-                });
-            });
-
-            // Exemplo de animação para linhas da tabela ao passar o mouse
-            const tableRows = document.querySelectorAll('.table tbody tr');
-            tableRows.forEach(row => {
-                row.addEventListener('mouseenter', () => {
-                    // row.style.transform = 'scale(1.01)';
-                    // row.style.transition = 'transform 0.2s ease-out';
-                });
-                row.addEventListener('mouseleave', () => {
-                    // row.style.transform = 'scale(1)';
-                });
-            });
+            // Exibe ou oculta a linha "Registro não encontrado"
+            if (encontrou) {
+                linhaNaoEncontrado.style.display = 'none';
+            } else {
+                linhaNaoEncontrado.style.display = '';
+            }
         });
     </script>
 </body>
