@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 import io
 from ..forms import GestorForm, GestorUploadForm
 from ..models import Chamado
@@ -8,7 +9,11 @@ from docx import Document
 
 @login_required
 def gestor_view(request):
-    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, usuario_gestor=request.user).exclude(assinatura_sesmt='')
+    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, usuario_gestor=request.user).exclude(assinatura_sesmt='').order_by('-id')
+
+    chamados_pendentes = Chamado.objects.filter(usuario_gestor=request.user).filter(
+        Q(assinatura_rh_dp__isnull=True) | Q(assinatura_rh_dp='')
+    ).order_by('-id')
 
     gestor_form = GestorForm()
     upload_form = GestorUploadForm()
@@ -41,11 +46,12 @@ def gestor_view(request):
         'gestor_form': gestor_form,
         'upload_form': upload_form,
         'chamados': chamados,
+        'chamados_pendentes': chamados_pendentes
     })
 
 @login_required
 def upload_documento_gestor(request, chamado_id):
-    chamado = Chamado.objects.get(id=chamado_id)
+    chamado = Chamado.objects.get(id=chamado_id).order_by('-id')
 
     if request.method == 'POST':
         form = GestorUploadForm(request.POST, request.FILES, instance=chamado)

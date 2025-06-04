@@ -5,7 +5,7 @@ from ..models import Chamado
 
 @login_required
 def diretor_view(request):
-    chamados = Chamado.objects.filter(assinatura_gestor__isnull=False).exclude(assinatura_gestor='')
+    chamados = Chamado.objects.filter(assinatura_gestor__isnull=False).exclude(assinatura_gestor='').order_by('-id')
 
     if request.method == 'POST':
         form_diretor = DiretorForm(request.POST)

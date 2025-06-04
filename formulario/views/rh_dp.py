@@ -7,7 +7,7 @@ from ..models import Chamado
 
 @login_required
 def rh_dp_view(request):
-    chamados = Chamado.objects.filter(upload_gestor__isnull=False).exclude(upload_gestor='')
+    chamados = Chamado.objects.filter(upload_gestor__isnull=False).exclude(upload_gestor='').order_by('-id')
 
     return render(request, 'formulario/rh_dp.html', {'chamados': chamados})
 
@@ -28,7 +28,7 @@ def rh_dp_editar(request, pk):
 
 @login_required
 def registros_rh_dp(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
 
     return render(request, 'formulario/registros_rh_dp.html', {
         'chamados': chamados
