@@ -195,8 +195,11 @@ body::-webkit-scrollbar-thumb:hover {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Habilita scroll se necessário */
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
   background-color: rgba(0,0,0,0.5); /* Fundo escurecido */
+}
+.modal-backdrop {
+    display: none !important;
 }
 
 .modal-content {
@@ -335,7 +338,7 @@ body .btn-primary#openModalBtn:hover {
   border-spacing: 0;
   border: 1px solid var(--border-color);
   border-radius: 8px; /* Bordas arredondadas para a tabela */
-  overflow: hidden; /* Garante que o conteúdo não ultrapasse as bordas arredondadas */
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   animation: slideUpIn 0.7s ease-out forwards;
   opacity: 0; /* Começa invisível para animação */
@@ -465,7 +468,7 @@ body .btn-primary#openModalBtn:hover {
   border-spacing: 0;
   border: 1px solid var(--border-color);
   border-radius: 8px; /* Bordas arredondadas para a tabela */
-  overflow: hidden; /* Garante que o conteúdo não ultrapasse as bordas arredondadas */
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   animation: slideUpIn 0.7s ease-out forwards;
   opacity: 0; /* Começa invisível para animação */

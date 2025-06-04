@@ -66,9 +66,11 @@
                 
         </tbody>
     </table>
+    {% for chamado in chamados %}
+        {% include 'formulario/include/modal_detalhes.html' %}
+    {% endfor %}
 
     </div>
-    <a href="{% url 'logout' %}" class="logout-link" style="display:none;">Sair</a> <!-- Mantido por segurança, mas o da navbar é o principal -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -108,6 +110,25 @@
                 linhaNaoEncontrado.style.display = '';
             }
         });
+    </script>
+    <script>
+        document.querySelectorAll('.modal').forEach(modalEl => {
+            var modal = new bootstrap.Modal(modalEl, {
+                backdrop: false
+            });
+            
+            modalEl.addEventListener('show.bs.modal', () => {
+                modal.show();
+            });
+        });
+    </script>
+    <script>
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', () => {
+        document.body.classList.remove('modal-open');
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        });
+    });
     </script>
 </body>
 </html>
