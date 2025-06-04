@@ -23,3 +23,12 @@ def diretor_view(request):
         form_diretor = DiretorForm()
 
     return render(request, 'formulario/diretor.html', {'chamados': chamados, 'form_diretor': form_diretor})
+
+
+@login_required
+def registros_diretor(request):
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
+
+    return render(request, 'formulario/registros_diretor.html', {
+        'chamados': chamados
+    })

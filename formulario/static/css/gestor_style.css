@@ -588,3 +588,157 @@ body .btn-primary#openModalBtn:hover {
 
 /* Adicionar classe .btn-pulse ao botão "Baixar Excel" no HTML se desejar o efeito */
 /* Ex: <button class="btn btn-pulse">Baixar Excel</button> */
+
+/* Estilos para os cards de chamados */
+.chamados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Layout responsivo em grade */
+  gap: 25px; /* Espaçamento entre os cards */
+  padding: 20px 0;
+}
+
+.chamado-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Bordas mais arredondadas */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada e suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Para que o header não ultrapasse o border-radius */
+  display: flex;
+  flex-direction: column; /* Organiza o conteúdo do card verticalmente */
+}
+
+.chamado-card:hover {
+  transform: translateY(-5px) scale(1.02); /* Efeito de elevação e leve zoom */
+  box-shadow: 0 12px 35px rgba(var(--primary-color-rgb, 19, 75, 242), 0.2); /* Sombra com cor primária */
+}
+
+.chamado-card .card-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: var(--text-on-primary);
+  padding: 15px 20px;
+  border-bottom: none; /* Remove a borda padrão se houver */
+  border-top-left-radius: 12px; /* Arredonda cantos superiores */
+  border-top-right-radius: 12px;
+}
+
+.chamado-card .card-header .card-title {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.chamado-card .card-body {
+  padding: 20px;
+  flex-grow: 1; /* Faz o corpo do card ocupar o espaço disponível */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espaça os elementos internos */
+  align-items: center; /* Centraliza os itens horizontalmente */
+  text-align: center; /* Centraliza o texto */
+}
+
+.chamado-card .card-text {
+  margin-bottom: 15px;
+  font-size: 0.95em;
+  color: var(--text-color);
+  width: 100%; /* Garante que o text-align center funcione bem */
+}
+
+.chamado-card .card-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; /* Adiciona transições para background e border */
+}
+
+.chamado-card .card-link:hover {
+  color: var(--highlight-color);
+  text-decoration: underline;
+}
+
+.chamado-card .download-btn {
+  padding: 6px 15px; /* Ajuste de padding para o botão de download */
+  font-size: 0.85em;
+  border-radius: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--highlight-color); /* Borda com cor de destaque */
+  background-color: transparent; /* Fundo transparente */
+  color: var(--highlight-color); /* Texto com cor de destaque */
+  display: inline-block; /* Para que o padding e margin funcionem corretamente */
+  margin-top: 5px; /* Pequeno espaço acima */
+  text-decoration: none; /* Remove sublinhado padrão de link */
+}
+
+.chamado-card .download-btn:hover {
+  background-color: var(--highlight-color); /* Fundo com cor de destaque no hover */
+  color: var(--text-on-primary); /* Texto branco no hover */
+  text-decoration: none; /* Garante que não haja sublinhado no hover */
+  transform: scale(1.03);
+}
+
+
+.chamado-card .card-btn,
+.chamado-card .card-action-btn {
+  padding: 8px 18px;
+  font-size: 0.9em;
+  border-radius: 20px; /* Botões mais arredondados/pílula */
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px; /* Espaçamento para botões */
+}
+
+.chamado-card .btn-info.card-btn { /* Botão "Ver Detalhes" */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  align-self: flex-start; /* Alinha o botão de detalhes à esquerda */
+}
+
+.chamado-card .btn-info.card-btn:hover {
+  background-color: #9a9c9e; /* Um tom mais escuro do cinza secundário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.chamado-card .card-footer {
+  background-color: transparent; /* Fundo transparente para o rodapé do card */
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end; /* Alinha o botão de ação à direita */
+}
+
+.chamado-card .card-action-btn.btn-primary { /* Botão "Preencher SESMT" */
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.chamado-card .card-action-btn.btn-primary:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb, 12, 135, 242), 0.3);
+}
+
+.chamado-card .card-action-btn.btn-secondary { /* Botão "Editar SESMT" */
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.chamado-card .card-action-btn.btn-secondary:hover {
+  background-color: var(--accent-color); /* Pode usar o accent para hover ou um tom mais escuro do primário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb, 19, 75, 242), 0.3);
+}
+
+/* Adicionar variáveis RGB para sombras coloridas se não existirem */
+/* Se :root já tiver --primary-color-rgb e --accent-color-rgb, ignore esta parte */
+/* :root {
+  --primary-color-rgb: 19, 75, 242;
+  --accent-color-rgb: 12, 135, 242;
+} */

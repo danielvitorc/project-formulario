@@ -16,6 +16,7 @@
     <div class="column">
         <h1>Bem vindo Diretor</h1>
         <h2>Chamados com Assinatura do Gestor</h2>
+        <li><a href="{% url 'registros_diretor' %}">Registros</a></li>
     <table border="1">
         <tr>
             <th>Colaborador</th>
@@ -60,8 +61,8 @@
         {% include 'formulario/include/modal_detalhes.html' %}
     {% endfor %}
 
-    <button type="submit" onclick="window.location.href='{% url 'logout' %}'">Sair</button>
-    <a href="{% url 'logout' %}">Sair</a>
+    <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+
     </div>
 
 </div>
