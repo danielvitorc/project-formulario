@@ -36,6 +36,39 @@
             </div>
         </div>
 
+        <div class="container">
+        {% if chamados_pendentes %}
+        <h2>Meus Chamados em andamneto </h2>
+        <div class="chamados-grid">
+            {% for chamado in chamados_pendentes %}
+                <div class="card chamado-card">
+                    <div class="card-header">
+                    <h5 class="card-title">{{ chamado.nome_colaborador }}</h5>
+                    </div>
+                    <div class="card-body">
+                    <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
+                        Ver Detalhes
+                    </button>
+                    {% if chamado.upload_gestor %}
+                        <p class="card-text">Doc. Avaliação GPM: <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-light btn-sm card-link download-btn">Download</a></p>
+                    {% endif %}
+                    </div>
+                    <div class="card-footer">
+                    {% if not chamado.sesmt_preenchido %}
+                        <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-primary card-action-btn">Preencher SESMT</a>
+                    {% else %}
+                        <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-secondary card-action-btn">Editar SESMT</a>
+                    {% endif %}
+                    </div>
+                </div>
+
+                {# ⬇️ Fora do card, mas ainda dentro do for #}
+                {% include 'formulario/include/modal_detalhes.html' %}
+                {% endfor %}
+
+        </div>
+        {% endif %}
+
         <!-- Modal para Cadastro de Chamado -->
         <div id="chamadoModal" class="modal">
             <div class="modal-content scrollable">

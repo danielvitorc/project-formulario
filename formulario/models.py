@@ -15,14 +15,14 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True, blank=True)
 
 HASHES_ASSINATURAS_GESTORES = [
-    "bc61c2c356167b859d9a008035e841ee32236ad44356772bfd5cec4cde5b3ffc"
+    "3feef40d62e9a74915b39abafad145bf5b34bd7e1955694dacbe6690fe9301b7"
 ]
 HASHES_ASSINATURAS_SESMT = [
-    "ec8ff0a6954a5f54e4ad246f0a788d076f675e457bca16a04248718cca3fe631"
+    "4fa8760fd175c47be450e4bdffdd4652f8b4fa6d62a328535746015af373f83d"
 ]
 
 HASHES_ASSINATURAS_RH_DP = [
-    "8e551767cfe9d662f0185cff3840c4616401a3726f52898ee38857cf495cbb8f"
+    "d22bffc2826652252094f1edbf320b1802a0d542f6740fe11eca998d684a7694"
 ]  
 
 class Chamado(models.Model):
