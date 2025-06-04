@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Estilos herdados de sesmt_style.css e ajustes específicos */
+        #aso_documento_div,
+        #epi_documento_div,
+        #nr10_documento_div,
+        #sep_documento_div,
+        #nr35_documento_div {
+            display: none;
+        }
+
         body {
             display: flex;
             justify-content: center; /* Centraliza o container principal */
@@ -185,20 +193,106 @@
         Formulário salvo com sucesso!
     </div>
 
-    <div class="container-forme"> <!-- Mantém o container principal para consistência -->
+    <div class="container-forme">
         <div class="form-container">
             <h2><i class="fas fa-clipboard-list" style="margin-right: 10px; color: var(--primary-color);"></i>Formulário SESMT: {{ chamado.nome_colaborador }}</h2>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                <!-- ASO -->
+                <div>
+                    {{ form.aso.label_tag }}
+                    {{ form.aso }}
+                </div>
+                <div id="aso_documento_div">
+                    <label>Documento ASO:</label>
+                    {{ form.aso_documento }}
+                </div>
+                <div>
+                    <label>Descrição ASO:</label>
+                    {{ form.aso_descricao }}
+                </div>
+
+                <hr>
+
+                <!-- EPI/EPC -->
+                <div>
+                    {{ form.epi_epc.label_tag }}
+                    {{ form.epi_epc }}
+                </div>
+                <div id="epi_documento_div">
+                    <label>Documento EPI/EPC:</label>
+                    {{ form.epi_epc_documento }}
+                </div>
+                <div>
+                    <label>Descrição EPI/EPC:</label>
+                    {{ form.epi_epc_descricao }}
+                </div>
+
+                <hr>
+
+                <!-- NR10 -->
+                <div>
+                    {{ form.curso_nr10.label_tag }}
+                    {{ form.curso_nr10 }}
+                </div>
+                <div id="nr10_documento_div">
+                    <label>Documento NR10:</label>
+                    {{ form.curso_nr10_documento }}
+                </div>
+
+                <hr>
+
+                <!-- SEP -->
+                <div>
+                    {{ form.curso_sep.label_tag }}
+                    {{ form.curso_sep }}
+                </div>
+                <div id="sep_documento_div">
+                    <label>Documento SEP:</label>
+                    {{ form.curso_sep_documento }}
+                </div>
+
+                <hr>
+
+                <!-- NR35 -->
+                <div>
+                    {{ form.curso_nr35.label_tag }}
+                    {{ form.curso_nr35 }}
+                </div>
+                <div id="nr35_documento_div">
+                    <label>Documento NR35:</label>
+                    {{ form.curso_nr35_documento }}
+                </div>
+
+                <div>
+                    {{ form.cursos_observacoes.label_tag }}
+                    {{ form.cursos_observacoes }}
+                </div>
+
+                <div>
+                    {{ form.data_autorizacao_sesmt.label_tag }}
+                    {{ form.data_autorizacao_sesmt }}
+                </div>
+
+                <div>
+                    {{ form.nome_sesmt.label_tag }}
+                    {{ form.nome_sesmt }}
+                </div>
+
+                <div>
+                    {{ form.assinatura_sesmt.label_tag }}
+                    {{ form.assinatura_sesmt }}
+                </div>
                 
-                <!-- Django form rendering - será estilizado pelo script e CSS -->
-                {{ form.as_p }}
 
                 <div class="form-actions">
                     <button type="submit">
                         <i class="fas fa-save" style="margin-right: 8px;"></i>Salvar Alterações
                     </button>
                 </div>
+
+
             </form>
         </div>
     </div>
@@ -331,5 +425,36 @@
             });
         });
     </script>
+
+    <script>
+    function toggleDocumento(radioName, divId) {
+        const radios = document.getElementsByName(radioName);
+        radios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked && radio.value === 'Apto') {
+                    document.getElementById(divId).style.display = 'block';
+                } else if (radio.checked) {
+                    document.getElementById(divId).style.display = 'none';
+                    const input = document.querySelector(`#${divId} input`);
+                    if (input) input.value = '';
+                }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleDocumento('aso', 'aso_documento_div');
+        toggleDocumento('epi_epc', 'epi_documento_div');
+        toggleDocumento('curso_nr10', 'nr10_documento_div');
+        toggleDocumento('curso_sep', 'sep_documento_div');
+        toggleDocumento('curso_nr35', 'nr35_documento_div');
+
+        // Atualiza estado inicial
+        document.querySelectorAll('input[type=radio]:checked').forEach(input => {
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+    </script>
+
 </body>
 </html>

@@ -128,8 +128,8 @@ class SESMTForm(forms.ModelForm):
     class Meta:
             model = Chamado
             fields = [
-                'aso', 'aso_descricao', 'epi_epc', 'epi_epc_descricao', 'curso_nr10', 'curso_sep',
-                'curso_nr35', 'cursos_observacoes', 'data_autorizacao_sesmt', 'nome_sesmt', 'assinatura_sesmt'
+                'aso', 'aso_documento', 'aso_descricao', 'epi_epc', 'epi_epc_documento', 'epi_epc_descricao', 'curso_nr10', 'curso_nr10_documento', 'curso_sep',
+                'curso_sep_documento', 'curso_sep_documento', 'curso_nr35', 'curso_nr35_documento', 'cursos_observacoes', 'data_autorizacao_sesmt', 'nome_sesmt', 'assinatura_sesmt'
                 ]
             widgets = {
                 'data_autorizacao_sesmt': forms.DateInput(attrs={'type': 'date'}),
