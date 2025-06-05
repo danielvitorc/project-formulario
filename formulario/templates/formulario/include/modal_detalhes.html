@@ -21,14 +21,6 @@
                 <li class="list-group-item"><strong>Frequência:</strong> {{ chamado.frequencia }}</li>
                 <li class="list-group-item"><strong>Data Autorização Gestor:</strong> {{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}</li>
                 <li class="list-group-item"><strong>Responsável:</strong> {{ chamado.responsavel }}</li>
-                <li class="list-group-item">
-                    <strong>Diretor Aprovou:</strong>
-                        {% if chamado.diretor_aprovacao %}
-                             Aprovado
-                        {% else %}
-                             Pendente
-                        {% endif %}
-                </li>
                 <li class="list-group-item"><strong>ASO:</strong> {{ chamado.aso|default:"Ainda não preenchido" }}</li>
                 <li class="list-group-item"><strong>EPI/EPC:</strong> {{ chamado.epi_epc|default:"Ainda não preenchido" }}</li>
                 <li class="list-group-item"><strong>Curso NR10:</strong> {{ chamado.curso_nr10|default:"Ainda não preenchido" }}</li>
