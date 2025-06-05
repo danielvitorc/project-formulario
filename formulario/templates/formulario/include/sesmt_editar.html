@@ -181,6 +181,140 @@
             box-shadow: 0 6px 15px rgba(12, 135, 242, 0.4); /* Sombra no hover */
         }
 
+        hr {
+            border: none;
+            height: 1px;
+            background-color: var(--border-color, #d0d0d0); /* Usa variável de sesmt_style.css ou fallback */
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Estilização para input[type="file"] customizado */
+        .form-field-group input[type="file"].custom-file-input-hidden {
+            display: none; /* Esconde o input original via JS adicionando esta classe */
+        }
+
+        .custom-file-upload-button { /* Botão customizado que aciona o input[type="file"] */
+            display: inline-flex; /* Para alinhar ícone e texto */
+            align-items: center;
+            justify-content: center; /* Centraliza conteúdo (ícone e texto) */
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-on-primary, #ffffff); /* Garanta que text-on-primary esteja definido ou use #fff */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95em;
+            border: none; /* Remove borda padrão */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil */
+        }
+
+        .custom-file-upload-button:hover {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombra mais pronunciada no hover */
+        }
+
+        .custom-file-upload-button .input-icon { /* Ícone dentro do botão */
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .file-name-display { /* Para mostrar o nome do arquivo selecionado */
+            display: block;
+            margin-top: 10px; /* Espaço acima do nome do arquivo */
+            font-size: 0.9em;
+            color: var(--text-color);
+            padding: 10px 12px;
+            background-color: #f8f9fa; /* Fundo sutil, como um campo desabilitado */
+            border: 1px dashed var(--border-color, #ced4da); /* Borda tracejada para indicar área de info */
+            border-radius: 6px;
+            min-height: 22px;
+            line-height: 1.5;
+            text-align: left;
+            font-style: italic;
+            word-break: break-all; /* Para nomes de arquivo longos não quebrarem o layout */
+        }
+        
+        /* Classe para o label original do Django quando for de um campo de arquivo */
+        .form-field-group > label.is-file-field-label {
+            margin-bottom: 15px; /* Aumenta o espaço entre o label e o botão de upload */
+        }
+
+        /* Estilização para Radio Buttons e seus Labels */
+        .form-field-group.radio-group {
+            /* padding-left: 5px; Adiciona um leve recuo se necessário */
+        }
+
+        .form-field-group.radio-group > label { /* Label principal do grupo de radios */
+            margin-bottom: 12px; /* Espaço entre o label do grupo e as opções */
+            font-weight: 600;
+        }
+
+        .radio-option {
+            display: flex; /* Alinha o rádio customizado e o texto do label */
+            align-items: center;
+            margin-bottom: 10px; /* Espaço entre as opções de rádio */
+            cursor: pointer;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            opacity: 0; /* Esconde o rádio original */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+        }
+
+        .radio-custom-indicator {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 50%;
+            margin-right: 12px;
+            display: inline-block;
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+
+        .radio-option:hover .radio-custom-indicator {
+            border-color: var(--primary-color);
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-custom-indicator {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-custom-indicator::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            transform: translate(-50%, -50%);
+        }
+        
+        .radio-option input[type="radio"]:focus + .radio-custom-indicator {
+             box-shadow: 0 0 0 3px rgba(19, 75, 242, 0.25); /* Foco similar a outros inputs */
+        }
+
+        .radio-label-text {
+            font-weight: normal;
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+        
+        /* Ajuste para Textarea com ícone */
+        .form-field-group textarea + .input-icon {
+            top: 22px; /* Ajusta a posição vertical do ícone para textareas */
+            transform: none;
+        }
+
+
         /* Estilizando a renderização {{ form.as_p }} do Django */
         form > p { /* Seleciona os <p> diretamente dentro do <form> */
             margin-bottom: 0; /* Remove margem padrão, será controlada por .form-field-group */
@@ -326,8 +460,8 @@
             const formParagraphs = form.querySelectorAll('p');
 
             formParagraphs.forEach(p => {
-                const label = p.querySelector('label');
-                const inputs = p.querySelectorAll('input, select, textarea');
+                const label = p.querySelector('label'); // Label principal do campo
+                const inputs = p.querySelectorAll('input, select, textarea'); // Todos os inputs dentro do <p>
                 const helpText = p.querySelector('.helptext');
                 
                 // Cria o wrapper
@@ -339,19 +473,58 @@
                     fieldGroup.appendChild(label);
                 }
 
-                inputs.forEach(input => {
-                    // Adiciona classes de controle
-                    input.classList.add('form-control');
+                inputs.forEach((input, index) => {
+                    // Adiciona classes de controle, exceto para radios que terão tratamento especial
+                    if (input.type !== 'radio') {
+                        input.classList.add('form-control');
+                    }
                     
                     let iconClass = '';
                     const inputType = input.getAttribute('type');
-                    const inputName = input.getAttribute('name'); // Para ícones mais específicos
+                    const inputName = input.getAttribute('name');
 
-                    if (input.tagName.toLowerCase() === 'select') {
-                        iconClass = 'fas fa-chevron-down'; // Ícone para select
+                    if (inputType === 'radio') {
+                        fieldGroup.classList.add('radio-group');
+                        // O label principal (p.querySelector('label')) já foi adicionado ao fieldGroup.
+                        // Agora processamos cada input de rádio e seu label específico.
+                        const radioId = input.id;
+                        // Tentamos encontrar um label que seja especificamente para este radio input.
+                        let radioSpecificLabel = form.querySelector(`label[for="${radioId}"]`);
+                        
+                        const optionWrapper = document.createElement('div');
+                        optionWrapper.classList.add('radio-option');
+
+                        const customIndicator = document.createElement('span');
+                        customIndicator.classList.add('radio-custom-indicator');
+                        
+                        optionWrapper.appendChild(input); // Move o input original para dentro
+                        optionWrapper.appendChild(customIndicator);
+
+                        if (radioSpecificLabel && radioSpecificLabel !== label) {
+                            const labelTextSpan = document.createElement('span');
+                            labelTextSpan.classList.add('radio-label-text');
+                            labelTextSpan.textContent = radioSpecificLabel.textContent;
+                            optionWrapper.appendChild(labelTextSpan);
+                            radioSpecificLabel.remove();
+                        } else if (!radioSpecificLabel && input.nextSibling && input.nextSibling.nodeType === Node.TEXT_NODE && input.nextSibling.textContent.trim()) {
+                            const labelTextSpan = document.createElement('span');
+                            labelTextSpan.classList.add('radio-label-text');
+                            labelTextSpan.textContent = input.nextSibling.textContent.trim();
+                            optionWrapper.appendChild(labelTextSpan);
+                            input.nextSibling.remove();
+                        }
+                        fieldGroup.appendChild(optionWrapper);
+
+                    } else if (input.tagName.toLowerCase() === 'select') {
+                        iconClass = 'fas fa-chevron-down';
+                        fieldGroup.appendChild(input);
                     } else if (input.tagName.toLowerCase() === 'textarea') {
-                        iconClass = 'fas fa-paragraph'; // Ícone para textarea
+                        iconClass = 'fas fa-edit';
+                        fieldGroup.appendChild(input);
                     } else {
+                        if(inputType !== 'file') {
+                           fieldGroup.appendChild(input);
+                        }
                         switch (inputType) {
                             case 'text':
                                 if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
@@ -366,44 +539,92 @@
                                 iconClass = 'fas fa-calendar-alt';
                                 break;
                             case 'file':
-                                iconClass = 'fas fa-file-upload'; // Ícone para upload
-                                // Para input file, o ícone não fica dentro, então não adicionamos o span.
-                                // O label pode ser estilizado para parecer um botão.
-                                if (label) label.classList.add('file-upload-label');
+                                // Não define iconClass aqui, pois o tratamento será diferente
+                                if (label) {
+                                    label.classList.add('is-file-field-label'); // Adiciona classe ao label original
+                                }
+                                input.classList.add('custom-file-input-hidden'); // Esconde o input original
+
+                                // Cria o botão de upload customizado
+                                const uploadButton = document.createElement('button');
+                                uploadButton.setAttribute('type', 'button'); // Importante para não submeter o form
+                                uploadButton.classList.add('custom-file-upload-button');
+                                
+                                const buttonIcon = document.createElement('span');
+                                buttonIcon.className = 'input-icon fas fa-cloud-upload-alt'; // Ícone para o botão
+                                uploadButton.appendChild(buttonIcon);
+                                
+                                const buttonText = document.createTextNode(' Escolher Arquivo');
+                                uploadButton.appendChild(buttonText);
+
+                                // Cria o display para o nome do arquivo
+                                const fileNameDisplay = document.createElement('div');
+                                fileNameDisplay.classList.add('file-name-display');
+                                fileNameDisplay.textContent = 'Nenhum arquivo selecionado';
+
+                                // Adiciona o botão e o display ao fieldGroup ANTES do input escondido
+                                fieldGroup.appendChild(uploadButton);
+                                fieldGroup.appendChild(fileNameDisplay);
+                                
+                                // Event listener para o botão customizado
+                                uploadButton.addEventListener('click', () => {
+                                    input.click(); // Aciona o clique no input original escondido
+                                });
+
+                                // Event listener para o input original (quando um arquivo é selecionado)
+                                input.addEventListener('change', () => {
+                                    if (input.files && input.files.length > 0) {
+                                        fileNameDisplay.textContent = input.files[0].name;
+                                    } else {
+                                        fileNameDisplay.textContent = 'Nenhum arquivo selecionado';
+                                    }
+                                });
                                 break;
                             case 'checkbox':
+                                const checkId = input.id;
+                                const checkSpecificLabel = form.querySelector(`label[for="${checkId}"]`);
                                 input.classList.add('form-check-input');
-                                // Para checkboxes, o label é geralmente ao lado, não acima.
-                                // O script original já lida com isso, mas podemos ajustar o label.
-                                if (label) {
-                                    label.classList.add('checkbox-label');
-                                    // Envolve o input e o texto do label para melhor alinhamento
-                                    const checkboxWrapper = document.createElement('span');
-                                    checkboxWrapper.style.display = 'flex';
-                                    checkboxWrapper.style.alignItems = 'center';
-                                    input.parentNode.insertBefore(checkboxWrapper, input);
-                                    checkboxWrapper.appendChild(input);
-                                    // Se o texto do label estiver solto, move para dentro do wrapper
-                                    // Isso é um pouco complexo porque o Django renderiza o label e o input separados
-                                    // Vamos assumir que o texto do label está no conteúdo do label original
+                                
+                                const checkboxOptionWrapper = document.createElement('div');
+                                checkboxOptionWrapper.classList.add('checkbox-option');
+                                checkboxOptionWrapper.style.display = 'flex';
+                                checkboxOptionWrapper.style.alignItems = 'center';
+                                checkboxOptionWrapper.style.marginBottom = '10px';
+                                
+                                if(input.parentNode === fieldGroup) fieldGroup.removeChild(input);
+                                checkboxOptionWrapper.appendChild(input);
+
+                                if (checkSpecificLabel && checkSpecificLabel !== label) {
+                                    const checkLabelTextSpan = document.createElement('span');
+                                    checkLabelTextSpan.classList.add('checkbox-label-text');
+                                    checkLabelTextSpan.textContent = checkSpecificLabel.textContent;
+                                    checkLabelTextSpan.style.marginLeft = '8px';
+                                    checkboxOptionWrapper.appendChild(checkLabelTextSpan);
+                                    checkSpecificLabel.remove();
+                                } else if (!checkSpecificLabel && input.nextSibling && input.nextSibling.nodeType === Node.TEXT_NODE && input.nextSibling.textContent.trim()) {
+                                    const checkLabelTextSpan = document.createElement('span');
+                                    checkLabelTextSpan.classList.add('checkbox-label-text');
+                                    checkLabelTextSpan.textContent = input.nextSibling.textContent.trim();
+                                    checkLabelTextSpan.style.marginLeft = '8px';
+                                    checkboxOptionWrapper.appendChild(checkLabelTextSpan);
+                                    input.nextSibling.remove();
                                 }
+                                fieldGroup.appendChild(checkboxOptionWrapper);
                                 break;
                             default:
-                                iconClass = 'fas fa-edit';
+                                if (inputType !== 'file') { // Ícone padrão para outros tipos, exceto file
+                                   iconClass = 'fas fa-pencil-alt'; // Ou um ícone mais genérico como 'fas fa-edit'
+                                }
                         }
                     }
                     
-                    // Adiciona o input ao fieldGroup
-                    fieldGroup.appendChild(input);
-
-                    // Adiciona o ícone (exceto para file e checkbox que são tratados de forma diferente)
-                    if (iconClass && inputType !== 'file' && inputType !== 'checkbox') {
+                    if (iconClass && inputType !== 'file' && inputType !== 'checkbox' && inputType !== 'radio') {
                         const iconSpan = document.createElement('span');
                         iconSpan.className = `input-icon ${iconClass}`;
                         fieldGroup.appendChild(iconSpan);
                     }
                 });
-
+                
                 // Move o helptext para dentro do fieldGroup
                 if (helpText) {
                     fieldGroup.appendChild(helpText);
@@ -412,6 +633,189 @@
                 // Substitui o <p> original pelo novo fieldGroup
                 p.parentNode.replaceChild(fieldGroup, p);
             });
+
+            // Função auxiliar para estilizar campos individuais que não estão em <p>
+            function styleIndividualField(form, fieldId, iconClassDefault) {
+                const inputElement = form.querySelector(`#${fieldId}`);
+                if (!inputElement) return;
+
+                const labelElement = form.querySelector(`label[for="${fieldId}"]`);
+                // Encontra o DIV pai mais próximo que contém diretamente o label e o input
+                // Isso é um pouco heurístico; pode precisar de ajuste se a estrutura for complexa.
+                let parentDiv = inputElement.closest('div');
+                if (labelElement && labelElement.parentNode !== parentDiv) {
+                    parentDiv = labelElement.closest('div');
+                }
+                // Se o label e o input estão em divs diferentes, mas um é pai do outro, usa o mais externo.
+                if (labelElement && parentDiv && !parentDiv.contains(labelElement)){
+                    parentDiv = form; // Fallback para o form se não encontrar um pai comum adequado
+                }
+
+
+                if (!parentDiv || (labelElement && !parentDiv.contains(labelElement)) || !parentDiv.contains(inputElement)) {
+                    // Se não encontrar um div pai comum claro, ou se o label/input não estiver nele,
+                    // vamos criar o fieldGroup e adicionar os elementos individualmente,
+                    // e tentar substituir o input ou o label no DOM.
+                    console.warn(`Não foi possível encontrar um DIV pai comum claro para ${fieldId}. Tentando estilização individual.`);
+                    
+                    const fieldGroup = document.createElement('div');
+                    fieldGroup.classList.add('form-field-group');
+
+                    if (labelElement) {
+                        fieldGroup.appendChild(labelElement.cloneNode(true)); // Clona para não remover do lugar errado
+                    }
+                    
+                    const clonedInput = inputElement.cloneNode(true);
+                    clonedInput.classList.add('form-control');
+                    fieldGroup.appendChild(clonedInput);
+                    
+                    let iconClass = iconClassDefault;
+                    const inputType = clonedInput.getAttribute('type');
+                    const inputName = clonedInput.getAttribute('name');
+
+                    if (clonedInput.tagName.toLowerCase() === 'select') {
+                        iconClass = 'fas fa-chevron-down';
+                    } else if (clonedInput.tagName.toLowerCase() === 'textarea') {
+                        iconClass = 'fas fa-edit';
+                    } else if (inputType === 'file') {
+                        // A lógica de arquivo customizado já deve ter sido aplicada se o input foi pego pelo querySelectorAll('input, select, textarea')
+                        // Mas se este input de arquivo foi renderizado fora de um <p>, precisamos aplicar aqui.
+                        // Esta parte pode precisar de refatoração para não duplicar a lógica de customização de arquivo.
+                        // Por ora, vamos apenas adicionar o ícone se não for tratado como custom file.
+                        if (!clonedInput.classList.contains('custom-file-input-hidden')) {
+                             iconClass = 'fas fa-file-upload';
+                        } else {
+                            iconClass = ''; // Já tratado
+                        }
+                    } else {
+                         switch (inputType) {
+                            case 'text':
+                                if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
+                                else iconClass = 'fas fa-pencil-alt';
+                                break;
+                            case 'date':
+                                iconClass = 'fas fa-calendar-alt';
+                                break;
+                            default:
+                                iconClass = iconClassDefault || 'fas fa-edit';
+                        }
+                    }
+
+                    if (iconClass && inputType !== 'file') { // Não adiciona ícone aqui para 'file' se for o customizado
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = `input-icon ${iconClass}`;
+                        fieldGroup.appendChild(iconSpan);
+                    }
+                    
+                    // Substitui o input original pelo fieldGroup. O label original pode ficar órfão ou ser removido se clonado.
+                    if (inputElement.parentNode) {
+                        inputElement.parentNode.replaceChild(fieldGroup, inputElement);
+                        if (labelElement && labelElement.parentNode && labelElement.parentNode !== fieldGroup) {
+                           // Se o label original não foi movido e está em outro lugar, remove-o para evitar duplicidade.
+                           // Isso é arriscado se o label não foi clonado. Melhor garantir que o label original seja movido ou clonado.
+                           // A heurística acima para parentDiv tenta evitar isso.
+                        }
+                    }
+                     // Se o label original ainda existir e não for o que está no fieldGroup, remove-o
+                    const originalLabelStillThere = form.querySelector(`label[for="${fieldId}"]`);
+                    if (originalLabelStillThere && originalLabelStillThere !== fieldGroup.querySelector(`label[for="${fieldId}"]`)) {
+                        originalLabelStillThere.remove();
+                    }
+
+                    return; // Sai da função após tentativa de estilização individual
+                }
+
+
+                const fieldGroup = document.createElement('div');
+                fieldGroup.classList.add('form-field-group');
+
+                if (labelElement) {
+                    fieldGroup.appendChild(labelElement); // Move o label original
+                }
+                
+                inputElement.classList.add('form-control');
+                fieldGroup.appendChild(inputElement); // Move o input original
+                
+                let iconClass = iconClassDefault;
+                const inputType = inputElement.getAttribute('type');
+                const inputName = inputElement.getAttribute('name');
+
+                if (inputElement.tagName.toLowerCase() === 'select') {
+                    iconClass = 'fas fa-chevron-down';
+                } else if (inputElement.tagName.toLowerCase() === 'textarea') {
+                    iconClass = 'fas fa-edit';
+                } else if (inputType === 'file') {
+                     // Se for um input de arquivo que não foi pego pela lógica de customização de arquivos (em <p>)
+                    if (!inputElement.classList.contains('custom-file-input-hidden')) {
+                        // Aplica a lógica de customização de arquivo aqui
+                        inputElement.classList.add('custom-file-input-hidden');
+                        if (labelElement) labelElement.classList.add('is-file-field-label');
+
+                        const uploadButton = document.createElement('button');
+                        uploadButton.setAttribute('type', 'button');
+                        uploadButton.classList.add('custom-file-upload-button');
+                        const buttonIconSpan = document.createElement('span');
+                        buttonIconSpan.className = 'input-icon fas fa-cloud-upload-alt';
+                        uploadButton.appendChild(buttonIconSpan);
+                        uploadButton.appendChild(document.createTextNode(' Escolher Arquivo'));
+
+                        const fileNameDisplay = document.createElement('div');
+                        fileNameDisplay.classList.add('file-name-display');
+                        fileNameDisplay.textContent = 'Nenhum arquivo selecionado';
+
+                        // Insere o botão e o display ANTES do input escondido, dentro do fieldGroup
+                        fieldGroup.insertBefore(uploadButton, inputElement);
+                        fieldGroup.insertBefore(fileNameDisplay, inputElement);
+                        
+                        uploadButton.addEventListener('click', () => inputElement.click());
+                        inputElement.addEventListener('change', () => {
+                            fileNameDisplay.textContent = inputElement.files && inputElement.files.length > 0 ? inputElement.files[0].name : 'Nenhum arquivo selecionado';
+                        });
+                        iconClass = ''; // Ícone já está no botão
+                    } else {
+                         iconClass = ''; // Já tratado pela lógica de <p>
+                    }
+                } else {
+                     switch (inputType) {
+                        case 'text':
+                            if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
+                            else iconClass = 'fas fa-pencil-alt';
+                            break;
+                        case 'date':
+                            iconClass = 'fas fa-calendar-alt';
+                            break;
+                        default:
+                            iconClass = iconClassDefault || 'fas fa-edit';
+                    }
+                }
+
+                if (iconClass) {
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = `input-icon ${iconClass}`;
+                    // Adiciona o ícone após o input, mas antes de outros elementos se houver
+                    if (inputElement.nextSibling) {
+                        fieldGroup.insertBefore(iconSpan, inputElement.nextSibling);
+                    } else {
+                        fieldGroup.appendChild(iconSpan);
+                    }
+                }
+                
+                if (parentDiv && parentDiv !== form) { // Se encontramos um div pai específico
+                    parentDiv.parentNode.replaceChild(fieldGroup, parentDiv);
+                } else { // Se não, tentamos substituir o input original (ou o label se o input não tiver pai)
+                    if (inputElement.parentNode) {
+                         inputElement.parentNode.replaceChild(fieldGroup, inputElement);
+                    } else if (labelElement && labelElement.parentNode) {
+                        labelElement.parentNode.replaceChild(fieldGroup, labelElement);
+                    }
+                }
+            }
+
+            // Estiliza os campos que não estão em <p>
+            // Os IDs são baseados na convenção do Django: id_<field_name>
+            styleIndividualField(form, 'id_data_autorizacao_sesmt', 'fas fa-calendar-alt');
+            styleIndividualField(form, 'id_nome_sesmt', 'fas fa-user');
+            styleIndividualField(form, 'id_assinatura_sesmt', 'fas fa-file-signature'); // Este é um campo de arquivo
 
             // Adiciona animação suave ao focar nos inputs
             const allInputs = form.querySelectorAll('.form-control');
@@ -435,23 +839,60 @@
                     document.getElementById(divId).style.display = 'block';
                 } else if (radio.checked) {
                     document.getElementById(divId).style.display = 'none';
-                    const input = document.querySelector(`#${divId} input`);
-                    if (input) input.value = '';
+                    const fileInput = document.querySelector(`#${divId} input[type="file"]`);
+                    if (fileInput) {
+                        fileInput.value = ''; // Limpa o valor do input de arquivo
+                        // Dispara o evento 'change' para atualizar o display do nome do arquivo, se houver
+                        const changeEvent = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(changeEvent);
+                    }
                 }
             });
         });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Garante que o script de manipulação de formulário (ícones, etc.) já rodou
+        // e os inputs de arquivo já foram processados e têm seus botões e displays.
+
         toggleDocumento('aso', 'aso_documento_div');
         toggleDocumento('epi_epc', 'epi_documento_div');
         toggleDocumento('curso_nr10', 'nr10_documento_div');
         toggleDocumento('curso_sep', 'sep_documento_div');
         toggleDocumento('curso_nr35', 'nr35_documento_div');
 
-        // Atualiza estado inicial
-        document.querySelectorAll('input[type=radio]:checked').forEach(input => {
-            input.dispatchEvent(new Event('change'));
+        // Atualiza estado inicial dos campos de documento condicional
+        // É importante que isso rode depois que os inputs de arquivo foram customizados
+        // para que a lógica de limpar o file input e seu display funcione corretamente.
+        const radiosForToggle = ['aso', 'epi_epc', 'curso_nr10', 'curso_sep', 'curso_nr35'];
+        radiosForToggle.forEach(radioName => {
+            const checkedRadio = document.querySelector(`input[name="${radioName}"]:checked`);
+            if (checkedRadio) {
+                // Simula um evento de change para garantir que a visibilidade e o estado do input de arquivo sejam definidos corretamente
+                const changeEvent = new Event('change', { bubbles: true });
+                checkedRadio.dispatchEvent(changeEvent);
+            } else {
+                // Se nenhum rádio estiver marcado para um grupo, esconde o div do documento correspondente
+                let divIdToHide = '';
+                if (radioName === 'aso') divIdToHide = 'aso_documento_div';
+                else if (radioName === 'epi_epc') divIdToHide = 'epi_documento_div';
+                else if (radioName === 'curso_nr10') divIdToHide = 'nr10_documento_div';
+                else if (radioName === 'curso_sep') divIdToHide = 'sep_documento_div';
+                else if (radioName === 'curso_nr35') divIdToHide = 'nr35_documento_div';
+
+                if (divIdToHide) {
+                    const divElement = document.getElementById(divIdToHide);
+                    if (divElement) {
+                        divElement.style.display = 'none';
+                        const fileInput = divElement.querySelector(`input[type="file"]`);
+                        if (fileInput) {
+                            fileInput.value = '';
+                            const fileChangeEvent = new Event('change', { bubbles: true });
+                            fileInput.dispatchEvent(fileChangeEvent);
+                        }
+                    }
+                }
+            }
         });
     });
     </script>
