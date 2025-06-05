@@ -34,64 +34,62 @@ def preencher_excel_per(per):
     ws["C7"] = per.gestor_imediato or ""
 
     ws["B10"] = "[X]" if per.tipo_exposicao == "Exposição Intermitente" else "[  ]"
-    ws["B11"] = "[X]" if per.tipo_exposicao == "Exposição Permanente" else "[  ]"
 
-    ws["B14"] = "[X]" if per.natureza_risco == "Risco Elétrico" else "[  ]"
-    ws["B15"] = "[X]" if per.natureza_risco == "Inflamáveis" else "[  ]"
-    ws["B16"] = "[X]" if per.natureza_risco == "Explosivos" else "[  ]"
-
-    ws["B17"] = "[X]" if per.outro_natureza_risco else "[  ]"
-
-    ws["C17"] = f"Outro: {per.outro_natureza_risco}" if per.outro_natureza_risco else "Outro:"
+    ws["B13"] = "[X]" if per.natureza_risco == "Operações Perigosas Com Explosivos" else "[  ]"
+    ws["B14"] = "[X]" if per.natureza_risco == "Operações Perigosas Com Inflamáveis" else "[  ]"
+    ws["B15"] = "[X]" if per.natureza_risco == "Operações Perigosas Com Exposição A Roubos Ou Outras Espécies De Violência Física Nas Atividades Profissionais De Segurança Pessoal Ou Patrimonial" else "[  ]"
+    ws["B16"] = "[X]" if per.natureza_risco == "Operações Perigosas Com Energia Elétrica" else "[  ]"
+    ws["B17"] = "[X]" if per.natureza_risco == "Atividades Perigosas Em Motocicleta" else "[  ]"
+    ws["B18"] = "[X]" if per.natureza_risco == "Atividades E Operações Perigosas Com Radiações Ionizantes Ou Substâncias Radiotivas" else "[  ]"
 
     ws["F9"] = per.descricao_atividades or ""
-    ws["B19"] = (per.atividade or "").replace(';', '\n')
+    ws["B20"] = (per.atividade or "").replace(';', '\n')
     ws["B19"].alignment = Alignment(wrap_text=True)
-    ws["F19"] = per.locais_atuaçao or ""
-    ws["J19"] = per.frequencia or ""
-    ws["B21"] = per.data_autorizacao_gestor.strftime("%d/%m/%Y") if per.data_autorizacao_gestor else ""
-    ws["D21"] = per.responsavel or ""
+    ws["F20"] = per.locais_atuaçao or ""
+    ws["J20"] = per.frequencia or ""
+    ws["B22"] = per.data_autorizacao_gestor.strftime("%d/%m/%Y") if per.data_autorizacao_gestor else ""
+    ws["D22"] = per.responsavel or ""
 
-    ws["H26"] = "[X]" if per.aso == "Apto" else "[  ]"
-    ws["J26"] = "[X]" if per.aso == "Não Apto" else "[  ]"
-    ws["K26"] = "[X]" if per.aso == "Não aplicável" else "[  ]"
+    ws["H27"] = "[X]" if per.aso == "Apto" else "[  ]"
+    ws["J27"] = "[X]" if per.aso == "Não apto" else "[  ]"
+    ws["K27"] = "[X]" if per.aso == "Não aplicável" else "[  ]"
 
-    ws["B26"] = f"Observações: {per.aso_descricao}" if per.aso_descricao else "Observações:"
+    ws["B27"] = f"Observações: {per.aso_descricao}" if per.aso_descricao else "Observações:"
 
-    ws["H29"] = "[X]" if per.epi_epc == "Apto" else "[  ]"
-    ws["J29"] = "[X]" if per.epi_epc == "Não Apto" else "[  ]"
-    ws["K29"] = "[X]" if per.epi_epc == "Não aplicável" else "[  ]"
+    ws["H30"] = "[X]" if per.epi_epc == "Apto" else "[  ]"
+    ws["J30"] = "[X]" if per.epi_epc == "Não apto" else "[  ]"
+    ws["K30"] = "[X]" if per.epi_epc == "Não aplicável" else "[  ]"
 
-    ws["B29"] = f"Observações: {per.epi_epc_descricao}" if per.epi_epc_descricao else "Observações:"
+    ws["B30"] = f"Observações: {per.epi_epc_descricao}" if per.epi_epc_descricao else "Observações:"
 
-    ws["H32"] = "[X]" if per.curso_nr10 == "Apto" else "[  ]"
-    ws["J32"] = "[X]" if per.curso_nr10 == "Não Apto" else "[  ]"
-    ws["K32"] = "[X]" if per.curso_nr10 == "Não aplicável" else "[  ]"
+    ws["H33"] = "[X]" if per.curso_nr10 == "Apto" else "[  ]"
+    ws["J33"] = "[X]" if per.curso_nr10 == "Não apto" else "[  ]"
+    ws["K33"] = "[X]" if per.curso_nr10 == "Não aplicável" else "[  ]"
 
-    ws["H33"] = "[X]" if per.curso_sep == "Apto" else "[  ]"
-    ws["J33"] = "[X]" if per.curso_sep == "Não Apto" else "[  ]"
-    ws["K33"] = "[X]" if per.curso_sep == "Não aplicável" else "[  ]"
+    ws["H34"] = "[X]" if per.curso_sep == "Apto" else "[  ]"
+    ws["J34"] = "[X]" if per.curso_sep == "Não apto" else "[  ]"
+    ws["K34"] = "[X]" if per.curso_sep == "Não aplicável" else "[  ]"
 
-    ws["H34"] = "[X]" if per.curso_nr35 == "Apto" else "[  ]"
-    ws["J34"] = "[X]" if per.curso_nr35 == "Não Apto" else "[  ]"
-    ws["K34"] = "[X]" if per.curso_nr35 == "Não aplicável" else "[  ]"
+    ws["H35"] = "[X]" if per.curso_nr35 == "Apto" else "[  ]"
+    ws["J35"] = "[X]" if per.curso_nr35 == "Não apto" else "[  ]"
+    ws["K35"] = "[X]" if per.curso_nr35 == "Não aplicável" else "[  ]"
 
-    ws["B35"] = f"Observações: {per.cursos_observacoes}" if per.cursos_observacoes else "Observações:"
+    ws["B36"] = f"Observações: {per.cursos_observacoes}" if per.cursos_observacoes else "Observações:"
    
-    ws["B39"] = per.data_autorizacao_sesmt.strftime("%d/%m/%Y") if per.data_autorizacao_sesmt else ""
-    ws["D39"] = per.nome_sesmt or ""
+    ws["B40"] = per.data_autorizacao_sesmt.strftime("%d/%m/%Y") if per.data_autorizacao_sesmt else ""
+    ws["D40"] = per.nome_sesmt or ""
 
-    ws["B44"] = "[X]" if per.procedimento_rh_dp == "Recebido sinalização automática da autorização" else "[  ]"
-    ws["B45"] = "[X]" if per.procedimento_rh_dp == "Validação do relatório de comprovação via GPM" else "[  ]"
-    ws["B46"] = "[X]" if per.procedimento_rh_dp == "Registro do adicional de periculosidade" else "[  ]"
+    ws["B45"] = "[X]" if per.procedimento_rh_dp == "Recebido sinalização automática da autorização" else "[  ]"
+    ws["B46"] = "[X]" if per.procedimento_rh_dp == "Validação do relatório de comprovação via GPM" else "[  ]"
+    ws["B47"] = "[X]" if per.procedimento_rh_dp == "Registro do adicional de periculosidade" else "[  ]"
 
-    ws["B50"] = per.data_autorizacao_rh_dp.strftime("%d/%m/%Y") if per.data_autorizacao_rh_dp else ""
-    ws["D50"] = per.nome_rh_dp or ""
+    ws["B51"] = per.data_autorizacao_rh_dp.strftime("%d/%m/%Y") if per.data_autorizacao_rh_dp else ""
+    ws["D51"] = per.nome_rh_dp or ""
 
     # Inserção das assinaturas
-    adicionar_imagem_excel(ws, per.assinatura_gestor, "J21")
-    adicionar_imagem_excel(ws, per.assinatura_sesmt, "J39")
-    adicionar_imagem_excel(ws, per.assinatura_rh_dp, "J50")
+    adicionar_imagem_excel(ws, per.assinatura_gestor, "J22")
+    adicionar_imagem_excel(ws, per.assinatura_sesmt, "J40")
+    adicionar_imagem_excel(ws, per.assinatura_rh_dp, "J51")
 
     # Salva em memória
     buffer = io.BytesIO()

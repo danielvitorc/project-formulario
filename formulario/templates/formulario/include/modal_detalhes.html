@@ -15,9 +15,6 @@
                 <li class="list-group-item"><strong>Gestor Imediato:</strong> {{ chamado.gestor_imediato }}</li>
                 <li class="list-group-item"><strong>Tipo de Exposição:</strong> {{ chamado.tipo_exposicao }}</li>
                 <li class="list-group-item"><strong>Natureza do Risco:</strong> {{ chamado.natureza_risco }}</li>
-                {% if chamado.outro_natureza_risco %}
-                <li class="list-group-item"><strong>Outro Natureza do Risco:</strong> {{ chamado.outro_natureza_risco }}</li>
-                {% endif %}
                 <li class="list-group-item"><strong>Descrição das Atividades:</strong> {{ chamado.descricao_atividades }}</li>
                 <li class="list-group-item"><strong>Atividade:</strong> {{ chamado.atividade }}</li>
                 <li class="list-group-item"><strong>Locais de Atuação:</strong> {{ chamado.locais_atuaçao }}</li>
@@ -46,6 +43,10 @@
 
                 {% if chamado.assinatura_gestor %}
                     <li class="list-group-item"><strong>Assinatura Gestor:</strong> <img src="{{ chamado.assinatura_gestor.url }}" width="200"></li>
+                {% endif %}
+
+                {% if chamado.assinatura_diretor %}
+                    <li class="list-group-item"><strong>Assinatura Diretor:</strong> <img src="{{ chamado.assinatura_diretor.url }}" width="200"></li>
                 {% endif %}
 
                 {% if chamado.assinatura_sesmt %}

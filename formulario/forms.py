@@ -19,19 +19,24 @@ AUTORIZACOES_CHOICES = [
 class GestorForm(forms.ModelForm):
     EXPOSICAO_CHOICES = [
         ('Exposição Intermitente','Exposição Intermitente'),
-        ('Exposição Permanente','Exposição Permanente'),
     ]
 
     NATUREZA_CHOICES = [
-        ('Risco Elétrico','Risco Elétrico'),
-        ('Inflamáveis','Inflamáveis'),
-        ('Explosivos','Explosivos'),
+        ('Operações Perigosas Com Explosivos','Operações Perigosas Com Explosivos'),
+        ('Operações Perigosas Com Inflamáveis','Operações Perigosas Com Inflamáveis'),
+        ('Operações Perigosas Com Exposição A Roubos Ou Outras Espécies De Violência Física Nas Atividades Profissionais De Segurança Pessoal Ou Patrimonial',
+         'Operações Perigosas Com Exposição A Roubos Ou Outras Espécies De Violência Física Nas Atividades Profissionais De Segurança Pessoal Ou Patrimonial'),
+        ('Operações Perigosas Com Energia Elétrica','Operações Perigosas Com Energia Elétrica'),
+        ('Atividades Perigosas Em Motocicleta','Atividades Perigosas Em Motocicleta'),
+        ('Atividades E Operações Perigosas Com Radiações Ionizantes Ou Substâncias Radiotivas ',
+         'Atividades E Operações Perigosas Com Radiações Ionizantes Ou Substâncias Radiotivas '),
     ]
     tipo_exposicao = forms.ChoiceField(
         choices =  EXPOSICAO_CHOICES,
         widget=forms.RadioSelect(), 
         required = False,
-        label = 'Tipo de Exposição'
+        label = 'Tipo de Exposição',
+        initial='Exposição Intermitente'  
     )
 
     natureza_risco = forms.ChoiceField(
@@ -45,7 +50,7 @@ class GestorForm(forms.ModelForm):
         model = Chamado
         fields = [
             'nome_colaborador', 'matricula', 'funcao', 'depto', 'gestor_imediato','tipo_exposicao',
-            'natureza_risco', 'outro_natureza_risco', 'descricao_atividades', 'atividade', 'locais_atuaçao', 'frequencia',
+            'natureza_risco', 'descricao_atividades', 'atividade', 'locais_atuaçao', 'frequencia',
             'data_autorizacao_gestor', 'responsavel', 'assinatura_gestor' 
             ]
         widgets = {
@@ -59,7 +64,6 @@ class GestorForm(forms.ModelForm):
             'funcao': 'Função',
             'depto': 'Departamento',
             'gestor_imediato': 'Gestor Imediato',
-            'outro_natureza_risco': 'Outro',
             'descricao_atividades': 'Descrição das Atividades',
             'atividade': 'Atividade',
             'locais_atuaçao': 'Locais de Atuação',
@@ -79,13 +83,7 @@ class GestorUploadForm(forms.ModelForm):
 class DiretorForm(forms.ModelForm):
     class Meta:
         model = Chamado
-        fields = ['diretor_aprovacao']
-        widgets = {
-            'diretor_aprovacao': forms.Select(choices=[
-                (True, 'Aprovar'),
-                (False, 'Selecionar'),
-            ])
-        }
+        fields = [ 'assinatura_diretor']
 
 
 class SESMTForm(forms.ModelForm):

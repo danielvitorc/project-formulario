@@ -6,7 +6,7 @@ from ..models import Chamado
 
 @login_required
 def sesmt_view(request):
-    chamados = Chamado.objects.filter(diretor_aprovacao=True).order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_diretor__isnull=False).exclude(assinatura_diretor='').order_by('-id')
     
     return render(request, 'formulario/sesmt.html', {'chamados': chamados})
 

@@ -42,8 +42,7 @@ class Chamado(models.Model):
     depto = models.CharField(max_length=100)
     gestor_imediato = models.CharField(max_length=100)
     tipo_exposicao = models.CharField(max_length=100)
-    natureza_risco = models.CharField(max_length=100)
-    outro_natureza_risco = models.CharField(max_length=100, null=True, blank=True)
+    natureza_risco = models.CharField(max_length=255)
     descricao_atividades = models.TextField()
     atividade = models.TextField()
     locais_atuaçao = models.CharField(max_length=255)
@@ -55,8 +54,7 @@ class Chamado(models.Model):
     upload_gestor = models.FileField(upload_to='registros/uploads', null=True, blank=True)
 
     # Campo cadastrado pelo Diretor
-    diretor_aprovacao = models.BooleanField(default=False, null=True, blank=True)
-    #assinatura_diretor = models.ImageField(upload_to="assinaturas/diretor/chamado", null=True, blank=True)
+    assinatura_diretor = models.ImageField(upload_to="assinaturas/diretor/chamado", null=True, blank=True)
 
     # Campos cadastrados pelo SESMT
     aso = models.CharField(max_length=100, null=True, blank=True)
@@ -108,7 +106,7 @@ class Chamado(models.Model):
             except Exception:
                 raise ValidationError("Não foi possível processar o arquivo de assinatura do diretor")
             
-            if hash_gestor not in HASHES_ASSINATURAS_GESTORES:
+            if hash_diretor not in HASHES_ASSINATURAS_DIRETORES:
                 raise ValidationError("Arquivo de assinatura inválido")
 
         if self.assinatura_sesmt and hasattr(self.assinatura_sesmt, 'file'):
