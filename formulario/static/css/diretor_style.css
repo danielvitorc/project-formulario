@@ -21,14 +21,10 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
   margin: 0;
-  padding: 20px; /* Espaçamento geral */
+  padding-top: 80px; /* Aumentar espaço para navbar mais robusta */
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centralizar conteúdo principal */
-  min-height: 100vh;
   overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
 }
 body::-webkit-scrollbar {
@@ -48,6 +44,71 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #0030a0, #004aad);
+}
+
+.navbar {
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  padding: 0 30px; /* Mais padding lateral */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Navbar mais alta */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  color: var(--navbar-brand-color);
+  font-size: 1.8em; /* Fonte maior */
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05); /* Efeito de zoom sutil */
+}
+
+.navbar-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-left: 20px; /* Espaçamento entre os links */
+}
+
+.navbar-links li a {
+  color: var(--navbar-text-color);
+  text-decoration: none;
+  padding: 10px 15px; /* Mais padding nos links */
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+  background-color: var(--navbar-hover-bg);
+  color: var(--text-on-accent); /* Garante contraste no hover */
+}
+
+.main-content {
+  padding: 30px; /* Mais padding no conteúdo principal */
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Estilo futurista adicional */

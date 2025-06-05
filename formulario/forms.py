@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import Select
 from .models import Chamado
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
@@ -41,7 +42,7 @@ class GestorForm(forms.ModelForm):
 
     natureza_risco = forms.ChoiceField(
         choices = NATUREZA_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-select',}),
+         widget=forms.Select(attrs={'class': 'natureza-select styled-form'}),
         required = False,
         label= 'Natureza do Risco'
     )

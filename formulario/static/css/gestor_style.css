@@ -742,3 +742,158 @@ body .btn-primary#openModalBtn:hover {
   --primary-color-rgb: 19, 75, 242;
   --accent-color-rgb: 12, 135, 242;
 } */
+
+/* Estilo do modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Conteúdo do modal */
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 60%;
+  max-width: 800px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Botão fechar */
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* Estilo do título */
+.modal-title {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Estilo do formulário */
+.styled-form p {
+  margin-bottom: 15px;
+}
+
+.styled-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.styled-form input[type="text"],
+.styled-form input[type="date"],
+.styled-form textarea,
+.styled-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.styled-form input:focus,
+.styled-form textarea:focus,
+.styled-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Radio buttons */
+.styled-form .radio {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+/* Botão submit */
+.btn-submit {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 20px auto 0;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #218838;
+}
+/* Faz o texto das opções do select quebrarem */
+.natureza-select {
+    width: 500px;
+    white-space: normal;
+}
+
+/* Para navegadores que respeitam esse seletor */
+.natureza-select option {
+    white-space: normal;
+}
+/* Estiliza o campo Select2 para parecer com outros inputs */
+.select2-container--default .select2-selection--single {
+  height: 42px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+/* Estilo ao focar */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--single.select2-selection--focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Ajuste do texto */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 16px;
+  white-space: normal; /* Permite quebra de linha */
+  word-break: break-word;
+}
+
+/* Alinha a seta do Select2 */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  top: 0;
+  right: 10px;
+}
+
+/* Estilo do dropdown */
+.select2-dropdown {
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Quebra as opções dentro do dropdown */
+.select2-results__option {
+  white-space: normal;
+  word-break: break-word;
+  padding: 10px;
+}
