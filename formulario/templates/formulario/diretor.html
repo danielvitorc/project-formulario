@@ -48,18 +48,37 @@
                     {% endif %}
                 </td>
                 <td data-label="Data">{{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}</td>
-                <td data-label="Assinatura do Diretor">
-                    {% if chamado.assinatura_diretor %}
-                        <div style="text-align: center; color: green; font-weight: bold;">
-                            ✅ Aprovado
-                        </div>
-                        <img src="{{ chamado.assinatura_diretor.url }}" alt="Assinatura do Diretor" width="100" style="display: block; margin: auto; margin-top: 5px;">
+
+                <td data-label="Aprovação do Diretor e Assinatura">
+                    {% if chamado.assinatura_diretor and chamado.diretor_aprovacao != None %}
+                        {% if chamado.diretor_aprovacao == True %}
+                            <div style="color: green; font-weight: bold;">✔️ Aprovado</div>
+                        {% elif chamado.diretor_aprovacao == False %}
+                            <div style="color: red; font-weight: bold;">❌ Reprovado</div>
+                        {% endif %}
+                        {% if chamado.assinatura_diretor %}
+                            <img src="{{ chamado.assinatura_diretor.url }}" alt="Assinatura do Diretor" width="100" style="display: block; margin: auto; margin-top: 5px;">
+                        {% endif %}
                     {% else %}
+                        <div style="color: orange; font-weight: bold;">⏳ Pendente</div>
                         <form method="post" enctype="multipart/form-data" style="text-align: center;">
                             {% csrf_token %}
-                            {{ form_diretor.assinatura_diretor }}
                             <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
-                            <button type="submit">Salvar</button>
+
+                            <div style="margin-top: 5px;">
+                                <label><strong>Aprovação:</strong></label><br>
+                                {{ form_diretor.diretor_aprovacao }}
+                            </div>
+
+                            <div style="margin-top: 5px;">
+                                {% if chamado.assinatura_diretor %}
+                                    <img src="{{ chamado.assinatura_diretor.url }}" alt="Assinatura do Diretor" width="100" style="display: block; margin: auto; margin-top: 5px;">
+                                {% endif %}
+                                <label><strong>Assinatura:</strong></label><br>
+                                <input type="file" name="assinatura_diretor" {% if not chamado.assinatura_diretor %}required{% endif %}>
+                            </div>
+
+                            <button type="submit" style="margin-top: 8px;">Salvar</button>
                         </form>
                     {% endif %}
                 </td>
@@ -71,12 +90,42 @@
                 </td>
             </tr>
             {% endfor %}
+
         </table>
         {% for chamado in chamados %}
             {% include 'formulario/include/modal_detalhes.html' %}
         {% endfor %}
         </div>
-
     </div>
+
+    {% if messages %}
+    <!-- Modal -->
+        <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #dc3545; color: white;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Atenção</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+            </div>
+            </div>
+        </div>
+        </div>
+    {% endif %}
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            myModal.show();
+        });
+    </script>
 </body>
 </html>

@@ -36,7 +36,7 @@
                         <i class="fas fa-file-alt fa-3x mb-3"></i> <!-- Ícone de exemplo -->
                         <h5 class="card-title">Gerenciar Chamados</h5>
                         <p class="card-text">Utilize o botão abaixo para cadastrar um novo chamado.</p>
-                        <button id="openModalBtn" class="btn">Cadastrar Novo Chamado</button>
+                        <button id="openModalBtn" name="salvar_gestor" class="btn">Cadastrar Novo Chamado</button>
                     </div>
                 </div>
             </div>
@@ -65,6 +65,43 @@
                             Aguardando envio
                         {% endif %}
                     </p>
+                    <p class="card-text">
+                        Aprovação do Diretor: 
+                        {% if chamado.diretor_aprovacao == True %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% elif chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌ Reprovado</span>
+                        {% else %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">
+                        Validação SESMT:
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌</span> 
+                        {% elif not chamado.assinatura_sesmt  or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+
+                        {% else %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">
+                        Validação RH/DP:
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌</span> 
+                        {% elif chamado.assinatura_rh_dp %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% else %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                        {% endif %}
+                    </p>
+                    {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
+                        <div class="alert alert-danger mt-2">
+                            Este chamado possui campos com status "Não apto". Upload não permitido.
+                        </div>
+                    {% endif %}
+
                     </div>
                 </div>
 
@@ -82,7 +119,7 @@
             <span class="close-btn" id="closeModalBtn">&times;</span>
             <h2 class="modal-title">Cadastro de Chamado</h2>
             
-            <form method="post" enctype="multipart/form-data" class="styled-form">
+            <form method="post" enctype="multipart/form-data" class="styled-form" >
             {% csrf_token %}
             {{ gestor_form.as_p }}
             <button type="submit" name="salvar_gestor" class="btn-submit">Salvar Chamado</button>
@@ -90,12 +127,16 @@
         </div>
         </div>
 
-        <h2>Upload de Documentos para Chamados Existentes</h2>
+        {% for chamado in chamados %}
+            <div class="chamado-item">
+                <h3>Chamado: {{ chamado.nome_colaborador }} </h3>
 
-        {% if chamados %}
-            {% for chamado in chamados %}
-                <div class="chamado-item">
-                    <h3>Chamado: {{ chamado.nome_colaborador }} </h3>
+                {% if chamado.id in chamados_nao_aptos %}
+                    <div style="border:1px solid red; padding:10px; background-color:#ffe6e6; margin-bottom:10px;">
+                        <strong>Não é possível fazer o upload.</strong><br>
+                        Um ou mais campos do formulário anterior estão como <strong>"Não apto"</strong>. 
+                    </div>
+                {% else %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="chamado_id" value="{{ chamado.id }}">
@@ -103,18 +144,18 @@
                         <button type="submit" name="salvar_upload">Enviar Documento</button>
 
                         {% if chamado.upload_gestor %}
-                            <p>Documento atual: <a href="{{ chamado.upload_gestor.url }}" target="_blank">Visualizar/Download</a></p>
+                            <p>Documento atual: 
+                                <a href="{{ chamado.upload_gestor.url }}" target="_blank">Visualizar/Download</a>
+                            </p>
                         {% else %}
                             <p><strong>Sem documento enviado para este chamado.</strong></p>
                         {% endif %}
                     </form>
-                </div>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>Não há chamados cadastrados para realizar upload de documentos.</p>
-        {% endif %}
-    </div>
+                {% endif %}
+            </div>
+            <hr>
+        {% endfor %}
+
     <script>
         $(document).ready(function() {
             $('.natureza-select').select2({

@@ -118,7 +118,7 @@ body::-webkit-scrollbar-thumb:hover {
   border-radius: 12px; /* Bordas mais suaves */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
   width: 100%;
-  max-width: 1200px; /* Aumentar a largura máxima para acomodar melhor a tabela */
+  max-width: 1400px; /* Aumentar a largura máxima para acomodar melhor a tabela */
   margin-top: 20px;
   border: 1px solid var(--border-color);
 }

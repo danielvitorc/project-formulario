@@ -54,6 +54,7 @@ class Chamado(models.Model):
     upload_gestor = models.FileField(upload_to='registros/uploads', null=True, blank=True)
 
     # Campo cadastrado pelo Diretor
+    diretor_aprovacao = models.BooleanField(null=True, blank=True)
     assinatura_diretor = models.ImageField(upload_to="assinaturas/diretor/chamado", null=True, blank=True)
 
     # Campos cadastrados pelo SESMT
@@ -136,3 +137,11 @@ class Chamado(models.Model):
 
     def rh_dp_preenchido(self):
         return bool(self.assinatura_rh_dp)
+
+    def get_status_diretor(self):
+        if self.diretor_aprovacao == True:
+            return '✔️ Aprovado'
+        elif self.diretor_aprovacao == False:
+            return '❌ Reprovado'
+        else:
+            return '⏳ Pendente'

@@ -82,9 +82,15 @@ class GestorUploadForm(forms.ModelForm):
         fields = ['upload_gestor']
 
 class DiretorForm(forms.ModelForm):
+    diretor_aprovacao = forms.ChoiceField(
+        choices=[('', 'Selecione')] + [('True', 'Aprovado'), ('False', 'Reprovado')],
+        widget=forms.Select(attrs={'style': 'width: 150px;'}),
+        required=False
+    )
+
     class Meta:
         model = Chamado
-        fields = [ 'assinatura_diretor']
+        fields = ['diretor_aprovacao', 'assinatura_diretor']
 
 
 class SESMTForm(forms.ModelForm):

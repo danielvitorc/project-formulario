@@ -32,9 +32,52 @@
                     <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
                         Ver Detalhes
                     </button>
-                    {% if chamado.upload_gestor %}
-                        <p class="card-text">Doc. Avaliação GPM: <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-light btn-sm card-link download-btn">Download</a></p>
+                    <p class="card-text">
+                        Doc. Avaliação GPM: 
+                        {% if chamado.upload_gestor %}
+                            <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-light btn-sm card-link download-btn">
+                                Download
+                            </a>
+                        {% else %}
+                            Aguardando envio
+                        {% endif %}
+                    </p>
+                    <p class="card-text">
+                        Aprovação do Diretor: 
+                        {% if chamado.diretor_aprovacao == True %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% elif chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌ Reprovado</span>
+                        {% else %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">
+                        Validação SESMT:
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌</span> 
+                        {% elif not chamado.assinatura_sesmt  or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+
+                        {% else %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% endif %}
+                    </p>
+                    {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
+                        <div class="alert alert-danger mt-2">
+                            Este chamado possui campos com status /n "Não apto". 
+                        </div>
                     {% endif %}
+                    <p class="card-text">
+                        Validação RH/DP:
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span style="color:red; font-weight:bold;">❌</span> 
+                        {% elif chamado.assinatura_rh_dp %}
+                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                        {% else %}
+                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                        {% endif %}
+                    </p>
                     </div>
                     <div class="card-footer">
                     {% if not chamado.sesmt_preenchido %}
