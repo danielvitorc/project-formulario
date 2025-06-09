@@ -26,7 +26,7 @@
             <li><a href="{% url 'registros_gestor' %}">Registros do Gestor</a></li>
             <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
         </ul>
-    </nav>    
+    </nav>
     <div class="main-content container mt-4">
         <h1 class="mb-4 text-center">Bem-vindo, Gestor!</h1>
         <div class="row justify-content-center">
@@ -55,52 +55,58 @@
                     <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
                         Ver Detalhes
                     </button>
-                    <p class="card-text">
-                        Doc. Avaliação GPM: 
+                    <div class="card p-3 shadow-sm rounded-3 bg-light mb-3">
+                    <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">📄 Doc. Avaliação GPM:</h6>
                         {% if chamado.upload_gestor %}
-                            <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-light btn-sm card-link download-btn">
-                                Download
+                            <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-download"></i> Download
                             </a>
                         {% else %}
-                            Aguardando envio
+                            <span class="text-muted fst-italic">Aguardando envio</span>
                         {% endif %}
-                    </p>
-                    <p class="card-text">
-                        Aprovação do Diretor: 
-                        {% if chamado.diretor_aprovacao == True %}
-                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
-                        {% elif chamado.diretor_aprovacao == False %}
-                            <span style="color:red; font-weight:bold;">❌ Reprovado</span>
-                        {% else %}
-                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
-                        {% endif %}
-                    </p>
-                    <p class="card-text">
-                        Validação SESMT:
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span style="color:red; font-weight:bold;">❌</span> 
-                        {% elif not chamado.assinatura_sesmt  or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
-                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                    </div>
 
+                    <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
+                        {% if chamado.diretor_aprovacao == True %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                        {% elif chamado.diretor_aprovacao == False %}
+                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
                         {% else %}
-                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
                         {% endif %}
-                    </p>
-                    <p class="card-text">
-                        Validação RH/DP:
+                    </div>
+
+                    <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
                         {% if chamado.diretor_aprovacao == False %}
-                            <span style="color:red; font-weight:bold;">❌</span> 
-                        {% elif chamado.assinatura_rh_dp %}
-                            <span style="color:green; font-weight:bold;">✔️ Aprovado</span>
+                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
+                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
+                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
                         {% else %}
-                            <span style="color:orange; font-weight:bold;">⏳ Pendente</span>
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
                         {% endif %}
-                    </p>
+                    </div>
+
+                    <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">🧾 Validação RH/DP:</h6>
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
+                        {% elif chamado.assinatura_rh_dp %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
+                        {% endif %}
+                    </div>
+
                     {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
-                        <div class="alert alert-danger mt-2">
-                            Este chamado possui campos com status "Não apto".
+                        <div class="alert alert-danger mt-3">
+                            <strong>⚠️ Atenção:</strong> Este chamado possui campos com status <b>"Não apto"</b>.
                         </div>
                     {% endif %}
+                    </div>
+
                     
                     {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp  %}
                         <form method="post" action="{% url 'gestor_ciente' chamado.pk %}">
@@ -161,14 +167,6 @@
             </div>
             <hr>
         {% endfor %}
-
-    <script>
-        $(document).ready(function() {
-            $('.natureza-select').select2({
-                width: '100%'
-            });
-        });
-    </script>
 
     <script>
         // Abrir modal

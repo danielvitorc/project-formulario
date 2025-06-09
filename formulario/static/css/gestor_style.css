@@ -17,6 +17,7 @@
   --navbar-brand-color: var(--text-on-primary);/* Cor do brand/logo na navbar */
 }
 
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
   margin: 0;
@@ -633,7 +634,6 @@ body .btn-primary#openModalBtn:hover {
   flex-grow: 1; /* Faz o corpo do card ocupar o espaço disponível */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Espaça os elementos internos */
   align-items: center; /* Centraliza os itens horizontalmente */
   text-align: center; /* Centraliza o texto */
 }
