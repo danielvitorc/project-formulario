@@ -98,10 +98,16 @@
                     </p>
                     {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
                         <div class="alert alert-danger mt-2">
-                            Este chamado possui campos com status "Não apto". Upload não permitido.
+                            Este chamado possui campos com status "Não apto".
                         </div>
                     {% endif %}
-
+                    
+                    {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp  %}
+                        <form method="post" action="{% url 'gestor_ciente' chamado.pk %}">
+                        {% csrf_token %}
+                        <button type="submit">Ciente</button>
+                        </form>
+                    {% endif %}
                     </div>
                 </div>
 

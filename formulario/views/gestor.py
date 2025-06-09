@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import io
@@ -12,13 +12,13 @@ from django.contrib import messages
 def gestor_view(request):
     chamados = Chamado.objects.filter(
         assinatura_sesmt__isnull=False, 
-        usuario_gestor=request.user
+        usuario_gestor=request.user,
+        gestor_ciente=False
     ).exclude(assinatura_sesmt='').order_by('-id')
 
     chamados_pendentes = Chamado.objects.filter(
-        usuario_gestor=request.user
-    ).filter(
-        Q(assinatura_rh_dp__isnull=True) | Q(assinatura_rh_dp__exact='')
+        usuario_gestor=request.user,
+        gestor_ciente=False
     ).order_by('-id')
 
     gestor_form = GestorForm()
@@ -77,3 +77,9 @@ def registros_gestor(request):
     return render(request, 'formulario/registros_gestor.html', {
         'chamados': chamados
     })
+
+def gestor_ciente(request, pk):
+    chamado = get_object_or_404(Chamado, pk=pk)
+    chamado.gestor_ciente = True
+    chamado.save()
+    return redirect('gestor_view')  # Ou onde quiser redirecionar

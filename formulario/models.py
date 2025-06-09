@@ -82,6 +82,10 @@ class Chamado(models.Model):
     nome_rh_dp = models.CharField(max_length=100, null=True, blank=True)
     assinatura_rh_dp =  models.ImageField(upload_to="assinaturas/rh_dp/chamado")
 
+    gestor_ciente =  models.BooleanField(default=False, null=True, blank=True)
+    sesmt_ciente =  models.BooleanField(default=False, null=True, blank=True)
+    rh_dp_ciente =  models.BooleanField(default=False, null=True, blank=True)
+
     def __str__(self):
         return f"{self.nome_colaborador} - {self.responsavel}"
     

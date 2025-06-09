@@ -15,4 +15,7 @@ urlpatterns = [
     path('registros-rh_dp/', rh_dp.registros_rh_dp, name='registros_rh_dp'),
     path('rh_dp/editar/<int:pk>/', rh_dp.rh_dp_editar, name='rh_dp_editar'),
     path('download_per/<int:registro_id>/', excel.download_per_excel, name='download_per_excel'),
+    path('chamado/<int:pk>/gestor_ciente/', gestor.gestor_ciente, name='gestor_ciente'),
+    path('chamado/<int:pk>/sesmt_ciente/', sesmt.sesmt_ciente, name='sesmt_ciente'),
+    path('chamado/<int:pk>/rh_dp_ciente/', rh_dp.rh_dp_ciente, name='rh_dp_ciente')
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from ..forms import RHDPForm
 from ..models import Chamado
@@ -7,9 +8,17 @@ from ..models import Chamado
 
 @login_required
 def rh_dp_view(request):
-    chamados = Chamado.objects.filter(upload_gestor__isnull=False).exclude(upload_gestor='').order_by('-id')
+    chamados = Chamado.objects.filter(upload_gestor__isnull=False, rh_dp_ciente = False).exclude(upload_gestor='').order_by('-id')
 
-    return render(request, 'formulario/rh_dp.html', {'chamados': chamados})
+    chamados_pendentes = Chamado.objects.filter(
+    Q(aso='Não apto') |
+    Q(epi_epc='Não apto') |
+    Q(curso_nr10='Não apto') |
+    Q(curso_sep='Não apto') |
+    Q(curso_nr35='Não apto')
+).order_by('-id')
+
+    return render(request, 'formulario/rh_dp.html', {'chamados': chamados , 'chamados_pendentes' : chamados_pendentes })
 
 @login_required
 def rh_dp_editar(request, pk):
@@ -33,3 +42,9 @@ def registros_rh_dp(request):
     return render(request, 'formulario/registros_rh_dp.html', {
         'chamados': chamados
     })
+
+def rh_dp_ciente(request, pk):
+    chamado = get_object_or_404(Chamado, pk=pk)
+    chamado.rh_dp_ciente = True
+    chamado.save()
+    return redirect('rh_dp_view') 

@@ -6,7 +6,7 @@ from ..models import Chamado
 
 @login_required
 def sesmt_view(request):
-    chamados = Chamado.objects.filter(diretor_aprovacao=True).order_by('-id')
+    chamados = Chamado.objects.filter(diretor_aprovacao=True, sesmt_ciente = False).order_by('-id')
 
     return render(request, 'formulario/sesmt.html', {'chamados': chamados})
 
@@ -32,3 +32,9 @@ def registros_sesmt(request):
     return render(request, 'formulario/registros_sesmt.html', {
         'chamados': chamados
     })
+
+def sesmt_ciente(request, pk):
+    chamado = get_object_or_404(Chamado, pk=pk)
+    chamado.sesmt_ciente = True
+    chamado.save()
+    return redirect('sesmt_view')  # Ou onde quiser redirecionar
