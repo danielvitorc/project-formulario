@@ -30,10 +30,7 @@ HASHES_ASSINATURAS_GESTORES = [
 ]
 
 HASHES_ASSINATURAS_DIRETORES = [
-    "dcad43271bb1a067f3c44954e39e9456d8970a0822416a9d0df7702c6437d63e",
-    "f4df4acbfe24928104732011da7a60c5c8b50f7a9a27ae41c78f22e57354b0f6",
-    "c86198dc67fb0fb44fed3215f02774018afebc923ad4ebb1cf05d6c672e678ae"
-
+    "42a3588bf2fe41304530fc17a15a0092bc77fc6b56fcf48d4c836bab1453ff9e"
 ]
 
 HASHES_ASSINATURAS_SESMT = [
@@ -89,13 +86,13 @@ class Chamado(models.Model):
     data_autorizacao_sesmt = models.DateField(null=True, blank=True)
     nome_sesmt = models.CharField(max_length=100, null=True, blank=True)
 
-    assinatura_sesmt = models.ImageField(upload_to="assinaturas/sesmt/chamado")
+    assinatura_sesmt = models.ImageField(upload_to="assinaturas/sesmt/chamado", null=True, blank=True)
 
     # Campos cadastrados pelo RH/DP
     procedimento_rh_dp = models.CharField(max_length=100, null=True, blank=True)
     data_autorizacao_rh_dp = models.DateField(null=True, blank=True)
     nome_rh_dp = models.CharField(max_length=100, null=True, blank=True)
-    assinatura_rh_dp =  models.ImageField(upload_to="assinaturas/rh_dp/chamado")
+    assinatura_rh_dp =  models.ImageField(upload_to="assinaturas/rh_dp/chamado",  null=True, blank=True)
 
     gestor_ciente =  models.BooleanField(default=False, null=True, blank=True)
     sesmt_ciente =  models.BooleanField(default=False, null=True, blank=True)
@@ -156,11 +153,3 @@ class Chamado(models.Model):
 
     def rh_dp_preenchido(self):
         return bool(self.assinatura_rh_dp)
-
-    def get_status_diretor(self):
-        if self.diretor_aprovacao == True:
-            return '✔️ Aprovado'
-        elif self.diretor_aprovacao == False:
-            return '❌ Reprovado'
-        else:
-            return '⏳ Pendente'

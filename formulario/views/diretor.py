@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from ..forms import  DiretorForm
 from ..models import Chamado
 from django.contrib import messages
@@ -10,7 +11,7 @@ def diretor_view(request):
         assinatura_gestor__isnull=False
     ).exclude(assinatura_gestor='').order_by('-id')
 
-    form_diretor = DiretorForm()  # Instancia o formulário
+    form_diretor = DiretorForm()  
 
     if request.method == 'POST':
         chamado_id = request.POST.get('chamado_id')
@@ -22,9 +23,17 @@ def diretor_view(request):
         if diretor_aprovacao is not None and assinatura_diretor is not None:
             chamado.diretor_aprovacao = True if diretor_aprovacao == 'True' else False
             chamado.assinatura_diretor = assinatura_diretor
-            chamado.save()
-            messages.success(request, 'Aprovação realizada com sucesso!')
-            return redirect('diretor_view')
+            try:
+                chamado.full_clean()  # VALIDAÇÃO ACONTECE AQUI
+                chamado.save()
+                messages.success(request, 'Aprovação realizada com sucesso!')
+                return redirect('diretor_view')
+            except ValidationError as e:
+                erros = e.message_dict.get('__all__')
+                if erros:
+                    messages.error(request, f'Erro na validação: {erros[0]}')
+                else:
+                    messages.error(request, f'Erro na validação: {e.message_dict}')
         else:
             messages.error(request, 'Preencha todos os campos corretamente.')
 
