@@ -187,7 +187,11 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
-                <a href="https://nortetech.gpm.srv.br/" target="_blank">Link GPM</a>
+                <a href="https://nortetech.gpm.srv.br/" target="_blank" 
+                    style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: #0d71a7; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background-color 0.3s;">
+                    🔗 Acessar GPM
+                </a>
+
 
                 <!-- Django form rendering - será estilizado pelo script e CSS -->
                 {{ form_rh_dp.as_p }}

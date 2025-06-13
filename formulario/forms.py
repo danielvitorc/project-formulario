@@ -3,6 +3,7 @@ from django.forms import Select
 from .models import Chamado
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from django.forms.widgets import FileInput
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -177,6 +178,7 @@ class RHDPForm(forms.ModelForm):
         ]
         widgets = {
             'data_autorizacao_rh_dp': forms.DateInput(attrs={'type': 'date'}),
+            'upload_gpm': FileInput(),  # Substitui o ClearableFileInput
         }
         
         labels = {
