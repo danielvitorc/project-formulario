@@ -1,0 +1,146 @@
+:root {
+  --primary-color: #134BF2; /* Azul primário forte */
+  --secondary-color: #acadaf; /* Cinza secundário */
+  --accent-color: #0C87F2; /* Azul acento */
+  --highlight-color: #1BA0F2; /* Azul destaque */
+  --bg-color: #F2F2F2; /* Cinza claro para fundo */
+  --text-color: #000000; /* Preto para texto principal */
+  --card-bg: #ffffff; /* Branco para cartões/contêineres */
+  --text-on-primary: #ffffff; /* Texto branco sobre cor primária */
+  --text-on-accent: #ffffff; /* Texto branco sobre cor de acento */
+  --border-color: #d0d0d0; /* Cor de borda sutil */
+
+  /* Mapeamento para variáveis existentes (ajustado para nova paleta) */
+  --navbar-bg: var(--primary-color);      /* Fundo da navbar */
+  --navbar-text-color: var(--text-on-primary);  /* Texto dos links da navbar */
+  --navbar-hover-bg: var(--accent-color);      /* Fundo do hover dos links da navbar */
+  --navbar-brand-color: var(--text-on-primary);/* Cor do brand/logo na navbar */
+}
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+  margin: 0;
+  padding-top: 80px; /* Aumentar espaço para navbar mais robusta */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #004aad, #0066ff);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0030a0, #004aad);
+}
+
+.navbar {
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  padding: 0 30px; /* Mais padding lateral */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Navbar mais alta */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  color: var(--navbar-brand-color);
+  font-size: 1.8em; /* Fonte maior */
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05); /* Efeito de zoom sutil */
+}
+
+.navbar-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-left: 20px; /* Espaçamento entre os links */
+}
+
+.navbar-links li a {
+  color: var(--navbar-text-color);
+  text-decoration: none;
+  padding: 10px 15px; /* Mais padding nos links */
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+  background-color: var(--navbar-hover-bg);
+  color: var(--text-on-accent); /* Garante contraste no hover */
+}
+
+.main-content {
+  padding: 30px; /* Mais padding no conteúdo principal */
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+}
+
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--bg-color); /* Fundo cinza claro */
+}
+
+.dashboard-card {
+  background: linear-gradient(145deg, var(--primary-color), var(--highlight-color));
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  color: var(--text-on-primary); /* texto branco */
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(12, 135, 242, 0.6); /* sombra azul mais forte no hover */
+}
+
+.dashboard-card h4 {
+  color: var(--accent-color); /* azul acento */
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dashboard-card canvas {
+  width: 100% !important;
+  height: 280px !important;
+}
+
+.full-width {
+  grid-column: span 2;
+}

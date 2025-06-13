@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import auth, gestor, diretor, sesmt, rh_dp, excel
+from .views import auth, gestor, diretor, sesmt, rh_dp, excel, analitico
 
 urlpatterns = [
     path('',auth.login_view, name='login'),
@@ -17,5 +17,7 @@ urlpatterns = [
     path('download_per/<int:registro_id>/', excel.download_per_excel, name='download_per_excel'),
     path('chamado/<int:pk>/gestor_ciente/', gestor.gestor_ciente, name='gestor_ciente'),
     path('chamado/<int:pk>/sesmt_ciente/', sesmt.sesmt_ciente, name='sesmt_ciente'),
-    path('chamado/<int:pk>/rh_dp_ciente/', rh_dp.rh_dp_ciente, name='rh_dp_ciente')
+    path('chamado/<int:pk>/rh_dp_ciente/', rh_dp.rh_dp_ciente, name='rh_dp_ciente'),
+    path('analitico/', analitico.analitico_view, name='analitico_view'),
+    path('analitico/dados/', analitico.analitico_dados_view, name='analitico_dados_view'),
 ]

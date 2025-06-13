@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
+    <title>{% block title %}Painel Analítico{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- Carregar jQuery antes do Select2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+    <link rel="stylesheet" href="{% static 'css/analitico.css' %}">
+</head>
+<body>
+  <nav class="navbar"> <!-- Assumindo que a navbar já foi implementada corretamente antes -->
+        <a href="{% url 'gestor_view' %}" class="navbar-brand">Painel Gestor</a>
+        <ul class="navbar-links">
+            <li><a href="{% url 'gestor_view' %}">Início</a></li>
+            <li><a href="{% url 'registros_gestor' %}">Registros do Gestor</a></li>
+            <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
+        </ul>
+  </nav>
+  <div class="dashboard-container">
+
+    <div class="dashboard-card">
+      <h4>Chamados por Departamento</h4>
+      <canvas id="chartDepto" height="250"></canvas>
+    </div>
+
+    <div class="dashboard-card">
+      <h4>Aprovações por Setor</h4>
+      <canvas id="chartAprovacoes" height="250"></canvas>
+    </div>
+
+    <div class="dashboard-card full-width">
+      <h4>Chamados por Mês</h4>
+      <canvas id="chartMes" height="250"></canvas>
+    </div>
+
+  </div>
+
+
+  <script>
+    fetch('/analitico/dados/')
+      .then(response => response.json())
+      .then(data => {
+        // 1. Chamados por Departamento
+        const labelsDepto = data.chamados_por_depto.map(item => item.depto);
+        const dataDepto = data.chamados_por_depto.map(item => item.total);
+
+        new Chart(document.getElementById('chartDepto'), {
+          type: 'bar',
+          data: {
+            labels: labelsDepto,
+            datasets: [{
+              label: 'Chamados',
+              data: dataDepto,
+              backgroundColor: 'rgba(54, 162, 235, 0.7)'
+            }]
+          }
+        });
+
+        // 2. Aprovações por setor
+        const labelsAprov = Object.keys(data.aprovacoes);
+        const dataAprov = Object.values(data.aprovacoes);
+
+        new Chart(document.getElementById('chartAprovacoes'), {
+          type: 'doughnut', // <- alterado de 'pie' para 'doughnut'
+          data: {
+            labels: labelsAprov,
+            datasets: [{
+              label: 'Aprovações',
+              data: dataAprov,
+              backgroundColor: ['#4caf50', '#f44336', '#2196f3', '#ff9800']
+            }]
+          },
+          options: {
+            responsive: true,
+            cutout: '60%', // opcional: define o tamanho do “furo” central (pode ajustar)
+            plugins: {
+              legend: {
+                position: 'bottom' // ou 'right', 'left', etc.
+              }
+            }
+          }
+        });
+        // 3. Chamados por mês
+        const labelsMes = data.chamados_por_mes.map(item => new Date(item.mes).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }));
+        const dataMes = data.chamados_por_mes.map(item => item.total);
+
+        new Chart(document.getElementById('chartMes'), {
+          type: 'bar',
+          data: {
+            labels: labelsMes,
+            datasets: [{
+              label: 'Chamados/Mês',
+              data: dataMes,
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }]
+          }
+        });
+      });
+  </script>
+</body>
+</html>
