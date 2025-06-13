@@ -8,7 +8,9 @@ from ..models import Chamado
 
 @login_required
 def rh_dp_view(request):
-    chamados = Chamado.objects.filter(upload_gestor__isnull=False, rh_dp_ciente = False).exclude(upload_gestor='').order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, rh_dp_ciente = False, 
+    aso = 'Apto', epi_epc = 'Apto', curso_nr10 = 'Apto', curso_sep = 'Apto', curso_nr35 = 'Apto'
+    ).exclude(assinatura_sesmt='').order_by('-id')
 
     chamados_pendentes = Chamado.objects.filter(
     Q(aso='Não apto') |

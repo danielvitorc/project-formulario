@@ -58,7 +58,7 @@
                     <div class="card p-3 shadow-sm rounded-3 bg-light mb-3">
                     <div class="mb-2">
                         <h6 class="fw-bold text-primary mb-1">📄 Doc. Avaliação GPM:</h6>
-                        {% if chamado.upload_gestor %}
+                        {% if chamado.upload_gpm %}
                             <a href="{{ chamado.upload_gestor.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-download"></i> Download
                             </a>
@@ -139,6 +139,8 @@
         </div>
         </div>
 
+        <!--
+
         {% for chamado in chamados %}
             <div class="chamado-item">
                 <h3>Chamado: {{ chamado.nome_colaborador }} </h3>
@@ -167,6 +169,7 @@
             </div>
             <hr>
         {% endfor %}
+        -->
 
     <script>
         // Abrir modal

@@ -26,23 +26,27 @@ HASHES_ASSINATURAS_GESTORES = [
     "73c3e45ff8dcd1d42dd48a11cbe3ec40abb05037f092520185a479bd36345e5a",
     "09106f815d907bee8a9d43fd1e494a388cad434d0106fee9d68e60b234ab615a",
     "1b9712623a55a3801366d8197849cb1073ed02d87201360c618ced142bef2b7a",
-    "99afd36d7a40c091850555f241d153ca9281706eb944e0aa6957c59cb1405038"
+    "99afd36d7a40c091850555f241d153ca9281706eb944e0aa6957c59cb1405038",
+    "32e31df93d56f34aaa2e52f520d40fc81352a83da5714ab5af45d571ecb20418"
 ]
 
 HASHES_ASSINATURAS_DIRETORES = [
-    "42a3588bf2fe41304530fc17a15a0092bc77fc6b56fcf48d4c836bab1453ff9e"
+    "42a3588bf2fe41304530fc17a15a0092bc77fc6b56fcf48d4c836bab1453ff9e",
+    "bf0267b251d1b1817d9c6a19ee9664f14e22c13f38375f2ba4af6b0b53abe8ac"
 ]
 
 HASHES_ASSINATURAS_SESMT = [
     "fda546737cd3f05ff1f2438431cfb92949afd679466e25ff6891ae7f2c9ff7c4",
     "27580949768de81ca0fffa8c7c35c19e6ba62415a8f52b88086e258e36dc8f07",
-    "7e5e6a6f1bd1c19c0628f254c8a043ef9f46e6018fe99c137159c5d978241c49"
+    "7e5e6a6f1bd1c19c0628f254c8a043ef9f46e6018fe99c137159c5d978241c49",
+    "68b97c6fe415071df27c195b45b85827c2fec741fa989adb21f1e759a651b28b"
 ]
 
 HASHES_ASSINATURAS_RH_DP = [
     "ff863fc46dbb350036d1e14459a2adf202f5fae8fa6979d35025d6d0b1754977",
     "19c35d32185989132d81a42f4096da48183e92cacf800ac94223c2ed32c11b29",
-    "b8a0e4c4dccf2e9583e172091655d8defbcb9b8490d3240c0e710872dc5837a1"
+    "b8a0e4c4dccf2e9583e172091655d8defbcb9b8490d3240c0e710872dc5837a1",
+    "9c80e724a346d80418440e11e01bb51ea6cb831af7b850fb59c8c34c0e7e1cbd"
 ]  
 
 class Chamado(models.Model):
@@ -62,8 +66,6 @@ class Chamado(models.Model):
     data_autorizacao_gestor = models.DateField()
     responsavel = models.CharField(max_length=100)
     assinatura_gestor = models.ImageField(upload_to="assinaturas/gestor/chamado")
-    
-    upload_gestor = models.FileField(upload_to='registros/uploads', null=True, blank=True)
 
     # Campo cadastrado pelo Diretor
     diretor_aprovacao = models.BooleanField(null=True, blank=True)
@@ -89,6 +91,7 @@ class Chamado(models.Model):
     assinatura_sesmt = models.ImageField(upload_to="assinaturas/sesmt/chamado", null=True, blank=True)
 
     # Campos cadastrados pelo RH/DP
+    upload_gpm = models.FileField(upload_to='registros/uploads', null=True, blank=True)
     procedimento_rh_dp = models.CharField(max_length=100, null=True, blank=True)
     data_autorizacao_rh_dp = models.DateField(null=True, blank=True)
     nome_rh_dp = models.CharField(max_length=100, null=True, blank=True)

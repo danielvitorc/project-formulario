@@ -74,6 +74,7 @@ class GestorForm(forms.ModelForm):
             'assinatura_gestor': 'Assinatura do Gestor',
         }
 
+'''
 class GestorUploadForm(forms.ModelForm):
     chamado_id = forms.IntegerField(widget=forms.HiddenInput())
 
@@ -81,6 +82,8 @@ class GestorUploadForm(forms.ModelForm):
         model = Chamado
         fields = ['upload_gestor']
 
+'''
+    
 class DiretorForm(forms.ModelForm):
     diretor_aprovacao = forms.ChoiceField(
         choices=[('', 'Selecione')] + [('True', 'Aprovado'), ('False', 'Reprovado')],
@@ -170,7 +173,7 @@ class RHDPForm(forms.ModelForm):
     class Meta:
         model = Chamado 
         fields = [
-            'procedimento_rh_dp', 'data_autorizacao_rh_dp', 'nome_rh_dp', 'assinatura_rh_dp'
+            'upload_gpm','procedimento_rh_dp', 'data_autorizacao_rh_dp', 'nome_rh_dp', 'assinatura_rh_dp'
         ]
         widgets = {
             'data_autorizacao_rh_dp': forms.DateInput(attrs={'type': 'date'}),
@@ -179,5 +182,6 @@ class RHDPForm(forms.ModelForm):
         labels = {
                'data_autorizacao_rh_dp': 'Data de Autorização RH/DP',
                'nome_rh_dp': 'Nome',
-               'assinatura_rh_dp': 'Assinatura  do RH/DP'
+               'assinatura_rh_dp': 'Assinatura  do RH/DP',
+               'upload_gpm': 'Documento do GPM'
         }

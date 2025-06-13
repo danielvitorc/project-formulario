@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import io
-from ..forms import GestorForm, GestorUploadForm
+from ..forms import GestorForm
 from ..models import Chamado
 from docx import Document
 from django.contrib import messages
@@ -10,6 +10,7 @@ from django.contrib import messages
 
 @login_required
 def gestor_view(request):
+
     chamados = Chamado.objects.filter(
         assinatura_sesmt__isnull=False, 
         usuario_gestor=request.user,
@@ -22,7 +23,6 @@ def gestor_view(request):
     ).order_by('-id')
 
     gestor_form = GestorForm()
-    upload_form = GestorUploadForm()
 
     # Mapeia quais chamados não estão aptos
     chamados_nao_aptos = []
@@ -37,14 +37,14 @@ def gestor_view(request):
             chamados_nao_aptos.append(chamado.id)
 
     if request.method == 'POST':
-        if 'salvar_gestor' in request.POST:
-            gestor_form = GestorForm(request.POST, request.FILES)
-            if gestor_form.is_valid():
-                chamado = gestor_form.save(commit=False)
-                chamado.usuario_gestor = request.user
-                chamado.save()
-                return redirect('gestor_view')
+        gestor_form = GestorForm(request.POST, request.FILES)
+        if gestor_form.is_valid():
+            chamado = gestor_form.save(commit=False)
+            chamado.usuario_gestor = request.user
+            chamado.save()
+            return redirect('gestor_view')
 
+        '''
         elif 'salvar_upload' in request.POST:
             chamado_id = request.POST.get('chamado_id')
             chamado = Chamado.objects.filter(id=chamado_id).first()
@@ -59,14 +59,13 @@ def gestor_view(request):
                 if upload_form.is_valid():
                     chamado.upload_gestor = upload_form.cleaned_data['upload_gestor']
                     chamado.save()
-                    return redirect('gestor_view')
+        '''
 
     return render(request, 'formulario/gestor.html', {
         'gestor_form': gestor_form,
-        'upload_form': upload_form,
         'chamados': chamados,
         'chamados_pendentes': chamados_pendentes,
-        'chamados_nao_aptos': chamados_nao_aptos  # <- passa pro template
+        'chamados_nao_aptos': chamados_nao_aptos 
     })
 
 
