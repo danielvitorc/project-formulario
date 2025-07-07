@@ -47,7 +47,7 @@ HASHES_ASSINATURAS_RH_DP = [
     "19c35d32185989132d81a42f4096da48183e92cacf800ac94223c2ed32c11b29",
     "b8a0e4c4dccf2e9583e172091655d8defbcb9b8490d3240c0e710872dc5837a1",
     "9c80e724a346d80418440e11e01bb51ea6cb831af7b850fb59c8c34c0e7e1cbd"
-]  
+]
 
 class Chamado(models.Model):
     usuario_gestor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
