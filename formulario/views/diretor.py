@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from ..forms import  DiretorForm
@@ -9,23 +9,20 @@ from django.contrib import messages
 def diretor_view(request):
     chamados = Chamado.objects.filter(
         assinatura_gestor__isnull=False
-    ).exclude(assinatura_gestor='').order_by('-id')
+    ).exclude(assinatura_gestor__isnull=True).order_by('-id')
 
     form_diretor = DiretorForm()  
 
     if request.method == 'POST':
         chamado_id = request.POST.get('chamado_id')
-        diretor_aprovacao = request.POST.get('diretor_aprovacao')
-        assinatura_diretor = request.FILES.get('assinatura_diretor')
+        chamado = get_object_or_404(Chamado, id=chamado_id)
 
-        chamado = Chamado.objects.get(id=chamado_id)
+        form_diretor = DiretorForm(request.POST, request.FILES, instance=chamado)
 
-        if diretor_aprovacao is not None and assinatura_diretor is not None:
-            chamado.diretor_aprovacao = True if diretor_aprovacao == 'True' else False
-            chamado.assinatura_diretor = assinatura_diretor
+        if form_diretor.is_valid():
             try:
-                chamado.full_clean()  # VALIDAÇÃO ACONTECE AQUI
-                chamado.save()
+                assinar = form_diretor.cleaned_data.get('assinar_como_diretor', False)
+                form_diretor.save(user=request.user if assinar else None)
                 messages.success(request, 'Aprovação realizada com sucesso!')
                 return redirect('diretor_view')
             except ValidationError as e:

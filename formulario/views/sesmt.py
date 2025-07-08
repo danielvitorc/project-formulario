@@ -17,7 +17,8 @@ def sesmt_editar(request, pk):
     if request.method == 'POST':
         form = SESMTForm(request.POST, request.FILES, instance=chamado)
         if form.is_valid():
-            form.save()
+            assinar = form.cleaned_data.get('assinar_como_sesmt', False)
+            form.save(user=request.user if assinar else None)
             messages.success(request, 'Formulário SESMT salvo com sucesso!')
             return redirect('sesmt_view')
     else:

@@ -33,7 +33,7 @@ class Chamado(models.Model):
     # Assinatura do gestor
     assinatura_gestor =  models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,
         related_name='chamados_assinados_como_gestor')
-    data_autorizacao_gestor = models.DateField(null=True, blank=True, auto_now_add=True)
+    data_autorizacao_gestor = models.DateField(null=True, blank=True)
     imagem_assinatura_gestor = models.ImageField(upload_to="assinaturas/gestor/chamado", null=True, blank=True)
 
     # Campo cadastrado pelo Diretor
