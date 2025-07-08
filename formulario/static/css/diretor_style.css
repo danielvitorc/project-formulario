@@ -373,3 +373,248 @@ button[type="submit"]:hover {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
 }
+
+/* Container compacto do checkbox */
+.compact-checkbox-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(19, 75, 242, 0.05) 0%, rgba(27, 160, 242, 0.05) 100%);
+    border: 1px solid rgba(19, 75, 242, 0.2);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Segoe UI', sans-serif;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+.compact-checkbox-container:hover {
+    border-color: rgba(19, 75, 242, 0.4);
+    background: linear-gradient(135deg, rgba(19, 75, 242, 0.08) 0%, rgba(27, 160, 242, 0.08) 100%);
+    box-shadow: 0 2px 8px rgba(19, 75, 242, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Esconder o checkbox original */
+.compact-checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Checkbox customizado compacto */
+.compact-checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background: var(--card-bg);
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.compact-checkmark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(19, 75, 242, 0.1) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    border-radius: 2px;
+}
+
+.compact-checkbox-container:hover .compact-checkmark::before {
+    transform: translateX(100%);
+}
+
+/* Ícone de check compacto */
+.compact-checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 8px;
+    border: solid var(--text-on-primary);
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    animation: compact-checkmark-appear 0.25s ease-in-out;
+}
+
+@keyframes compact-checkmark-appear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -60%) rotate(45deg) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
+    }
+}
+
+/* Estado checked compacto */
+.compact-checkbox-container input[type="checkbox"]:checked ~ .compact-checkmark {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 8px rgba(19, 75, 242, 0.3);
+    animation: compact-checkbox-glow 0.4s ease-in-out;
+}
+
+.compact-checkbox-container input[type="checkbox"]:checked ~ .compact-checkmark::after {
+    display: block;
+}
+
+@keyframes compact-checkbox-glow {
+    0% {
+        box-shadow: 0 0 2px rgba(19, 75, 242, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 12px rgba(19, 75, 242, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 8px rgba(19, 75, 242, 0.3);
+    }
+}
+
+/* Label compacto */
+.compact-checkbox-label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    line-height: 1.2;
+    flex: 1;
+}
+
+.compact-checkbox-container:hover .compact-checkbox-label {
+    color: var(--primary-color);
+}
+
+/* Ícone de status compacto */
+.compact-status-icon {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(135deg, var(--highlight-color) 0%, var(--accent-color) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: var(--text-on-primary);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 6px rgba(27, 160, 242, 0.4);
+}
+
+.compact-checkbox-container input[type="checkbox"]:checked ~ .compact-status-icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: compact-icon-pulse 1.5s infinite;
+}
+
+@keyframes compact-icon-pulse {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(27, 160, 242, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 10px rgba(27, 160, 242, 0.6);
+    }
+}
+
+/* Efeito de partículas compacto */
+.compact-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.compact-particle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: var(--highlight-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: compact-particle-float 2s infinite linear;
+}
+
+@keyframes compact-particle-float {
+    0% {
+        opacity: 0;
+        transform: translateY(100%) translateX(0);
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100%) translateX(20px);
+    }
+}
+
+/* Responsividade para tabelas */
+@media (max-width: 768px) {
+    .compact-checkbox-container {
+        padding: 6px 10px;
+        gap: 6px;
+        max-width: 180px;
+    }
+    
+    .compact-checkmark {
+        height: 18px;
+        width: 18px;
+    }
+    
+    .compact-checkbox-label {
+        font-size: 12px;
+    }
+    
+    .compact-status-icon {
+        width: 12px;
+        height: 12px;
+        font-size: 7px;
+    }
+}
+
+/* Integração com tabelas */
+.table-cell-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.table-cell-checkbox .compact-checkbox-container {
+    margin: 0 auto;
+}

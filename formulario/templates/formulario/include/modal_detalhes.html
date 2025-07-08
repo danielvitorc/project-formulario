@@ -137,28 +137,28 @@
                     <div class="col-md-6 mb-3"><strong>Nome RH/DP:</strong> {{ chamado.nome_rh_dp|default:"Ainda não preenchido" }}</div>
 
                     <!-- Assinaturas -->
-                    {% if chamado.assinatura_gestor %}
+                    {% if chamado.imagem_assinatura_gestor %}
                         <div class="col-md-6 mb-3">
                         <strong>Assinatura Gestor:</strong><br>
-                        <img src="{{ chamado.assinatura_gestor.url }}" class="assinatura-img">
+                        <img src="{{ chamado.imagem_assinatura_gestor.url }}" class="assinatura-img">
                         </div>
                     {% endif %}
-                    {% if chamado.assinatura_diretor %}
+                    {% if chamado.imagem_assinatura_diretor %}
                         <div class="col-md-6 mb-3">
                         <strong>Assinatura Diretor:</strong><br>
-                        <img src="{{ chamado.assinatura_diretor.url }}" class="assinatura-img">
+                        <img src="{{ chamado.imagem_assinatura_diretor.url }}" class="assinatura-img">
                         </div>
                     {% endif %}
-                    {% if chamado.assinatura_sesmt %}
+                    {% if chamado.imagem_assinatura_sesmt %}
                         <div class="col-md-6 mb-3">
                         <strong>Assinatura SESMT:</strong><br>
-                        <img src="{{ chamado.assinatura_sesmt.url }}" class="assinatura-img">
+                        <img src="{{ chamado.imagem_assinatura_sesmt.url }}" class="assinatura-img">
                         </div>
                     {% endif %}
-                    {% if chamado.assinatura_rh_dp %}
+                    {% if chamado.imagem_assinatura_rh_dp %}
                         <div class="col-md-6 mb-3">
                         <strong>Assinatura RH/DP:</strong><br>
-                        <img src="{{ chamado.assinatura_rh_dp.url }}" class="assinatura-img">
+                        <img src="{{ chamado.imagem_assinatura_rh_dp.url }}" class="assinatura-img">
                         </div>
                     {% endif %}
                     </div>
