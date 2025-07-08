@@ -71,7 +71,7 @@ def gestor_view(request):
 
 @login_required
 def registros_gestor(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False, usuario_gestor=request.user).exclude(assinatura_rh_dp='')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False, usuario_gestor=request.user).exclude(assinatura_rh_dp__isnull=True)
 
     return render(request, 'formulario/registros_gestor.html', {
         'chamados': chamados

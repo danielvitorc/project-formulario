@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
         ('sesmt','Sesmt')
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True, blank=True)
+    cargo = models.CharField(max_length=100, null=True, blank=True)
 
 User = get_user_model()
 

@@ -39,7 +39,7 @@ def rh_dp_editar(request, pk):
 
 @login_required
 def registros_rh_dp(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp__isnull=True).order_by('-id')
 
     return render(request, 'formulario/registros_rh_dp.html', {
         'chamados': chamados

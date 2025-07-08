@@ -94,37 +94,53 @@ class GestorForm(forms.ModelForm):
             self.fields["assinatura_gestor"].widget = forms.HiddenInput()
 
     @staticmethod
-    def generate_signature_image(name: str) -> ContentFile:
+    def generate_signature_image(name: str, cargo: str = None) -> ContentFile:
 
-        print("Gerando assinatura para:", name)
+        print("Gerando assinatura para:", name, cargo)
 
         try:
-            font = ImageFont.truetype("BRADHITC.TTF", 40)
+            font_name = ImageFont.truetype("BRADHITC.TTF", 40)
+            font_cargo = ImageFont.truetype("BRADHITC.TTF", 25)
             print("Fonte carregada com sucesso.")
         except IOError:
             print("Fonte não encontrada, usando padrão.")
-            font = ImageFont.load_default()
+            font_name = ImageFont.load_default()
+            font_cargo = ImageFont.load_default()
+
 
         # Calcular tamanho necessário do texto
         dummy_img = Image.new('RGBA', (1, 1))
         draw_dummy = ImageDraw.Draw(dummy_img)
-        bbox = draw_dummy.textbbox((0, 0), name, font=font)
-        text_width = bbox[2] - bbox[0]
-        text_height = bbox[3] - bbox[1]
+
+        bbox_name = draw_dummy.textbbox((0, 0), name, font=font_name)
+        width_name = bbox_name[2] - bbox_name[0]
+        height_name = bbox_name[3] - bbox_name[1]
+
+        # Calcular tamanho do texto do cargo (se tiver)
+        if cargo:
+            bbox_cargo = draw_dummy.textbbox((0, 0), cargo, font=font_cargo)
+            width_cargo = bbox_cargo[2] - bbox_cargo[0]
+            height_cargo = bbox_cargo[3] - bbox_cargo[1]
+        else:
+            width_cargo = 0
+            height_cargo = 0
  
         padding = 20
-        img_width = text_width + padding * 2
-        img_height = text_height + padding * 2
+        img_width = max(width_name, width_cargo) + padding * 2
+        img_height = height_name + height_cargo + padding * 3 
 
         img = Image.new('RGBA', (img_width, img_height), color=(255, 255, 255, 0))
         draw = ImageDraw.Draw(img)
 
-        # Desenhar o texto centralizado verticalmente
-        draw.text((padding, padding), name, font=font, fill=(0, 0, 0, 255))
+        # Desenhar o nome no topo
+        draw.text((padding, padding), name, font=font_name, fill=(0, 0, 0, 255))
+
+        # Desenhar o cargo abaixo do nome
+        if cargo:
+            draw.text((padding, padding + height_name + padding // 2), cargo, font=font_cargo, fill=(0, 0, 0, 255))
 
         buffer = BytesIO()
         img.save(buffer, format='PNG')
-
         filename = f"assinatura_{name.lower().replace(' ', '_')}.png"
         return ContentFile(buffer.getvalue(), name=filename)
 
@@ -141,7 +157,9 @@ class GestorForm(forms.ModelForm):
         if user:
             instance.usuario = user
             nome_usuario = str(user.get_full_name() or user.username or "USUÁRIO")
-            assinatura_img = self.generate_signature_image(nome_usuario)
+            cargo_usuario = getattr(user, 'cargo', '')
+
+            assinatura_img = self.generate_signature_image(nome_usuario, cargo_usuario)
         
         # Assinatura automática com base no tipo de usuário
         if user.role == "gestor":
@@ -199,10 +217,14 @@ class DiretorForm(forms.ModelForm):
         if user:
             instance.assinatura_diretor = user
 
+        nome_usuario = str(user.get_full_name() or user.username or "USUÁRIO")
+        cargo_usuario = getattr(user, 'cargo', '')  # pega o cargo se existir
+
             # Gera imagem da assinatura se desejar
         assinatura_img = GestorForm.generate_signature_image(
-            str(user.get_full_name() or user.username or "USUÁRIO")
+           nome_usuario, cargo_usuario
         )
+        
 
         instance.imagem_assinatura_diretor.save(
             assinatura_img.name, assinatura_img, save=False
@@ -292,10 +314,14 @@ class SESMTForm(forms.ModelForm):
         if user:
             instance.assinatura_sesmt = user
 
-            # Gera imagem da assinatura se desejar
+            nome_usuario = str(user.get_full_name() or user.username or "USUÁRIO")
+            cargo_usuario = getattr(user, 'cargo', '')  # pega o cargo se existir
+
+                # Gera imagem da assinatura se desejar
             assinatura_img = GestorForm.generate_signature_image(
-                str(user.get_full_name() or user.username or "USUÁRIO")
+            nome_usuario, cargo_usuario
             )
+
             instance.imagem_assinatura_sesmt.save(
                 assinatura_img.name, assinatura_img, save=False
             )
@@ -353,9 +379,12 @@ class RHDPForm(forms.ModelForm):
         if user:
             instance.assinatura_rh_dp = user
 
-            # Gera imagem da assinatura se desejar
+            nome_usuario = str(user.get_full_name() or user.username or "USUÁRIO")
+            cargo_usuario = getattr(user, 'cargo', '')  # pega o cargo se existir
+
+                # Gera imagem da assinatura se desejar
             assinatura_img = GestorForm.generate_signature_image(
-                str(user.get_full_name() or user.username or "USUÁRIO")
+            nome_usuario, cargo_usuario
             )
             instance.imagem_assinatura_rh_dp.save(
                 assinatura_img.name, assinatura_img, save=False

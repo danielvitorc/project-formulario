@@ -87,9 +87,9 @@ def preencher_excel_per(per):
     ws["D51"] = per.nome_rh_dp or ""
 
     # Inserção das assinaturas
-    adicionar_imagem_excel(ws, per.assinatura_gestor, "J22")
-    adicionar_imagem_excel(ws, per.assinatura_sesmt, "J40")
-    adicionar_imagem_excel(ws, per.assinatura_rh_dp, "J51")
+    adicionar_imagem_excel(ws, per.imagem_assinatura_gestor, "J22")
+    adicionar_imagem_excel(ws, per.imagem_assinatura_sesmt, "J40")
+    adicionar_imagem_excel(ws, per.imagem_assinatura_rh_dp, "J51")
 
     # Salva em memória
     buffer = io.BytesIO()

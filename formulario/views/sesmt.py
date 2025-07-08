@@ -28,7 +28,7 @@ def sesmt_editar(request, pk):
 
 @login_required
 def registros_sesmt(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp__isnull=True).order_by('-id')
 
     return render(request, 'formulario/registros_sesmt.html', {
         'chamados': chamados
