@@ -241,11 +241,6 @@
             margin-bottom: 15px; /* Aumenta o espaço entre o label e o botão de upload */
         }
 
-        /* Estilização para Radio Buttons e seus Labels */
-        .form-field-group.radio-group {
-            /* padding-left: 5px; Adiciona um leve recuo se necessário */
-        }
-
         .form-field-group.radio-group > label { /* Label principal do grupo de radios */
             margin-bottom: 12px; /* Espaço entre o label do grupo e as opções */
             font-weight: 600;
@@ -414,22 +409,59 @@
                     {{ form.nome_sesmt }}
                 </div>
 
-                <div>
-                    {{ form.assinatura_sesmt.label_tag }}
-                    {{ form.assinatura_sesmt }}
+                <!-- Checkbox Futurista para Assinatura SESMT -->
+                <div class="form-group">
+                    <label class="futuristic-checkbox-container">
+                        <!-- O campo do formulário Django -->
+                        {{ form.assinar_como_sesmt }}
+                        
+                        <!-- Elementos visuais do checkbox customizado -->
+                        <span class="futuristic-checkmark"></span>
+                        
+                        <!-- Label e help text -->
+                        <div class="futuristic-checkbox-label">
+                            <span>{{ form.assinar_como_sesmt.label }}</span>
+                            <span class="futuristic-help-text">{{ form.assinar_como_sesmt.help_text }}</span>
+                        </div>
+                        
+                        <!-- Ícone do SESMT (opcional, para efeito visual) -->
+                        <div class="manager-icon">🛡️</div> <!-- Use um ícone diferente se desejar, como 🛡️ ou ⚙️ -->
+                    </label>
+                    
+                    <!-- Se houver erros específicos para este campo, exiba-os aqui -->
+                    {% if form.assinar_como_sesmt.errors %}
+                        <div class="errorlist">
+                            {% for error in form.assinar_como_sesmt.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 
-
                 <div class="form-actions">
                     <button type="submit">
                         <i class="fas fa-save" style="margin-right: 8px;"></i>Salvar Alterações
                     </button>
                 </div>
-
-
             </form>
         </div>
     </div>
+
+    <script src="{% static 'js/checkbox_futurista.js' %}"></script>
+
+    <script>
+        // Script para inicializar o checkbox futurista (se ainda não estiver sendo inicializado globalmente)
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkboxContainers = document.querySelectorAll(".futuristic-checkbox-container");
+            checkboxContainers.forEach(container => {
+                // Evita reinicializar se já houver uma instância
+                if (!container.dataset.initialized) {
+                    new FuturisticCheckbox(container);
+                    container.dataset.initialized = "true";
+                }
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

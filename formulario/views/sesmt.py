@@ -17,7 +17,8 @@ def sesmt_editar(request, pk):
     if request.method == 'POST':
         form = SESMTForm(request.POST, request.FILES, instance=chamado)
         if form.is_valid():
-            form.save()
+            assinar = form.cleaned_data.get('assinar_como_sesmt', False)
+            form.save(user=request.user if assinar else None)
             messages.success(request, 'Formulário SESMT salvo com sucesso!')
             return redirect('sesmt_view')
     else:
@@ -27,7 +28,7 @@ def sesmt_editar(request, pk):
 
 @login_required
 def registros_sesmt(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp__isnull=True).order_by('-id')
 
     return render(request, 'formulario/registros_sesmt.html', {
         'chamados': chamados

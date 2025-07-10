@@ -15,7 +15,7 @@ def gestor_view(request):
         assinatura_sesmt__isnull=False, 
         usuario_gestor=request.user,
         gestor_ciente=False
-    ).exclude(assinatura_sesmt='').order_by('-id')
+    ).exclude(assinatura_sesmt__isnull=True).order_by('-id')
 
     chamados_pendentes = Chamado.objects.filter(
         usuario_gestor=request.user,
@@ -39,7 +39,7 @@ def gestor_view(request):
     if request.method == 'POST':
         gestor_form = GestorForm(request.POST, request.FILES)
         if gestor_form.is_valid():
-            chamado = gestor_form.save(commit=False)
+            chamado = gestor_form.save(commit=False, user=request.user)
             chamado.usuario_gestor = request.user
             chamado.save()
             return redirect('gestor_view')
@@ -71,7 +71,7 @@ def gestor_view(request):
 
 @login_required
 def registros_gestor(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False, usuario_gestor=request.user).exclude(assinatura_rh_dp='')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False, usuario_gestor=request.user).exclude(assinatura_rh_dp__isnull=True)
 
     return render(request, 'formulario/registros_gestor.html', {
         'chamados': chamados

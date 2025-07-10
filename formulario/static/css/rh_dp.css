@@ -249,3 +249,246 @@ h2::before {
     font-size: 0.9em;
   }
 }
+
+
+/* Container principal do checkbox */
+.futuristic-checkbox-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(var(--highlight-color), 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Orbitron', monospace;
+    backdrop-filter: blur(10px);
+}
+
+
+/* Esconder o checkbox original */
+.futuristic-checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Checkbox customizado */
+.futuristic-checkmark {
+    position: relative;
+    height: 30px;
+    width: 30px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border: 2px solid var(--highlight-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.futuristic-checkmark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(var(--highlight-color), 0.1) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.futuristic-checkbox-container:hover .futuristic-checkmark::before {
+    transform: translateX(100%);
+}
+
+/* Ícone de check */
+.futuristic-checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 12px;
+    border: solid var(--text-on-primary);
+    border-width: 0 3px 3px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    animation: checkmark-appear 0.3s ease-in-out;
+}
+
+@keyframes checkmark-appear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -60%) rotate(45deg) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
+    }
+}
+
+/* Estado checked */
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .futuristic-checkmark {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-color: var(--highlight-color);
+    box-shadow: 
+        0 0 20px rgba(var(--highlight-color), 0.5),
+        inset 0 0 10px rgba(var(--text-on-primary), 0.3);
+    animation: checkbox-glow 0.5s ease-in-out;
+}
+
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .futuristic-checkmark::after {
+    display: block;
+}
+
+@keyframes checkbox-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(var(--highlight-color), 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(var(--highlight-color), 0.8),
+            inset 0 0 15px rgba(var(--text-on-primary), 0.5);
+    }
+    100% {
+        box-shadow: 
+            0 0 20px rgba(var(--highlight-color), 0.5),
+            inset 0 0 10px rgba(var(--text-on-primary), 0.3);
+    }
+}
+
+/* Label do checkbox */
+.futuristic-checkbox-label {
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    text-shadow: 0 0 10px rgba(var(--highlight-color), 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.futuristic-checkbox-container:hover .futuristic-checkbox-label {
+    color: var(--highlight-color);
+    text-shadow: 0 0 15px rgba(var(--highlight-color), 0.6);
+}
+
+/* Texto de ajuda */
+.futuristic-help-text {
+    font-size: 12px;
+    color: rgba(var(--text-color), 0.7);
+    font-weight: 400;
+    line-height: 1.4;
+    text-shadow: none;
+}
+
+/* Ícone de gestor */
+.manager-icon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-on-primary);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
+}
+
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .manager-icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: icon-pulse 2s infinite;
+}
+
+@keyframes icon-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(var(--primary-color), 0.8);
+    }
+}
+
+/* Efeito de partículas */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--highlight-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle-float 3s infinite linear;
+}
+
+@keyframes particle-float {
+    0% {
+        opacity: 0;
+        transform: translateY(100%) translateX(0);
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100%) translateX(50px);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .futuristic-checkbox-container {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .futuristic-checkmark {
+        height: 25px;
+        width: 25px;
+    }
+    
+    .futuristic-checkbox-label {
+        font-size: 14px;
+    }
+    
+    .futuristic-help-text {
+        font-size: 11px;
+    }
+}

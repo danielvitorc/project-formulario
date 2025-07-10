@@ -9,20 +9,20 @@ class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'role', 'is_staff', 'is_active']
     list_filter = ['is_staff', 'is_active', 'role']
-    search_fields = ['username', 'email']
+    search_fields = ['username', 'email', 'cargo']
     ordering = ['username']
 
     # Configuração do formulário de edição de usuários
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Informações pessoais', {'fields': ('first_name', 'last_name', 'email', 'role')}),
+        ('Informações pessoais', {'fields': ('first_name', 'last_name', 'email', 'role', 'cargo')}),
         ('Permissões', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Importante', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'email', 'role'),
+            'fields': ('username', 'password1', 'password2', 'email', 'role', 'cargo'),
         }),
     )
 

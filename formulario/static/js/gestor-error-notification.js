@@ -1,3 +1,4 @@
+
 // Notificação de erro específica para a tela do Gestor
 // Este arquivo deve ser incluído no template gestor_view.html
 
@@ -279,4 +280,3 @@
     window.showGestorSuccessNotification = showSuccessNotification;
 
 })();
-

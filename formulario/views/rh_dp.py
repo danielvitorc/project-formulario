@@ -10,7 +10,7 @@ from ..models import Chamado
 def rh_dp_view(request):
     chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, rh_dp_ciente = False, 
     aso = 'Apto', epi_epc = 'Apto', curso_nr10 = 'Apto', curso_sep = 'Apto', curso_nr35 = 'Apto'
-    ).exclude(assinatura_sesmt='').order_by('-id')
+    ).exclude(assinatura_sesmt__isnull=True).order_by('-id')
 
     chamados_pendentes = Chamado.objects.filter(
     Q(aso='Não apto') |
@@ -29,7 +29,7 @@ def rh_dp_editar(request, pk):
     if request.method == 'POST':
         form_rh_dp = RHDPForm(request.POST, request.FILES, instance=chamado)
         if form_rh_dp.is_valid():
-            form_rh_dp.save()
+            form_rh_dp.save(user=request.user)
             messages.success(request, 'Formulário RH/DP salvo com sucesso!')
             return redirect('rh_dp_view')
     else:
@@ -39,7 +39,7 @@ def rh_dp_editar(request, pk):
 
 @login_required
 def registros_rh_dp(request):
-    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp='').order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_rh_dp__isnull=False).exclude(assinatura_rh_dp__isnull=True).order_by('-id')
 
     return render(request, 'formulario/registros_rh_dp.html', {
         'chamados': chamados

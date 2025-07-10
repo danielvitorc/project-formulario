@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{% static 'css/sesmt_style.css' %}">
     <!-- Adicionar link para uma biblioteca de ícones, como Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Inclua o CSS do checkbox futurista -->
+    <link rel="stylesheet" href="{% static 'css/checkbox_futurista.css' %}">
+
     <style>
         /* Estilos herdados de sesmt_style.css e ajustes específicos */
         body {
@@ -126,6 +129,7 @@
             color: var(--primary-color);
         }
         
+        /* Estilos para o checkbox padrão do Django, se não for o futurista */
         .form-field-group input[type="checkbox"] {
             margin-right: 10px;
             vertical-align: middle;
@@ -192,9 +196,55 @@
                     🔗 Acessar GPM
                 </a>
 
-
-                <!-- Django form rendering - será estilizado pelo script e CSS -->
-                {{ form_rh_dp.as_p }}
+                <!-- Renderiza os campos do formulário um por um -->
+                {% for field in form_rh_dp %}
+                    {% if field.name == 'assinar_como_rh_dp' %}
+                        <!-- Checkbox Futurista para Assinatura RH/DP -->
+                        <div class="form-field-group">
+                            <label class="futuristic-checkbox-container">
+                                <!-- O campo do formulário Django -->
+                                {{ field }}
+                                
+                                <!-- Elementos visuais do checkbox customizado -->
+                                <span class="futuristic-checkmark"></span>
+                                
+                                <!-- Label e help text -->
+                                <div class="futuristic-checkbox-label">
+                                    <span>{{ field.label }}</span>
+                                    <span class="futuristic-help-text">{{ field.help_text }}</span>
+                                </div>
+                                
+                                <!-- Ícone do RH/DP (opcional, para efeito visual) -->
+                                <div class="manager-icon">📊</div> <!-- Use um ícone diferente se desejar, como 📊 ou 🧑‍💼 -->
+                            </label>
+                            
+                            <!-- Se houver erros específicos para este campo, exiba-os aqui -->
+                            {% if field.errors %}
+                                <div class="errorlist">
+                                    {% for error in field.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <!-- Renderização dos outros campos do formulário -->
+                        <div class="form-field-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="helptext">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="errorlist">
+                                    {% for error in field.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
                 <div class="form-actions">
                     <button type="submit">
@@ -205,6 +255,9 @@
         </div>
     </div>
 
+    <!-- Inclua o JavaScript do checkbox futurista antes do fechamento da tag </body> -->
+    <script src="{% static 'js/checkbox_futurista.js' %}"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
@@ -212,102 +265,54 @@
 
             // Envolve cada campo gerado pelo Django (que está em um <p>) em uma div .form-field-group
             // e adiciona ícones com base no tipo de input.
-            const formParagraphs = form.querySelectorAll('p');
+            // Esta parte do script agora é menos crítica para a estrutura, pois estamos renderizando manualmente.
+            // No entanto, pode ser útil para outros campos que não são o checkbox futurista.
+            const formFields = form.querySelectorAll('.form-field-group');
 
-            formParagraphs.forEach(p => {
-                const label = p.querySelector('label');
-                const inputs = p.querySelectorAll('input, select, textarea');
-                const helpText = p.querySelector('.helptext');
+            formFields.forEach(fieldGroup => {
+                const label = fieldGroup.querySelector('label');
+                const input = fieldGroup.querySelector('input, select, textarea');
                 
-                // Cria o wrapper
-                const fieldGroup = document.createElement('div');
-                fieldGroup.classList.add('form-field-group');
+                if (!input || input.type === 'checkbox') return; // Ignora o checkbox futurista e campos sem input
 
-                // Move o label para dentro do fieldGroup
-                if (label) {
-                    fieldGroup.appendChild(label);
-                }
+                let iconClass = '';
+                const inputType = input.getAttribute('type');
+                const inputName = input.getAttribute('name'); 
 
-                inputs.forEach(input => {
-                    // Adiciona classes de controle
-                    input.classList.add('form-control');
-                    
-                    let iconClass = '';
-                    const inputType = input.getAttribute('type');
-                    const inputName = input.getAttribute('name'); // Para ícones mais específicos
-
-                    if (input.tagName.toLowerCase() === 'select') {
-                        iconClass = 'fas fa-chevron-down'; // Ícone para select
-                    } else if (input.tagName.toLowerCase() === 'textarea') {
-                        iconClass = 'fas fa-paragraph'; // Ícone para textarea
-                    } else {
-                        switch (inputType) {
-                            case 'text':
-                                if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
-                                else if (inputName && inputName.toLowerCase().includes('cargo')) iconClass = 'fas fa-briefcase';
-                                else if (inputName && inputName.toLowerCase().includes('setor')) iconClass = 'fas fa-building';
-                                else if (inputName && inputName.toLowerCase().includes('empresa')) iconClass = 'fas fa-industry';
-                                else if (inputName && inputName.toLowerCase().includes('matricula')) iconClass = 'fas fa-id-badge';
-                                else iconClass = 'fas fa-pencil-alt';
-                                break;
-                            case 'email':
-                                iconClass = 'fas fa-envelope';
-                                break;
-                            case 'date':
-                                iconClass = 'fas fa-calendar-alt';
-                                break;
-                            case 'file':
-                                iconClass = 'fas fa-file-upload'; // Ícone para upload
-                                // Para input file, o ícone não fica dentro, então não adicionamos o span.
-                                // O label pode ser estilizado para parecer um botão.
-                                if (label) label.classList.add('file-upload-label');
-                                break;
-                            case 'checkbox':
-                                input.classList.add('form-check-input');
-                                // Para checkboxes, o label é geralmente ao lado, não acima.
-                                if (label) {
-                                    label.classList.add('checkbox-label');
-                                    // Envolve o input e o texto do label para melhor alinhamento
-                                    // Esta parte pode precisar de ajustes dependendo de como o Django renderiza o label do checkbox
-                                    // Se o label já envolve o input, pode não ser necessário.
-                                    // Se o input e o label são irmãos, este código tenta agrupá-los.
-                                    if (input.nextSibling && input.nextSibling.nodeType === Node.TEXT_NODE) {
-                                        const wrapper = document.createElement('span');
-                                        wrapper.appendChild(input.cloneNode(true)); // Clona o input
-                                        wrapper.appendChild(document.createTextNode(input.nextSibling.textContent));
-                                        input.parentNode.replaceChild(wrapper, input.nextSibling); // Substitui o texto
-                                        input.parentNode.removeChild(input); // Remove o input original
-                                    } else if (label.contains(input)) {
-                                        // Se o input já está dentro do label, não faz nada extra aqui
-                                    } else {
-                                         // Caso mais simples: apenas adiciona a classe ao label
-                                    }
-                                }
-                                break;
-                            default:
-                                iconClass = 'fas fa-edit';
-                        }
+                if (input.tagName.toLowerCase() === 'select') {
+                    iconClass = 'fas fa-chevron-down'; 
+                } else if (input.tagName.toLowerCase() === 'textarea') {
+                    iconClass = 'fas fa-paragraph'; 
+                } else {
+                    switch (inputType) {
+                        case 'text':
+                            if (inputName && inputName.toLowerCase().includes('nome')) iconClass = 'fas fa-user';
+                            else if (inputName && inputName.toLowerCase().includes('cargo')) iconClass = 'fas fa-briefcase';
+                            else if (inputName && inputName.toLowerCase().includes('setor')) iconClass = 'fas fa-building';
+                            else if (inputName && inputName.toLowerCase().includes('empresa')) iconClass = 'fas fa-industry';
+                            else if (inputName && inputName.toLowerCase().includes('matricula')) iconClass = 'fas fa-id-badge';
+                            else iconClass = 'fas fa-pencil-alt';
+                            break;
+                        case 'email':
+                            iconClass = 'fas fa-envelope';
+                            break;
+                        case 'date':
+                            iconClass = 'fas fa-calendar-alt';
+                            break;
+                        case 'file':
+                            iconClass = 'fas fa-file-upload'; 
+                            if (label) label.classList.add('file-upload-label');
+                            break;
+                        default:
+                            iconClass = 'fas fa-edit';
                     }
-                    
-                    // Adiciona o input ao fieldGroup
-                    fieldGroup.appendChild(input);
-
-                    // Adiciona o ícone (exceto para file e checkbox que são tratados de forma diferente)
-                    if (iconClass && inputType !== 'file' && inputType !== 'checkbox') {
-                        const iconSpan = document.createElement('span');
-                        iconSpan.className = `input-icon ${iconClass}`;
-                        fieldGroup.appendChild(iconSpan);
-                    }
-                });
-
-                // Move o helptext para dentro do fieldGroup
-                if (helpText) {
-                    fieldGroup.appendChild(helpText);
                 }
                 
-                // Substitui o <p> original pelo novo fieldGroup
-                if (p.parentNode) { // Verifica se p ainda tem um pai
-                    p.parentNode.replaceChild(fieldGroup, p);
+                if (iconClass && inputType !== 'file') {
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = `input-icon ${iconClass}`;
+                    // Insere o ícone antes do input
+                    input.parentNode.insertBefore(iconSpan, input);
                 }
             });
 
@@ -320,6 +325,15 @@
                 input.addEventListener('blur', () => {
                     input.style.transform = 'scale(1)';
                 });
+            });
+
+            // Inicializa o checkbox futurista
+            const futuristicCheckboxContainers = document.querySelectorAll('.futuristic-checkbox-container');
+            futuristicCheckboxContainers.forEach(container => {
+                if (!container.dataset.initialized) {
+                    new FuturisticCheckbox(container);
+                    container.dataset.initialized = 'true';
+                }
             });
         });
     </script>
