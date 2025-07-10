@@ -26,9 +26,8 @@ class Chamado(models.Model):
     tipo_exposicao = models.CharField(max_length=100)
     natureza_risco = models.CharField(max_length=255)
     descricao_atividades = models.TextField()
-    atividade = models.TextField()
     locais_atuaçao = models.CharField(max_length=255)
-    frequencia = models.CharField(max_length=50)
+    frequencia = models.CharField(max_length=50, default='16/06 - 15/07.')
     responsavel = models.CharField(max_length=100)
     
     # Assinatura do gestor

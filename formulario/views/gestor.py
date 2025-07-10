@@ -82,3 +82,13 @@ def gestor_ciente(request, pk):
     chamado.gestor_ciente = True
     chamado.save()
     return redirect('gestor_view')  # Ou onde quiser redirecionar
+
+# Função para excluir chamado
+def excluir_chamado(request, id):
+    chamado = get_object_or_404(Chamado, id=id)
+    try:
+        chamado.delete()
+        messages.success(request, "Ambulatório excluído com sucesso.")
+    except Exception as e:
+        messages.error(request, f"Ocorreu um erro ao tentar excluir o ambulatório: {e}")
+    return redirect('gestor_view')  

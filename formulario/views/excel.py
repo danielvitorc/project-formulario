@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from openpyxl.drawing.image import Image as XLImage
-from openpyxl.styles import Alignment
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+import openpyxl
 from PIL import Image
 import io
 from ..models import Chamado
@@ -43,7 +44,7 @@ def preencher_excel_per(per):
     ws["B18"] = "[X]" if per.natureza_risco == "Atividades E Operações Perigosas Com Radiações Ionizantes Ou Substâncias Radiotivas" else "[  ]"
 
     ws["F9"] = per.descricao_atividades or ""
-    ws["B20"] = (per.atividade or "").replace(';', '\n')
+    ws["B20"] = "-"
     ws["B19"].alignment = Alignment(wrap_text=True)
     ws["F20"] = per.locais_atuaçao or ""
     ws["J20"] = per.frequencia or ""
@@ -111,4 +112,97 @@ def download_per_excel(request, registro_id):
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
     response["Content-Disposition"] = f'attachment; filename="{nome_arquivo}"'
+    return response
+
+
+@login_required
+def exportar_chamados_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Chamados"
+
+    # Cabeçalhos
+    colunas = [
+        "Nome", "Matrícula", "Função", "Depto", "Gestor Imediato", "Tipo de Exposição",
+        "Natureza do Risco", "Descrição das Atividades", "Locais de Atuação", "Frequência", "Responsável",
+        "Data Aut. Gestor", "ASO", "ASO Desc.", "EPI/EPC", "EPI/EPC Desc.",
+        "Curso NR10", "Curso SEP", "Curso NR35", "Cursos Obs.", "Data Aut. SESMT", "Nome SESMT",
+        "Procedimento RH/DP", "Data Aut. RH/DP", "Nome RH/DP"
+    ]
+
+    # Estilos
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill("solid", fgColor="4F81BD")
+    alignment_center = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    thin_border = Border(
+        left=Side(style="thin"),
+        right=Side(style="thin"),
+        top=Side(style="thin"),
+        bottom=Side(style="thin"),
+    )
+
+    # Escrever cabeçalhos com estilo
+    for col_num, col_name in enumerate(colunas, 1):
+        cell = ws.cell(row=1, column=col_num, value=col_name)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = alignment_center
+        cell.border = thin_border
+
+    # Dados
+    chamados = Chamado.objects.all()
+
+    for row_num, chamado in enumerate(chamados, 2):
+        dados = [
+            chamado.nome_colaborador,
+            chamado.matricula,
+            chamado.funcao,
+            chamado.depto,
+            chamado.gestor_imediato,
+            chamado.tipo_exposicao,
+            chamado.natureza_risco,
+            chamado.descricao_atividades,
+            chamado.locais_atuaçao,
+            chamado.frequencia,
+            chamado.responsavel,
+            chamado.data_autorizacao_gestor,
+            chamado.aso,
+            chamado.aso_descricao,
+            chamado.epi_epc,
+            chamado.epi_epc_descricao,
+            chamado.curso_nr10,
+            chamado.curso_sep,
+            chamado.curso_nr35,
+            chamado.cursos_observacoes,
+            chamado.data_autorizacao_sesmt,
+            chamado.nome_sesmt,
+            chamado.procedimento_rh_dp,
+            chamado.data_autorizacao_rh_dp,
+            chamado.nome_rh_dp,
+        ]
+
+        for col_num, valor in enumerate(dados, 1):
+            cell = ws.cell(row=row_num, column=col_num, value=valor)
+            cell.alignment = Alignment(vertical="top", wrap_text=True)
+            cell.border = thin_border
+
+    # Ajuste automático da largura das colunas
+    for col in ws.columns:
+        max_length = 0
+        col_letter = col[0].column_letter
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        adjusted_width = max_length + 2
+        ws.column_dimensions[col_letter].width = adjusted_width
+
+    # Resposta HTTP com o arquivo
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=chamados_exportados.xlsx'
+    wb.save(response)
     return response

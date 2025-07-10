@@ -62,7 +62,7 @@ class GestorForm(forms.ModelForm):
         model = Chamado
         fields = [
             'nome_colaborador', 'matricula', 'funcao', 'depto', 'gestor_imediato','tipo_exposicao',
-            'natureza_risco', 'descricao_atividades', 'atividade', 'locais_atuaçao', 'frequencia',
+            'natureza_risco', 'descricao_atividades', 'locais_atuaçao', 'frequencia',
             'data_autorizacao_gestor', 'responsavel'
             ]
         widgets = {
