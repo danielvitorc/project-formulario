@@ -12,13 +12,15 @@
     <link rel="stylesheet" href="{% static 'css/gestor_style.css' %}">
 </head>
 <body>
-    <nav class="navbar">
-        <a class="navbar-brand" href="{% url 'sesmt_view' %}">Painel Sesmt</a>
+    <nav class="navbar"> <!-- Assumindo que a navbar já foi implementada corretamente antes -->
+        <a href="{% url 'sesmt_view' %}" class="navbar-brand">Painel Sesmt</a>
         <ul class="navbar-links">
             <li><a href="{% url 'sesmt_view' %}">Início</a></li>
+            <li><a href="{% url 'registros_sesmt' %}">Registros do Sesmt</a></li>
+            <li><a class="nav-link" href="{% url 'lista_chamados_backup' %}">Chamados Excluídos</a></li>
             <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
         </ul>
-    </nav>
+    </nav> 
     <div class="main-content">
         <h1 class="mb-4">Registros Sesmt</h1>
 

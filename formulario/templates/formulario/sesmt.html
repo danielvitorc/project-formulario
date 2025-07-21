@@ -1,14 +1,32 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel SESMT - Sistema de gerenciamento de chamados de segurança do trabalho">
+    <meta name="keywords" content="SESMT, segurança do trabalho, chamados, validação">
+    <meta name="author" content="NorteTech">
+    
+    <!-- Favicon -->
     <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
+    
+    <!-- Título dinâmico -->
     <title>{% block title %}Painel SESMT - Chamados{% endblock %}</title>
+    
+    <!-- Preload de fontes para melhor performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- CSS customizado -->
     <link rel="stylesheet" href="{% static 'css/sesmt_style.css' %}">
+    
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body>
     <nav class="navbar"> <!-- Assumindo que a navbar já foi implementada corretamente antes -->
@@ -19,34 +37,195 @@
             <li><a class="nav-link" href="{% url 'lista_chamados_backup' %}">Chamados Excluídos</a></li>
             <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
         </ul>
-    </nav>    
- <h2 class="mt-4">📌 Chamados Pendentes de Validação do SESMT</h2>
-<div class="chamados-grid">
-    {% for chamado in pendentes %}
-        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
-    {% empty %}
-        <p class="text-muted">Nenhum chamado pendente.</p>
-    {% endfor %}
-</div>
+    </nav> 
 
-<h2 class="mt-5">✅ Chamados com Validação do SESMT Concluída (aguardando RH/DP)</h2>
-<div class="chamados-grid">
-    {% for chamado in sesmt_preenchidos %}
-        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
-    {% empty %}
-        <p class="text-muted">Nenhum chamado validado pelo SESMT no momento.</p>
-    {% endfor %}
-</div>
+    <!-- Conteúdo principal -->
+    <main class="main-content" role="main">
+        <div class="container">
+            <!-- Cabeçalho da página -->
+            <header class="page-header">
+                <h1>
+                    <i class="bi bi-clipboard-check" aria-hidden="true"></i>
+                    Sistema de Validação SESMT
+                </h1>
+                <p class="page-description">
+                    Gerencie e valide chamados de segurança do trabalho de forma eficiente
+                </p>
+            </header>
 
-<h2 class="mt-5">📁 Chamados com Validação Final (RH/DP)</h2>
-<div class="chamados-grid">
-    {% for chamado in rh_preenchidos %}
-        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
-    {% empty %}
-        <p class="text-muted">Nenhum chamado com validação RH/DP finalizada.</p>
-    {% endfor %}
-</div>
+            <!-- Seção: Chamados Pendentes -->
+            <section class="chamados-section" aria-labelledby="pendentes-title">
+                <h2 id="pendentes-title">
+                    <i class="bi bi-clock-history text-warning" aria-hidden="true"></i>
+                    Chamados Pendentes de Validação do SESMT
+                </h2>
+                
+                {% if pendentes %}
+                    <div class="chamados-grid" role="grid" aria-label="Lista de chamados pendentes">
+                        {% for chamado in pendentes %}
+                            <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
+                                {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state" role="status" aria-live="polite">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i>
+                        </div>
+                        <p class="text-muted">
+                            <strong>Excelente!</strong> Não há chamados pendentes no momento.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
 
+            <!-- Seção: Chamados Validados pelo SESMT -->
+            <section class="chamados-section" aria-labelledby="sesmt-title">
+                <h2 id="sesmt-title">
+                    <i class="bi bi-check-circle text-success" aria-hidden="true"></i>
+                    Chamados com Validação do SESMT Concluída
+                </h2>
+                <p class="section-subtitle text-muted">
+                    Aguardando validação final do RH/DP
+                </p>
+                
+                {% if sesmt_preenchidos %}
+                    <div class="chamados-grid" role="grid" aria-label="Lista de chamados validados pelo SESMT">
+                        {% for chamado in sesmt_preenchidos %}
+                            <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
+                                {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state" role="status" aria-live="polite">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-hourglass-split text-info" aria-hidden="true"></i>
+                        </div>
+                        <p class="text-muted">
+                            Nenhum chamado validado pelo SESMT aguardando RH/DP no momento.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
 
+            <!-- Seção: Chamados Finalizados -->
+            <section class="chamados-section" aria-labelledby="finalizados-title">
+                <h2 id="finalizados-title">
+                    <i class="bi bi-folder-check text-primary" aria-hidden="true"></i>
+                    Chamados com Validação Final (RH/DP)
+                </h2>
+                <p class="section-subtitle text-muted">
+                    Processo completo de validação finalizado
+                </p>
+                
+                {% if rh_preenchidos %}
+                    <div class="chamados-grid" role="grid" aria-label="Lista de chamados finalizados">
+                        {% for chamado in rh_preenchidos %}
+                            <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
+                                {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state" role="status" aria-live="polite">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-inbox text-secondary" aria-hidden="true"></i>
+                        </div>
+                        <p class="text-muted">
+                            Nenhum chamado com validação RH/DP finalizada no momento.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé (opcional) -->
+    <footer class="page-footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <p class="text-muted text-center">
+                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                    Sistema SESMT - NorteTech © {% now "Y" %}
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script para menu mobile -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.querySelector('.navbar-toggle');
+            const navbarLinks = document.querySelector('.navbar-links');
+            
+            if (navbarToggle && navbarLinks) {
+                navbarToggle.addEventListener('click', function() {
+                    const isExpanded = navbarToggle.getAttribute('aria-expanded') === 'true';
+                    
+                    navbarToggle.setAttribute('aria-expanded', !isExpanded);
+                    navbarLinks.classList.toggle('active');
+                    
+                    // Mudança do ícone
+                    const icon = navbarToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = navbarLinks.classList.contains('active') 
+                            ? 'bi bi-x' 
+                            : 'bi bi-list';
+                    }
+                });
+                
+                // Fechar menu ao clicar em um link (mobile)
+                navbarLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navbarLinks.classList.remove('active');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                        const icon = navbarToggle.querySelector('i');
+                        if (icon) {
+                            icon.className = 'bi bi-list';
+                        }
+                    });
+                });
+                
+                // Fechar menu ao clicar fora (mobile)
+                document.addEventListener('click', function(event) {
+                    if (!navbarToggle.contains(event.target) && !navbarLinks.contains(event.target)) {
+                        navbarLinks.classList.remove('active');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                        const icon = navbarToggle.querySelector('i');
+                        if (icon) {
+                            icon.className = 'bi bi-list';
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Animação suave para cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.chamado-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate-slide-in');
+                        }, index * 100);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
+
