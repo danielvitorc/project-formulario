@@ -409,6 +409,16 @@ body .btn-primary#openModalBtn:hover {
   box-shadow: 0 4px 12px rgba(var(--primary-color-rgb, 19, 75, 242), 0.3);
 }
 
+.chamados-grid.grid-unico {
+  display: flex;
+  justify-content: center;
+}
+
+.chamados-grid.grid-unico .chamado-card {
+  max-width: 600px !important;
+  width: 100%;
+  flex: none;
+}
 /* Adicionar variáveis RGB para sombras coloridas se não existirem */
 /* Se :root já tiver --primary-color-rgb e --accent-color-rgb, ignore esta parte */
 /* :root {

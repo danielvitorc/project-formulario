@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-import io
+from django.views.decorators.http import require_POST
 from ..forms import GestorForm
 from ..models import Chamado
 from docx import Document
@@ -83,12 +82,19 @@ def gestor_ciente(request, pk):
     chamado.save()
     return redirect('gestor_view')  # Ou onde quiser redirecionar
 
-# Função para excluir chamado
+@require_POST
 def excluir_chamado(request, id):
     chamado = get_object_or_404(Chamado, id=id)
+    motivo = request.POST.get('motivo')
+
+    if not motivo:
+        messages.error(request, "É obrigatório informar o motivo da exclusão.")
+        return redirect('gestor_view')
+
     try:
-        chamado.delete()
-        messages.success(request, "Ambulatório excluído com sucesso.")
+        chamado.delete(user=request.user, motivo_exclusao=motivo)
+        messages.success(request, "Chamado excluído com sucesso.")
     except Exception as e:
-        messages.error(request, f"Ocorreu um erro ao tentar excluir o ambulatório: {e}")
-    return redirect('gestor_view')  
+        messages.error(request, f"Ocorreu um erro ao excluir: {e}")
+
+    return redirect('gestor_view')

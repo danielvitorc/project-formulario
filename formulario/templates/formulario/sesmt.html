@@ -16,96 +16,37 @@
         <ul class="navbar-links">
             <li><a href="{% url 'sesmt_view' %}">Início</a></li>
             <li><a href="{% url 'registros_sesmt' %}">Registros do Sesmt</a></li>
+            <li><a class="nav-link" href="{% url 'lista_chamados_backup' %}">Chamados Excluídos</a></li>
             <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
         </ul>
     </nav>    
-    <div class="container">
-        <h1>Bem vindo sesmt</h1>
-        <h2>Chamados Aprovados</h2>
-        <div class="chamados-grid">
-            {% for chamado in chamados %}
-                <div class="card chamado-card">
-                    <div class="card-header">
-                    <h5 class="card-title">{{ chamado.nome_colaborador }}</h5>
-                    </div>
-                    <div class="card-body">
-                    <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
-                        Ver Detalhes
-                    </button>
-                    <div class="card p-3 shadow-sm rounded-3 bg-light mb-3">
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">📄 Doc. Avaliação GPM:</h6>
-                        {% if chamado.upload_gpm %}
-                            <a href="{{ chamado.upload_gpm.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-download"></i> Download
-                            </a>
-                        {% else %}
-                            <span class="text-muted fst-italic">Aguardando envio</span>
-                        {% endif %}
-                    </div>
+ <h2 class="mt-4">📌 Chamados Pendentes de Validação do SESMT</h2>
+<div class="chamados-grid">
+    {% for chamado in pendentes %}
+        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+    {% empty %}
+        <p class="text-muted">Nenhum chamado pendente.</p>
+    {% endfor %}
+</div>
 
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
-                        {% if chamado.diretor_aprovacao == True %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% elif chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% endif %}
-                    </div>
+<h2 class="mt-5">✅ Chamados com Validação do SESMT Concluída (aguardando RH/DP)</h2>
+<div class="chamados-grid">
+    {% for chamado in sesmt_preenchidos %}
+        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+    {% empty %}
+        <p class="text-muted">Nenhum chamado validado pelo SESMT no momento.</p>
+    {% endfor %}
+</div>
 
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% else %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% endif %}
-                    </div>
+<h2 class="mt-5">📁 Chamados com Validação Final (RH/DP)</h2>
+<div class="chamados-grid">
+    {% for chamado in rh_preenchidos %}
+        {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
+    {% empty %}
+        <p class="text-muted">Nenhum chamado com validação RH/DP finalizada.</p>
+    {% endfor %}
+</div>
 
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🧾 Validação RH/DP:</h6>
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% elif chamado.assinatura_rh_dp %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% endif %}
-                    </div>
 
-                    {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
-                        <div class="alert alert-danger mt-3">
-                            <strong>⚠️ Atenção:</strong> Este chamado possui campos com status <b>"Não apto"</b>.
-                        </div>
-                    {% endif %}
-                    </div>
-
-                    {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp  %}
-                        <form method="post" action="{% url 'sesmt_ciente' chamado.pk %}">
-                        {% csrf_token %}
-                        <button type="submit">Ciente</button>
-                        </form>
-                    {% endif %}
-
-                    </div>
-                    <div class="card-footer">
-                    {% if not chamado.sesmt_preenchido %}
-                        <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-primary card-action-btn">Preencher SESMT</a>
-                    {% else %}
-                        <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-secondary card-action-btn">Editar SESMT</a>
-                    {% endif %}
-                    </div>
-                </div>
-
-                {# ⬇️ Fora do card, mas ainda dentro do for #}
-                {% include 'formulario/include/modal_detalhes.html' %}
-                {% endfor %}
-
-        </div>
-    </div>
 </body>
 </html>

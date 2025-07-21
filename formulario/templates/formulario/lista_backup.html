@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/backup.css' %}">
+    
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'sesmt_view' %}" class="navbar-brand">Painel Sesmt</a>
+        <ul class="navbar-links">
+            <li><a href="{% url 'sesmt_view' %}">Início</a></li>
+            <li><a href="{% url 'registros_sesmt' %}">Registros do Sesmt</a></li>
+            <li><a class="nav-link" href="{% url 'lista_chamados_backup' %}">Chamados Excluídos</a></li>
+            <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
+        </ul>
+    </nav>    
+    <div class="container mt-4">
+    <h2 class="mb-4">Chamados Excluídos (Backup)</h2>
+
+    {% if chamados_backup %}
+        <form method="get" class="mb-3 d-flex" role="search">
+            <input type="text" name="matricula" class="form-control me-2" placeholder="Buscar por matrícula" value="{{ matricula_query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+                {% if matricula_query %}
+                <a href="{% url 'lista_chamados_backup' %}" class="btn btn-secondary">Remover Filtro</a>
+                {% endif %}
+
+        </form>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Responsável pelo preenchimento</th>
+                        <th>Matrícula</th>
+                        <th>Nome do Colaborador</th>
+                        <th>Gestor Imediato</th>
+                        <th>Data Exclusão</th>
+                        <th>Motivo Exclusão</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chamado in chamados_backup %}
+                        <tr>
+                            <td>{{ chamado.responsavel }}</td>
+                            <td>{{ chamado.matricula }}</td>
+                            <td>{{ chamado.nome_colaborador }}</td>
+                            <td>{{ chamado.gestor_imediato }}</td>
+                            <td>{{ chamado.data_exclusao|date:"d/m/Y H:i" }}</td>
+                            <td>{{ chamado.motivo_exclusao }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">Nenhum chamado excluído foi encontrado.</p>
+    {% endif %}
+</div>
+</body>
+</html>

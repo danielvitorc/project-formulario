@@ -2,13 +2,29 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from ..forms import SESMTForm
-from ..models import Chamado
+from ..models import Chamado, ChamadoBackup
 
 @login_required
 def sesmt_view(request):
-    chamados = Chamado.objects.filter(diretor_aprovacao=True, sesmt_ciente = False).order_by('-id')
+    pendentes = Chamado.objects.filter(
+        assinatura_gestor__isnull=False,
+        assinatura_sesmt__isnull=True
+    ).order_by('-id')
 
-    return render(request, 'formulario/sesmt.html', {'chamados': chamados})
+    sesmt_preenchidos = Chamado.objects.filter(
+        assinatura_sesmt__isnull=False,
+        assinatura_rh_dp__isnull=True
+    ).order_by('-id')
+
+    # 3️⃣ Chamados com RH/DP preenchido
+    rh_preenchidos = Chamado.objects.filter(
+        assinatura_rh_dp__isnull=False
+    ).order_by('-id')
+
+    return render(request, 'formulario/sesmt.html', {
+        'pendentes': pendentes,
+        'sesmt_preenchidos': sesmt_preenchidos,
+        'rh_preenchidos': rh_preenchidos,})
 
 @login_required
 def sesmt_editar(request, pk):
@@ -39,3 +55,16 @@ def sesmt_ciente(request, pk):
     chamado.sesmt_ciente = True
     chamado.save()
     return redirect('sesmt_view')  # Ou onde quiser redirecionar
+
+def lista_chamados_backup(request):
+
+    matricula_query = request.GET.get("matricula") or ""  
+    chamados_backup = ChamadoBackup.objects.all().order_by('-data_exclusao')
+
+    if matricula_query:
+        chamados_backup = chamados_backup.filter(matricula__icontains=matricula_query)
+
+    return render(request, 'formulario/lista_backup.html', {
+        'chamados_backup': chamados_backup,
+        'matricula_query': matricula_query  # envia de volta para manter no input
+    })

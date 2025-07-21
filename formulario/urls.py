@@ -11,6 +11,7 @@ urlpatterns = [
     path('sesmt/', sesmt.sesmt_view, name='sesmt_view'),
     path('registros-sesmt/', sesmt.registros_sesmt, name='registros_sesmt'),
     path('sesmt/editar/<int:pk>/', sesmt.sesmt_editar, name='sesmt_editar'),
+    path('chamados/backup/', sesmt.lista_chamados_backup, name='lista_chamados_backup'),
     path('rh_dp/', rh_dp.rh_dp_view, name='rh_dp_view'),
     path('registros-rh_dp/', rh_dp.registros_rh_dp, name='registros_rh_dp'),
     path('rh_dp/editar/<int:pk>/', rh_dp.rh_dp_editar, name='rh_dp_editar'),

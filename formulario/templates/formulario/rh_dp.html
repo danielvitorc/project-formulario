@@ -46,6 +46,17 @@
                     </div>
 
                     <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
+                        {% if chamado.diretor_aprovacao == False %}
+                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
+                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
+                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
+                        {% else %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-2">
                         <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
                         {% if chamado.diretor_aprovacao == True %}
                             <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
@@ -56,16 +67,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% else %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% endif %}
-                    </div>
+
 
                     <div class="mb-2">
                         <h6 class="fw-bold text-primary mb-1">🧾 Validação RH/DP:</h6>

@@ -395,3 +395,11 @@ class RHDPForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+
+class MotivoExclusaoForm(forms.Form):
+    motivo = forms.CharField(
+        label="Motivo da exclusão",
+        widget=forms.Textarea(attrs={'rows': 4}),
+        required=True
+    )

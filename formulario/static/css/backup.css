@@ -1,0 +1,1142 @@
+:root {
+  --primary-color: #134BF2; /* Azul primário forte */
+  --secondary-color: #acadaf; /* Cinza secundário */
+  --accent-color: #0C87F2; /* Azul acento */
+  --highlight-color: #1BA0F2; /* Azul destaque */
+  --bg-color: #F2F2F2; /* Cinza claro para fundo */
+  --text-color: #000000; /* Preto para texto principal */
+  --card-bg: #ffffff; /* Branco para cartões/contêineres */
+  --text-on-primary: #ffffff; /* Texto branco sobre cor primária */
+  --text-on-accent: #ffffff; /* Texto branco sobre cor de acento */
+  --border-color: #d0d0d0; /* Cor de borda sutil */
+
+  /* Mapeamento para variáveis existentes (ajustado para nova paleta) */
+  --navbar-bg: var(--primary-color);      /* Fundo da navbar */
+  --navbar-text-color: var(--text-on-primary);  /* Texto dos links da navbar */
+  --navbar-hover-bg: var(--accent-color);      /* Fundo do hover dos links da navbar */
+  --navbar-brand-color: var(--text-on-primary);/* Cor do brand/logo na navbar */
+}
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+  margin: 0;
+  padding-top: 80px; /* Aumentar espaço para navbar mais robusta */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #004aad, #0066ff);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0030a0, #004aad);
+}
+
+.navbar {
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  padding: 0 30px; /* Mais padding lateral */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Navbar mais alta */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  color: var(--navbar-brand-color);
+  font-size: 1.8em; /* Fonte maior */
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05); /* Efeito de zoom sutil */
+}
+
+.navbar-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-left: 20px; /* Espaçamento entre os links */
+}
+
+.navbar-links li a {
+  color: var(--navbar-text-color);
+  text-decoration: none;
+  padding: 10px 15px; /* Mais padding nos links */
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+  background-color: var(--navbar-hover-bg);
+  color: var(--text-on-accent); /* Garante contraste no hover */
+}
+
+.main-content {
+  padding: 30px; /* Mais padding no conteúdo principal */
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos para o .welcome-card (agora estilizado como o exemplo) */
+.welcome-card.card { /* Adicionamos .card para herdar estilos base do Bootstrap se necessário */
+  background-color: var(--card-bg);
+  /* padding: 30px; Bootstrap .card-body já tem padding */
+  border-radius: .375rem; /* Bootstrap padrão para cards */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); Usando shadow-sm do Bootstrap */
+  /* text-align: center; Usando text-center do Bootstrap */
+  margin-bottom: 30px;
+  border: 1px solid rgba(0,0,0,.125); /* Borda padrão do Bootstrap card */
+}
+
+/* .welcome-card h1 foi removido pois o H1 principal está fora do card */
+
+.welcome-card .card-body .fa-file-alt { /* Ícone específico do welcome-card */
+  color: var(--azul-nort) !important;
+}
+
+.welcome-card .card-body .card-title {
+  color: var(--azulEscuro-nort);
+  font-size: 1.25rem; /* Tamanho padrão de card-title do Bootstrap */
+  margin-bottom: .75rem; /* Margem padrão de card-title do Bootstrap */
+}
+
+.welcome-card .card-body .card-text {
+  color: var(--text-color); /* Usa a cor de texto principal da paleta Nort */
+  font-size: 1em;
+  margin-bottom: 1rem; /* Margem padrão de card-text */
+}
+
+/* Botão dentro do .welcome-card */
+.welcome-card .btn {
+  background-color: var(--primary-color); /* --azul-nort */
+  border-color: var(--primary-color);
+  color: var(--branco-nort);
+  padding: .5rem 1rem; /* Ajuste de padding para botões em cards */
+  font-size: 1em;
+}
+
+.welcome-card .btn:hover {
+  background-color: var(--accent-color); /* --dourado-nort */
+  border-color: var(--accent-color);
+  color: var(--azulEscuro-nort); /* Texto escuro para contraste com dourado */
+}
+
+
+/* Estilos gerais para botões, se não sobrescritos especificamente */
+.btn {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  padding: 12px 28px; /* Padding ligeiramente ajustado */
+  border: none;
+  border-radius: 6px; /* Bordas mais arredondadas */
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500; /* Fonte um pouco mais forte */
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+  transform: translateY(-2px); /* Efeito de levantar */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: #868e96; /* Um pouco mais escuro que o secondary */
+}
+
+/* Estilos do Modal */
+.modal {
+  display: none; /* Oculto por padrão */
+  position: fixed;
+  z-index: 1000; /* Fica sobre outros elementos */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+  background-color: rgba(0,0,0,0.5); /* Fundo escurecido */
+}
+.modal-backdrop {
+    display: none !important;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  margin: 10% auto; /* Centralizado verticalmente e um pouco abaixo do topo */
+  padding: 25px;
+  border: 1px solid #888;
+  width: 60%; /* Largura do modal */
+  max-width: 700px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Estilos para formulários dentro do modal e na página */
+form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+form h2, form h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+form p {
+    margin-bottom: 10px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"],
+form select,
+form textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form button[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+form button[type="submit"]:hover {
+  background-color: var(--accent-color);
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--secondary-color); /* --azulEscuro-nort */
+  margin: 30px 0;
+}
+
+/* Ajustes para a lista de chamados */
+.chamado-item {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    border: 1px solid var(--secondary-color); /* Adiciona uma borda sutil */
+}
+
+.chamado-item h3 {
+    color: var(--primary-color); /* --azul-nort */
+    margin-top: 0;
+}
+
+/* Ajuste geral para títulos h1 principais da página */
+.main-content > h1 { /* Título principal da página de registros */
+    color: var(--primary-color);
+    text-align: center; /* Centralizado como no HTML */
+    margin-bottom: 30px; /* Mais espaço abaixo do título */
+    font-size: 2.5em; /* Título maior */
+    font-weight: 600;
+    letter-spacing: 1px; /* Espaçamento entre letras */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sombra sutil no texto */
+}
+
+/* Removendo estilos específicos do card "Livro de Ocorrências" que não são mais necessários */
+/* .card.shadow-sm .card-body .fa-book { ... } */
+/* .card.shadow-sm .card-title { ... } */
+/* .card.shadow-sm .btn-outline-primary { ... } */
+/* .card.shadow-sm .btn-outline-primary:hover { ... } */
+
+/* Ajuste para o botão principal "Cadastrar Novo Chamado" se ele estiver fora de .welcome-card
+   e precisar de estilização (se for o mesmo #openModalBtn, já está coberto acima se dentro do card) */
+/* Se #openModalBtn estiver fora do .welcome-card e for um .btn-primary do Bootstrap: */
+body .btn-primary#openModalBtn { /* Maior especificidade se necessário */
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--branco-nort);
+}
+
+body .btn-primary#openModalBtn:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--azulEscuro-nort);
+}
+/* Estilos para a tabela de registros */
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-collapse: separate; /* Necessário para border-radius em células */
+  border-spacing: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Bordas arredondadas para a tabela */
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  animation: slideUpIn 0.7s ease-out forwards;
+  opacity: 0; /* Começa invisível para animação */
+}
+
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table thead.table-dark th { /* Cabeçalho escuro do Bootstrap */
+  background-color: var(--primary-color);
+  border-bottom: 2px solid var(--accent-color);
+  font-weight: 600;
+  text-transform: uppercase; /* Deixa o texto do cabeçalho em maiúsculas */
+  letter-spacing: 0.5px;
+  padding: 15px 12px; /* Mais padding no cabeçalho */
+}
+
+.table th,
+.table td {
+  padding: 12px 15px; /* Aumenta o padding das células */
+  vertical-align: middle; /* Alinha o conteúdo verticalmente */
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: rgba(0,0,0,0.03); /* Zebrado sutil */
+}
+
+.table tbody tr:hover {
+  background-color: var(--highlight-color); /* Destaque no hover da linha */
+  cursor: default; /* Mantém o cursor padrão */
+}
+
+
+
+
+.table tbody tr td:last-child { /* Última célula (botão) */
+  text-align: center;
+}
+
+.table .btn { /* Botão dentro da tabela */
+  padding: 8px 15px;
+  font-size: 0.9em;
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.table .btn:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.05); /* Pequeno zoom no hover */
+}
+
+/* Estilo para o link de Sair e outros links de navegação inferiores */
+.logout-link, body > a[href*="gestor_view"] {
+  display: inline-block;
+  margin-top: 30px;
+  margin-right: 15px; /* Espaçamento se houver múltiplos links */
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: var(--text-on-primary); /* Ajustado para melhor contraste com cinza */
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-link:hover, body > a[href*="gestor_view"]:hover {
+  background-color: var(--text-color); /* Cor mais escura no hover */
+  color: var(--bg-color);
+  transform: translateY(-2px);
+}
+
+/* Animação para os cards (se houver outros cards na página) */
+.card {
+  animation: popIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  80% {
+    transform: scale(1.02) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Efeito de pulso sutil para botões de ação primários */
+.btn-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(27, 160, 242, 0.7); /* --highlight-color com alpha */
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(27, 160, 242, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(27, 160, 242, 0);
+  }
+}
+
+/* Adicionar classe .btn-pulse ao botão "Baixar Excel" no HTML se desejar o efeito */
+/* Ex: <button class="btn btn-pulse">Baixar Excel</button> */
+/* Estilos para a tabela de registros */
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  border-collapse: separate; /* Necessário para border-radius em células */
+  border-spacing: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px; /* Bordas arredondadas para a tabela */
+  overflow-x: hidden; /* Evitar scroll horizontal desnecessário */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  animation: slideUpIn 0.7s ease-out forwards;
+  opacity: 0; /* Começa invisível para animação */
+}
+
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table thead.table-dark th { /* Cabeçalho escuro do Bootstrap */
+  background-color: var(--primary-color);
+  border-bottom: 2px solid var(--accent-color);
+  font-weight: 600;
+  text-transform: uppercase; /* Deixa o texto do cabeçalho em maiúsculas */
+  letter-spacing: 0.5px;
+  padding: 15px 12px; /* Mais padding no cabeçalho */
+}
+
+.table th,
+.table td {
+  padding: 12px 15px; /* Aumenta o padding das células */
+  vertical-align: middle; /* Alinha o conteúdo verticalmente */
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: rgba(0,0,0,0.03); /* Zebrado sutil */
+}
+
+.table tbody tr:hover {
+  background-color: var(--highlight-color); /* Destaque no hover da linha */
+  cursor: default; /* Mantém o cursor padrão */
+}
+
+
+
+
+.table tbody tr td:last-child { /* Última célula (botão) */
+  text-align: center;
+}
+
+.table .btn { /* Botão dentro da tabela */
+  padding: 8px 15px;
+  font-size: 0.9em;
+  background-color: var(--accent-color);
+}
+
+.table .btn:hover {
+  background-color: var(--primary-color);
+  transform: scale(1.05); /* Pequeno zoom no hover */
+}
+
+/* Estilo para o link de Sair e outros links de navegação inferiores */
+.logout-link, body > a[href*="gestor_view"] {
+  display: inline-block;
+  margin-top: 30px;
+  margin-right: 15px; /* Espaçamento se houver múltiplos links */
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: var(--text-on-primary); /* Ajustado para melhor contraste com cinza */
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-link:hover, body > a[href*="gestor_view"]:hover {
+  background-color: var(--text-color); /* Cor mais escura no hover */
+  color: var(--bg-color);
+  transform: translateY(-2px);
+}
+
+/* Animação para os cards (se houver outros cards na página) */
+.card {
+  animation: popIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  80% {
+    transform: scale(1.02) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Efeito de pulso sutil para botões de ação primários */
+.btn-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(27, 160, 242, 0.7); /* --highlight-color com alpha */
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(27, 160, 242, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(27, 160, 242, 0);
+  }
+}
+
+/* Adicionar classe .btn-pulse ao botão "Baixar Excel" no HTML se desejar o efeito */
+/* Ex: <button class="btn btn-pulse">Baixar Excel</button> */
+
+/* Estilos para os cards de chamados */
+.chamados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Layout responsivo em grade */
+  gap: 25px; /* Espaçamento entre os cards */
+  padding: 20px 0;
+}
+
+.chamado-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Bordas mais arredondadas */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada e suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Para que o header não ultrapasse o border-radius */
+  display: flex;
+  flex-direction: column; /* Organiza o conteúdo do card verticalmente */
+}
+
+.chamado-card:hover {
+  transform: translateY(-5px) scale(1.02); /* Efeito de elevação e leve zoom */
+  box-shadow: 0 12px 35px rgba(var(--primary-color-rgb, 19, 75, 242), 0.2); /* Sombra com cor primária */
+}
+
+.chamado-card .card-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: var(--text-on-primary);
+  padding: 15px 20px;
+  border-bottom: none; /* Remove a borda padrão se houver */
+  border-top-left-radius: 12px; /* Arredonda cantos superiores */
+  border-top-right-radius: 12px;
+}
+
+.chamado-card .card-header .card-title {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.chamado-card .card-body {
+  padding: 20px;
+  flex-grow: 1; /* Faz o corpo do card ocupar o espaço disponível */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza os itens horizontalmente */
+  text-align: center; /* Centraliza o texto */
+}
+
+.chamado-card .card-text {
+  margin-bottom: 15px;
+  font-size: 0.95em;
+  color: var(--text-color);
+  width: 100%; /* Garante que o text-align center funcione bem */
+}
+
+.chamado-card .card-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; /* Adiciona transições para background e border */
+}
+
+.chamado-card .card-link:hover {
+  color: var(--highlight-color);
+  text-decoration: underline;
+}
+
+.chamado-card .download-btn {
+  padding: 6px 15px; /* Ajuste de padding para o botão de download */
+  font-size: 0.85em;
+  border-radius: 18px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--highlight-color); /* Borda com cor de destaque */
+  background-color: transparent; /* Fundo transparente */
+  color: var(--highlight-color); /* Texto com cor de destaque */
+  display: inline-block; /* Para que o padding e margin funcionem corretamente */
+  margin-top: 5px; /* Pequeno espaço acima */
+  text-decoration: none; /* Remove sublinhado padrão de link */
+}
+
+.chamado-card .download-btn:hover {
+  background-color: var(--highlight-color); /* Fundo com cor de destaque no hover */
+  color: var(--text-on-primary); /* Texto branco no hover */
+  text-decoration: none; /* Garante que não haja sublinhado no hover */
+  transform: scale(1.03);
+}
+
+
+.chamado-card .card-btn,
+.chamado-card .card-action-btn {
+  padding: 8px 18px;
+  font-size: 0.9em;
+  border-radius: 20px; /* Botões mais arredondados/pílula */
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px; /* Espaçamento para botões */
+}
+
+.chamado-card .btn-info.card-btn { /* Botão "Ver Detalhes" */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  align-self: flex-start; /* Alinha o botão de detalhes à esquerda */
+}
+
+.chamado-card .btn-info.card-btn:hover {
+  background-color: #9a9c9e; /* Um tom mais escuro do cinza secundário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.chamado-card .card-footer {
+  background-color: transparent; /* Fundo transparente para o rodapé do card */
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end; /* Alinha o botão de ação à direita */
+}
+
+.chamado-card .card-action-btn.btn-primary { /* Botão "Preencher SESMT" */
+  background-color: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.chamado-card .card-action-btn.btn-primary:hover {
+  background-color: var(--highlight-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-color-rgb, 12, 135, 242), 0.3);
+}
+
+.chamado-card .card-action-btn.btn-secondary { /* Botão "Editar SESMT" */
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.chamado-card .card-action-btn.btn-secondary:hover {
+  background-color: var(--accent-color); /* Pode usar o accent para hover ou um tom mais escuro do primário */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb, 19, 75, 242), 0.3);
+}
+
+/* Adicionar variáveis RGB para sombras coloridas se não existirem */
+/* Se :root já tiver --primary-color-rgb e --accent-color-rgb, ignore esta parte */
+/* :root {
+  --primary-color-rgb: 19, 75, 242;
+  --accent-color-rgb: 12, 135, 242;
+} */
+
+/* Estilo do modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Conteúdo do modal */
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 60%;
+  max-width: 800px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Botão fechar */
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* Estilo do título */
+.modal-title {
+  margin-top: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Estilo do formulário */
+.styled-form p {
+  margin-bottom: 15px;
+}
+
+.styled-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.styled-form input[type="text"],
+.styled-form input[type="date"],
+.styled-form textarea,
+.styled-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.styled-form input:focus,
+.styled-form textarea:focus,
+.styled-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Radio buttons */
+.styled-form .radio {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+/* Botão submit */
+.btn-submit {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 20px auto 0;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #218838;
+}
+/* Faz o texto das opções do select quebrarem */
+.natureza-select {
+    width: 500px;
+    white-space: normal;
+}
+
+/* Para navegadores que respeitam esse seletor */
+.natureza-select option {
+    white-space: normal;
+}
+/* Estiliza o campo Select2 para parecer com outros inputs */
+.select2-container--default .select2-selection--single {
+  height: 42px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+/* Estilo ao focar */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--single.select2-selection--focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Ajuste do texto */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 16px;
+  white-space: normal; /* Permite quebra de linha */
+  word-break: break-word;
+}
+
+/* Alinha a seta do Select2 */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  top: 0;
+  right: 10px;
+}
+
+/* Estilo do dropdown */
+.select2-dropdown {
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Quebra as opções dentro do dropdown */
+.select2-results__option {
+  white-space: normal;
+  word-break: break-word;
+  padding: 10px;
+}
+
+
+/* Container principal do checkbox */
+.futuristic-checkbox-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(var(--highlight-color), 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Orbitron', monospace;
+    backdrop-filter: blur(10px);
+}
+
+
+/* Esconder o checkbox original */
+.futuristic-checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Checkbox customizado */
+.futuristic-checkmark {
+    position: relative;
+    height: 30px;
+    width: 30px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border: 2px solid var(--highlight-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.futuristic-checkmark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(var(--highlight-color), 0.1) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.futuristic-checkbox-container:hover .futuristic-checkmark::before {
+    transform: translateX(100%);
+}
+
+/* Ícone de check */
+.futuristic-checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 12px;
+    border: solid var(--text-on-primary);
+    border-width: 0 3px 3px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    animation: checkmark-appear 0.3s ease-in-out;
+}
+
+@keyframes checkmark-appear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -60%) rotate(45deg) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
+    }
+}
+
+/* Estado checked */
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .futuristic-checkmark {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-color: var(--highlight-color);
+    box-shadow: 
+        0 0 20px rgba(var(--highlight-color), 0.5),
+        inset 0 0 10px rgba(var(--text-on-primary), 0.3);
+    animation: checkbox-glow 0.5s ease-in-out;
+}
+
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .futuristic-checkmark::after {
+    display: block;
+}
+
+@keyframes checkbox-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(var(--highlight-color), 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px rgba(var(--highlight-color), 0.8),
+            inset 0 0 15px rgba(var(--text-on-primary), 0.5);
+    }
+    100% {
+        box-shadow: 
+            0 0 20px rgba(var(--highlight-color), 0.5),
+            inset 0 0 10px rgba(var(--text-on-primary), 0.3);
+    }
+}
+
+/* Label do checkbox */
+.futuristic-checkbox-label {
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    text-shadow: 0 0 10px rgba(var(--highlight-color), 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.futuristic-checkbox-container:hover .futuristic-checkbox-label {
+    color: var(--highlight-color);
+    text-shadow: 0 0 15px rgba(var(--highlight-color), 0.6);
+}
+
+/* Texto de ajuda */
+.futuristic-help-text {
+    font-size: 12px;
+    color: rgba(var(--text-color), 0.7);
+    font-weight: 400;
+    line-height: 1.4;
+    text-shadow: none;
+}
+
+/* Ícone de gestor */
+.manager-icon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-on-primary);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
+}
+
+.futuristic-checkbox-container input[type="checkbox"]:checked ~ .manager-icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: icon-pulse 2s infinite;
+}
+
+@keyframes icon-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(var(--primary-color), 0.8);
+    }
+}
+
+/* Efeito de partículas */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--highlight-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle-float 3s infinite linear;
+}
+
+@keyframes particle-float {
+    0% {
+        opacity: 0;
+        transform: translateY(100%) translateX(0);
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100%) translateX(50px);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .futuristic-checkbox-container {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .futuristic-checkmark {
+        height: 25px;
+        width: 25px;
+    }
+    
+    .futuristic-checkbox-label {
+        font-size: 14px;
+    }
+    
+    .futuristic-help-text {
+        font-size: 11px;
+    }
+}

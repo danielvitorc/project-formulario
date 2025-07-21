@@ -62,13 +62,13 @@
                 <div class="card chamado-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">{{ chamado.nome_colaborador }}</h5>
-                        <a href="{% url 'excluir_chamado' chamado.id %}" 
-                           class="btn btn-danger btn-sm"
-                           style="background-color: #dc3545; color: white;"
-                        onclick="return confirm('Tem certeza que deseja excluir este registro?');">
-                            <i class="fas fa-trash-alt"></i> Excluir
-                        </a>
+                        {% if chamado.id %}
+                            <button type="button" class="btn btn-danger btn-sm" style="background-color: #dc3545; color: white;" data-bs-toggle="modal" data-bs-target="#excluirModal{{ chamado.id }}">
+                                <i class="fas fa-trash-alt"></i>  Excluir
+                            </button>
+                        {% endif %}
                     </div>
+                        
                     <div class="card-body">
                     <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
                         Ver Detalhes
@@ -86,17 +86,6 @@
                     </div>
 
                     <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
-                        {% if chamado.diretor_aprovacao == True %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% elif chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-2">
                         <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
                         {% if chamado.diretor_aprovacao == False %}
                             <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
@@ -104,6 +93,17 @@
                             <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
                         {% else %}
                             <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-2">
+                        <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
+                        {% if chamado.diretor_aprovacao == True %}
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                        {% elif chamado.diretor_aprovacao == False %}
+                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
                         {% endif %}
                     </div>
 
@@ -134,10 +134,39 @@
 
                     </div>
                 </div>
+                <!-- Modal de confirmação e motivo -->
+                
+                {% if chamado.id %}
+                <div class="modal fade" id="excluirModal{{ chamado.id }}" tabindex="-1" aria-labelledby="excluirModalLabel{{ chamado.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <form method="post" action="{% url 'excluir_chamado' chamado.id %}">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="excluirModalLabel{{ chamado.id }}">Excluir Chamado</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="motivo_{{ chamado.id }}" class="form-label">Motivo da exclusão:</label>
+                                        <textarea name="motivo" id="motivo_{{ chamado.id }}" class="form-control" required placeholder="Explique o motivo da exclusão"></textarea>
+                                        <small class="text-muted">Este motivo será registrado para visualização do SESMT no backup do chamado</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
                 {% include 'formulario/include/modal_detalhes.html' %}
-                {% endfor %}
 
+                {% endfor %}
+        
         </div>
         {% endif %}
         
@@ -206,6 +235,9 @@
             </div>
         </div>
     </div>
+
+
+
     <!-- Antes do fechamento da tag </body>, ou em um bloco de JavaScript -->
     <script src="{% static 'js/checkbox_futurista.js' %}"></script>
 

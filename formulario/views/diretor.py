@@ -7,9 +7,9 @@ from django.contrib import messages
 
 @login_required
 def diretor_view(request):
-    chamados = Chamado.objects.filter(
-        assinatura_gestor__isnull=False
-    ).exclude(assinatura_gestor__isnull=True).order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_sesmt__isnull=False, 
+    aso = 'Apto', epi_epc = 'Apto', curso_nr10 = 'Apto', curso_sep = 'Apto', curso_nr35 = 'Apto'
+    ).exclude(assinatura_sesmt__isnull=True).order_by('-id')
 
     form_diretor = DiretorForm()  
 
