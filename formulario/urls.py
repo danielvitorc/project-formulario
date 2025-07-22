@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import auth, gestor, diretor, sesmt, rh_dp, excel, analitico
 
 urlpatterns = [
@@ -23,4 +23,7 @@ urlpatterns = [
     path('chamado/excluir/<int:id>/', gestor.excluir_chamado, name='excluir_chamado'),
     path('analitico/', analitico.analitico_view, name='analitico_view'),
     path('analitico/dados/', analitico.analitico_dados_view, name='analitico_dados_view'),
+    
+    # URLs Administrativas
+    path('admin-panel/', include('formulario.admin_urls')),
 ]
