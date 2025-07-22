@@ -13,8 +13,12 @@ from django.forms.widgets import FileInput
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'role']  # Campos que aparecerão no formulário de cadastro
-
+        fields = ['username', 'email', 'role']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'role': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 AUTORIZACOES_CHOICES = [
     ('Apto','Apto'),

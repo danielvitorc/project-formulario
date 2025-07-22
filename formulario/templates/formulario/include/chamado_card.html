@@ -77,12 +77,5 @@
                     </div>
                 </div>
     </div>
-    <div class="card-footer">
-        {% if not chamado.sesmt_preenchido %}
-            <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-primary card-action-btn">Preencher SESMT</a>
-        {% else %}
-            <a href="{% url 'sesmt_editar' chamado.id %}" class="btn btn-secondary card-action-btn">Editar SESMT</a>
-        {% endif %}
-    </div>
 </div>
 {% include 'formulario/include/modal_detalhes.html' %}

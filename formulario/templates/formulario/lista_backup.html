@@ -1,15 +1,35 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/backup.css' %}">
+    <meta name="description" content="Lista de chamados excluídos do sistema SESMT - Backup e histórico">
+    <meta name="keywords" content="SESMT, chamados excluídos, backup, histórico">
+    <meta name="author" content="NorteTech">
     
+    <!-- Favicon -->
+    <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
+    
+    <!-- Título -->
+    <title>Chamados Excluídos - Painel SESMT</title>
+    
+    <!-- Preload de fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS customizado -->
+    <link rel="stylesheet" href="{% static 'css/sesmt_style.css' %}">
+    
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar"> <!-- Assumindo que a navbar já foi implementada corretamente antes -->
         <a href="{% url 'sesmt_view' %}" class="navbar-brand">Painel Sesmt</a>
         <ul class="navbar-links">
             <li><a href="{% url 'sesmt_view' %}">Início</a></li>
@@ -17,48 +37,305 @@
             <li><a class="nav-link" href="{% url 'lista_chamados_backup' %}">Chamados Excluídos</a></li>
             <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
         </ul>
-    </nav>    
-    <div class="container mt-4">
-    <h2 class="mb-4">Chamados Excluídos (Backup)</h2>
+    </nav> 
 
-    {% if chamados_backup %}
-        <form method="get" class="mb-3 d-flex" role="search">
-            <input type="text" name="matricula" class="form-control me-2" placeholder="Buscar por matrícula" value="{{ matricula_query }}">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-                {% if matricula_query %}
-                <a href="{% url 'lista_chamados_backup' %}" class="btn btn-secondary">Remover Filtro</a>
+    <!-- Conteúdo principal -->
+    <main class="main-content" role="main">
+        <div class="container">
+            <!-- Cabeçalho da página -->
+            <header class="page-header">
+                <h1>
+                    <i class="bi bi-archive" aria-hidden="true"></i>
+                    Chamados Excluídos (Backup)
+                </h1>
+                <p class="page-description">
+                    Histórico e backup de chamados removidos do sistema
+                </p>
+            </header>
+
+            <!-- Seção de busca -->
+            <section class="search-section" aria-labelledby="search-title">
+                <h2 id="search-title" class="visually-hidden">Buscar chamados</h2>
+                
+                <div class="search-container">
+                    <form method="get" class="search-form" role="search" aria-label="Buscar chamados por matrícula">
+                        <div class="search-input-group">
+                            <div class="input-group">
+                                <span class="input-group-text" id="search-icon">
+                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                </span>
+                                <input 
+                                    type="text" 
+                                    name="matricula" 
+                                    class="form-control" 
+                                    placeholder="Buscar por matrícula..." 
+                                    value="{{ matricula_query }}"
+                                    aria-label="Matrícula do colaborador"
+                                    aria-describedby="search-icon search-help"
+                                >
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search" aria-hidden="true"></i>
+                                    Buscar
+                                </button>
+                                {% if matricula_query %}
+                                    <a href="{% url 'lista_chamados_backup' %}" class="btn btn-outline-secondary" aria-label="Remover filtro de busca">
+                                        <i class="bi bi-x-circle" aria-hidden="true"></i>
+                                        Limpar
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <small id="search-help" class="form-text text-muted">
+                                Digite a matrícula do colaborador para filtrar os resultados
+                            </small>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Seção da tabela -->
+            <section class="table-section" aria-labelledby="table-title">
+                <h2 id="table-title" class="visually-hidden">Lista de chamados excluídos</h2>
+                
+                {% if chamados_backup %}
+                    <!-- Informações da busca -->
+                    {% if matricula_query %}
+                        <div class="search-results-info" role="status" aria-live="polite">
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Filtro ativo:</strong> Exibindo resultados para a matrícula "{{ matricula_query }}"
+                                    <br>
+                                    <small>{{ chamados_backup|length }} chamado{{ chamados_backup|length|pluralize }} encontrado{{ chamados_backup|length|pluralize }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Tabela responsiva -->
+                    <div class="table-responsive" role="region" aria-label="Tabela de chamados excluídos" tabindex="0">
+                        <table class="table table-hover" role="table">
+                            <thead class="table-dark">
+                                <tr role="row">
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-person-badge me-1" aria-hidden="true"></i>
+                                        Responsável
+                                    </th>
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-hash me-1" aria-hidden="true"></i>
+                                        Matrícula
+                                    </th>
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-person me-1" aria-hidden="true"></i>
+                                        Colaborador
+                                    </th>
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-person-gear me-1" aria-hidden="true"></i>
+                                        Gestor Imediato
+                                    </th>
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-calendar-x me-1" aria-hidden="true"></i>
+                                        Data Exclusão
+                                    </th>
+                                    <th scope="col" role="columnheader">
+                                        <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i>
+                                        Motivo
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for chamado in chamados_backup %}
+                                    <tr role="row" class="table-row-hover">
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                <strong>{{ chamado.responsavel }}</strong>
+                                            </div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                <span class="badge bg-secondary">{{ chamado.matricula }}</span>
+                                            </div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                {{ chamado.nome_colaborador }}
+                                            </div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                {{ chamado.gestor_imediato }}
+                                            </div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                <time datetime="{{ chamado.data_exclusao|date:'c' }}">
+                                                    <i class="bi bi-calendar3 me-1 text-muted" aria-hidden="true"></i>
+                                                    {{ chamado.data_exclusao|date:"d/m/Y" }}
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-clock me-1" aria-hidden="true"></i>
+                                                        {{ chamado.data_exclusao|date:"H:i" }}
+                                                    </small>
+                                                </time>
+                                            </div>
+                                        </td>
+                                        <td role="gridcell">
+                                            <div class="cell-content">
+                                                <span class="motivo-exclusao" title="{{ chamado.motivo_exclusao }}">
+                                                    {{ chamado.motivo_exclusao|truncatechars:50 }}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Informações da tabela -->
+                    <div class="table-info mt-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
+                                    Total de {{ chamados_backup|length }} chamado{{ chamados_backup|length|pluralize }} excluído{{ chamados_backup|length|pluralize }}
+                                </small>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <small class="text-muted">
+                                    <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>
+                                    Última atualização: {% now "d/m/Y H:i" %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <!-- Estado vazio -->
+                    <div class="empty-state" role="status" aria-live="polite">
+                        <div class="empty-state-icon">
+                            {% if matricula_query %}
+                                <i class="bi bi-search text-info" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="bi bi-archive text-secondary" aria-hidden="true"></i>
+                            {% endif %}
+                        </div>
+                        
+                        {% if matricula_query %}
+                            <h3>Nenhum resultado encontrado</h3>
+                            <p class="text-muted">
+                                Não foram encontrados chamados excluídos para a matrícula "{{ matricula_query }}".
+                            </p>
+                            <a href="{% url 'lista_chamados_backup' %}" class="btn btn-outline-primary">
+                                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+                                Ver todos os chamados
+                            </a>
+                        {% else %}
+                            <h3>Nenhum chamado excluído</h3>
+                            <p class="text-muted">
+                                Não há chamados excluídos no sistema no momento.
+                            </p>
+                            <a href="{% url 'sesmt_view' %}" class="btn btn-primary">
+                                <i class="bi bi-house me-1" aria-hidden="true"></i>
+                                Voltar ao início
+                            </a>
+                        {% endif %}
+                    </div>
                 {% endif %}
-
-        </form>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Responsável pelo preenchimento</th>
-                        <th>Matrícula</th>
-                        <th>Nome do Colaborador</th>
-                        <th>Gestor Imediato</th>
-                        <th>Data Exclusão</th>
-                        <th>Motivo Exclusão</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for chamado in chamados_backup %}
-                        <tr>
-                            <td>{{ chamado.responsavel }}</td>
-                            <td>{{ chamado.matricula }}</td>
-                            <td>{{ chamado.nome_colaborador }}</td>
-                            <td>{{ chamado.gestor_imediato }}</td>
-                            <td>{{ chamado.data_exclusao|date:"d/m/Y H:i" }}</td>
-                            <td>{{ chamado.motivo_exclusao }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            </section>
         </div>
-    {% else %}
-        <p class="text-muted">Nenhum chamado excluído foi encontrado.</p>
-    {% endif %}
-</div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="page-footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <p class="text-muted text-center">
+                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                    Sistema SESMT - NorteTech © {% now "Y" %}
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script para funcionalidades da página -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu mobile
+            const navbarToggle = document.querySelector('.navbar-toggle');
+            const navbarLinks = document.querySelector('.navbar-links');
+            
+            if (navbarToggle && navbarLinks) {
+                navbarToggle.addEventListener('click', function() {
+                    const isExpanded = navbarToggle.getAttribute('aria-expanded') === 'true';
+                    
+                    navbarToggle.setAttribute('aria-expanded', !isExpanded);
+                    navbarLinks.classList.toggle('active');
+                    
+                    const icon = navbarToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = navbarLinks.classList.contains('active') 
+                            ? 'bi bi-x' 
+                            : 'bi bi-list';
+                    }
+                });
+                
+                // Fechar menu ao clicar em link
+                navbarLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navbarLinks.classList.remove('active');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                        const icon = navbarToggle.querySelector('i');
+                        if (icon) {
+                            icon.className = 'bi bi-list';
+                        }
+                    });
+                });
+            }
+            
+            // Tooltip para motivos de exclusão longos
+            const motivoElements = document.querySelectorAll('.motivo-exclusao');
+            motivoElements.forEach(element => {
+                if (element.textContent.length > 47) { // Se foi truncado
+                    element.style.cursor = 'help';
+                    element.addEventListener('click', function() {
+                        alert(this.getAttribute('title'));
+                    });
+                }
+            });
+            
+            // Animação das linhas da tabela
+            const tableRows = document.querySelectorAll('tbody tr');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 50);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            tableRows.forEach(row => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                observer.observe(row);
+            });
+            
+            // Foco automático no campo de busca (apenas se não houver parâmetros)
+            const searchInput = document.querySelector('input[name="matricula"]');
+            const urlParams = new URLSearchParams(window.location.search);
+            if (searchInput && !urlParams.has('matricula')) {
+                searchInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
+
