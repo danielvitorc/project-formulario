@@ -100,12 +100,12 @@ class GestorForm(forms.ModelForm):
 
     @staticmethod
     def generate_signature_image(name: str, cargo: str = None) -> ContentFile:
-
         print("Gerando assinatura para:", name, cargo)
 
         try:
-            font_name = ImageFont.truetype("BRADHITC.TTF", 40)
-            font_cargo = ImageFont.truetype("BRADHITC.TTF", 25)
+            font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'BRADHITC.TTF')
+            font_name = ImageFont.truetype(font_path, 40)
+            font_cargo = ImageFont.truetype(font_path, 25)
             print("Fonte carregada com sucesso.")
         except IOError:
             print("Fonte não encontrada, usando padrão.")
