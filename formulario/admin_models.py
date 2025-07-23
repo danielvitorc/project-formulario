@@ -49,3 +49,5 @@ def save_user_profile(sender, instance, **kwargs):
     else:
         UserProfile.objects.create(user=instance)
 
+
+

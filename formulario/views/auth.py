@@ -22,18 +22,15 @@ def login_view(request):
             login(request, user)
             
             # Redirecionar para tela de admin se for administrador
-            if user.is_superuser or user.profile.is_admin:
-                if not user.profile.is_admin:
-                    user.profile.is_admin = True
-                    user.profile.save()
-                return redirect('admin_dashboard')
-            elif user.profile.role == 'gestor':
+            if user.is_superuser or user.is_staff:
+                return redirect("admin_dashboard")
+            elif user.role == "gestor":
                 return redirect('gestor_view')
-            elif user.profile.role == 'diretor':
+            elif user.role == 'diretor':
                 return redirect('diretor_view')
-            elif user.profile.role == 'rh_dp':
+            elif user.role == 'rh_dp':
                 return redirect('rh_dp_view')
-            elif user.profile.role == 'sesmt':
+            elif user.role == 'sesmt':
                 return redirect('sesmt_view')
             else:
                 messages.error(request, 'Usuário sem função definida.')
