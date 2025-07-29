@@ -112,28 +112,28 @@
     </div>
 
     {% if messages %}
-    <!-- Modal -->
-    <div class="modal fade show" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true" style="display: block;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content custom-modal-content">
-        <div class="modal-header custom-modal-header">
-            <h5 class="modal-title" id="messageModalLabel">
-            <i class="bi bi-exclamation-triangle-fill"></i> Atenção
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-            {% for message in messages %}
-            <div class="alert alert-light text-dark mb-2 shadow-sm p-2 rounded">
-                {{ message }}
+    <!-- Modal de Mensagens Corrigido -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header custom-modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Atenção
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    {% for message in messages %}
+                    <div class="alert alert-light text-dark mb-2 shadow-sm p-2 rounded">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Fechar</button>
+                </div>
             </div>
-            {% endfor %}
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Fechar</button>
-        </div>
-        </div>
-    </div>
     </div>
     {% endif %}
 
@@ -157,9 +157,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('messageModal'));
-            myModal.show();
+            // Verifica se o modal existe antes de tentar inicializá-lo
+            const messageModalElement = document.getElementById('messageModal');
+            if (messageModalElement) {
+                const myModal = new bootstrap.Modal(messageModalElement, {
+                    backdrop: true,  // Permite fechar clicando no backdrop
+                    keyboard: true,  // Permite fechar com ESC
+                    focus: true      // Foca no modal quando aberto
+                });
+                myModal.show();
+                
+                // Adiciona evento para garantir que o modal seja removido corretamente
+                messageModalElement.addEventListener('hidden.bs.modal', function () {
+                    // Remove qualquer backdrop residual
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Restaura o scroll do body
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                });
+            }
         });
     </script>
 </body>
 </html>
+

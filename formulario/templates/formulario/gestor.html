@@ -6,177 +6,328 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://encrypted-tbn2.gstatic.com/faviconV2?url=https://www.nortetech.net&client=VFE&size=64&type=FAVICON&fallback_opts=TYPE,SIZE,URL&nfrp=2" type="image/png">
     <title>{% block title %}Painel do Gestor{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- CSS personalizado -->
     <link rel="stylesheet" href="{% static 'css/gestor_style.css' %}">
+    
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
+    <!-- Navbar - mantida sem alterações -->
     <nav class="navbar">
-        <a href="{% url 'gestor_view' %}" class="navbar-brand">Painel Gestor</a>
+        <a href="{% url 'gestor_view' %}" class="navbar-brand">
+            <i class="fas fa-tachometer-alt me-2"></i>Painel Gestor
+        </a>
         <ul class="navbar-links">
-            <li><a href="{% url 'gestor_view' %}">Início</a></li>
-            <li><a href="{% url 'registros_gestor' %}">Registros do Gestor</a></li>
-            <li><a href="{% url 'logout' %}" class="logout-link-nav">Sair</a></li>
+            <li><a href="{% url 'gestor_view' %}"><i class="fas fa-home me-1"></i>Início</a></li>
+            <li><a href="{% url 'registros_gestor' %}"><i class="fas fa-file-alt me-1"></i>Registros do Gestor</a></li>
+            <li><a href="{% url 'logout' %}" class="logout-link-nav"><i class="fas fa-sign-out-alt me-1"></i>Sair</a></li>
         </ul>
     </nav>
 
-    <!-- Container para mensagens Django (será interceptado pelo JavaScript) -->
+    <!-- Container para mensagens Django -->
     {% if messages %}
         <div class="django-messages" style="display: none;">
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} django-message {{ message.tags }}">
-                    {{ message }}
+                    <i class="fas fa-info-circle me-2"></i>{{ message }}
                 </div>
             {% endfor %}
         </div>
     {% endif %}
 
-    <div class="main-content container mt-4">
-        <h1 class="mb-4 text-center">Bem-vindo, Gestor!</h1>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="welcome-card card shadow-sm text-center">
+    <!-- Conteúdo principal melhorado -->
+    <div class="main-content container-fluid">
+        <!-- Título principal com animação -->
+        <h1 class="mb-5">
+            <i class="fas fa-user-tie me-3" style="color: var(--accent-color);"></i>
+            Bem-vindo, Gestor!
+        </h1>
+        
+        <!-- Card de boas-vindas melhorado -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-6 col-md-8">
+                <div class="welcome-card card text-center">
                     <div class="card-body">
-                        <i class="fas fa-file-alt fa-3x mb-3"></i>
+                        <div class="icon-container mb-4">
+                            <i class="fas fa-file-alt fa-4x"></i>
+                        </div>
                         <h5 class="card-title">Gerenciar Chamados</h5>
-                        <p class="card-text">Utilize o botão abaixo para cadastrar um novo chamado.</p>
-                        <button id="openModalBtn" name="salvar_gestor" class="btn">Cadastrar Novo Chamado</button>
+                        <p class="card-text">
+                            Utilize o botão abaixo para cadastrar um novo chamado no sistema. 
+                            Todos os campos obrigatórios devem ser preenchidos corretamente.
+                        </p>
+                        <button id="openModalBtn" name="salvar_gestor" class="btn btn-lg">
+                            <i class="fas fa-plus me-2"></i>Cadastrar Novo Chamado
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="container">
+        <!-- Seção de chamados em andamento -->
         {% if chamados_pendentes %}
-        <h2>Meus Chamados em andamento </h2>
-        <div class="chamados-grid">
-            {% for chamado in chamados_pendentes %}
-                <div class="card chamado-card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">{{ chamado.nome_colaborador }}</h5>
-                        {% if chamado.id %}
-                            <button type="button" class="btn btn-danger btn-sm" style="background-color: #dc3545; color: white;" data-bs-toggle="modal" data-bs-target="#excluirModal{{ chamado.id }}">
-                                <i class="fas fa-trash-alt"></i>  Excluir
-                            </button>
-                        {% endif %}
-                    </div>
-                        
-                    <div class="card-body">
-                    <button type="button" class="btn btn-info btn-sm card-btn" data-bs-toggle="modal" data-bs-target="#modal{{ chamado.id }}">
-                        Ver Detalhes
-                    </button>
-                    <div class="card p-3 shadow-sm rounded-3 bg-light mb-3">
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">📄 Doc. Avaliação GPM:</h6>
-                        {% if chamado.upload_gpm %}
-                            <a href="{{ chamado.upload_gpm.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-download"></i> Download
-                            </a>
-                        {% else %}
-                            <span class="text-muted fst-italic">Aguardando envio</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🩺 Validação SESMT:</h6>
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% else %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🧑‍💼 Aprovação do Diretor:</h6>
-                        {% if chamado.diretor_aprovacao == True %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% elif chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-2">
-                        <h6 class="fw-bold text-primary mb-1">🧾 Validação RH/DP:</h6>
-                        {% if chamado.diretor_aprovacao == False %}
-                            <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                        {% elif chamado.assinatura_rh_dp %}
-                            <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
-                        {% endif %}
-                    </div>
-
-                    {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
-                        <div class="alert alert-danger mt-3">
-                            <strong>⚠️ Atenção:</strong> Este chamado possui campos com status <b>"Não apto"</b>.
-                        </div>
-                    {% endif %}
-                    </div>
-
-                    {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp  %}
-                        <form method="post" action="{% url 'gestor_ciente' chamado.pk %}">
-                        {% csrf_token %}
-                        <button type="submit">Ciente</button>
-                        </form>
-                    {% endif %}
-
-                    </div>
+        <div class="container-fluid px-0">
+            <div class="section-header mb-4">
+                <h2>
+                    <i class="fas fa-clock me-3" style="color: var(--warning-color);"></i>
+                    Meus Chamados em Andamento
+                </h2>
+                <div class="section-subtitle">
+                    <span class="badge bg-primary">{{ chamados_pendentes|length }} chamado{{ chamados_pendentes|length|pluralize:"s" }} ativo{{ chamados_pendentes|length|pluralize:"s" }}</span>
                 </div>
-                <!-- Modal de confirmação e motivo -->
-                
-                {% if chamado.id %}
-                <div class="modal fade" id="excluirModal{{ chamado.id }}" tabindex="-1" aria-labelledby="excluirModalLabel{{ chamado.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <form method="post" action="{% url 'excluir_chamado' chamado.id %}">
-                                {% csrf_token %}
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="excluirModalLabel{{ chamado.id }}">Excluir Chamado</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="motivo_{{ chamado.id }}" class="form-label">Motivo da exclusão:</label>
-                                        <textarea name="motivo" id="motivo_{{ chamado.id }}" class="form-control" required placeholder="Explique o motivo da exclusão"></textarea>
-                                        <small class="text-muted">Este motivo será registrado para visualização do SESMT no backup do chamado</small>
+            </div>
+            
+            <div class="chamados-grid">
+                {% for chamado in chamados_pendentes %}
+                    <div class="card chamado-card">
+                        <!-- Header do card melhorado -->
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="colaborador-info">
+                                <h5 class="card-title mb-1">
+                                    <i class="fas fa-user me-2" style="color: var(--primary-color);"></i>
+                                    {{ chamado.nome_colaborador }}
+                                </h5>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    Criado em {{ chamado.data_criacao|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+                            {% if chamado.id %}
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#excluirModal{{ chamado.id }}"
+                                        title="Excluir chamado">
+                                    <i class="fas fa-trash-alt me-1"></i>Excluir
+                                </button>
+                            {% endif %}
+                        </div>
+                            
+                        <!-- Body do card melhorado -->
+                        <div class="card-body">
+                            <!-- Botão de detalhes melhorado -->
+                            <button type="button" class="btn btn-info card-btn w-100 mb-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modal{{ chamado.id }}">
+                                <i class="fas fa-eye me-2"></i>Ver Detalhes Completos
+                            </button>
+                            
+                            <!-- Card de status melhorado -->
+                            <div class="status-card p-4 rounded-4 bg-light mb-3">
+                                <!-- Status GPM -->
+                                <div class="status-item mb-3">
+                                    <h6 class="fw-bold text-primary mb-2">
+                                        <i class="fas fa-file-pdf me-2"></i>
+                                        Documento de Avaliação GPM
+                                    </h6>
+                                    <div class="status-content">
+                                        {% if chamado.upload_gpm %}
+                                            <a href="{{ chamado.upload_gpm.url }}" target="_blank" 
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-download me-1"></i>Baixar Documento
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted fst-italic">
+                                                <i class="fas fa-hourglass-half me-1"></i>
+                                                Aguardando envio do documento
+                                            </span>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                                <!-- Status SESMT -->
+                                <div class="status-item mb-3">
+                                    <h6 class="fw-bold text-primary mb-2">
+                                        <i class="fas fa-user-md me-2"></i>
+                                        Validação SESMT
+                                    </h6>
+                                    <div class="status-content">
+                                        {% if chamado.diretor_aprovacao == False %}
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle-fill me-1"></i>Reprovado
+                                            </span>
+                                        {% elif not chamado.assinatura_sesmt or chamado.aso == "Não apto" or chamado.epi_epc == "Não apto" or chamado.curso_nr10 == "Não apto" or chamado.curso_sep == "Não apto" or chamado.curso_nr35 == "Não apto" %}
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-hourglass-split me-1"></i>Pendente
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Aprovado
+                                            </span>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </form>
+                                
+                                <!-- Status Diretor -->
+                                <div class="status-item mb-3">
+                                    <h6 class="fw-bold text-primary mb-2">
+                                        <i class="fas fa-user-tie me-2"></i>
+                                        Aprovação do Diretor
+                                    </h6>
+                                    <div class="status-content">
+                                        {% if chamado.diretor_aprovacao == True %}
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Aprovado
+                                            </span>
+                                        {% elif chamado.diretor_aprovacao == False %}
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle-fill me-1"></i>Reprovado
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-hourglass-split me-1"></i>Pendente
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Status RH/DP -->
+                                <div class="status-item mb-3">
+                                    <h6 class="fw-bold text-primary mb-2">
+                                        <i class="fas fa-users me-2"></i>
+                                        Validação RH/DP
+                                    </h6>
+                                    <div class="status-content">
+                                        {% if chamado.diretor_aprovacao == False %}
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle-fill me-1"></i>Reprovado
+                                            </span>
+                                        {% elif chamado.assinatura_rh_dp %}
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle-fill me-1"></i>Aprovado
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-hourglass-split me-1"></i>Pendente
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Alerta para campos não aptos -->
+                                {% if chamado.aso == 'Não apto' or chamado.epi_epc == 'Não apto' or chamado.curso_nr10 == 'Não apto' or chamado.curso_sep == 'Não apto' or chamado.curso_nr35 == 'Não apto' %}
+                                    <div class="alert alert-danger mt-3">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>Atenção:</strong> Este chamado possui campos com status <strong>"Não apto"</strong>.
+                                        <br><small>Verifique os detalhes para mais informações.</small>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Botão Ciente (se necessário) -->
+                            {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp %}
+                                <form method="post" action="{% url 'gestor_ciente' chamado.pk %}" class="mt-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-secondary w-100">
+                                        <i class="fas fa-check me-2"></i>Marcar como Ciente
+                                    </button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-                {% endif %}
+                    
+                    <!-- Modal de confirmação de exclusão -->
+                    {% if chamado.id %}
+                    <div class="modal fade" id="excluirModal{{ chamado.id }}" tabindex="-1" 
+                         aria-labelledby="excluirModalLabel{{ chamado.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form method="post" action="{% url 'excluir_chamado' chamado.id %}">
+                                    {% csrf_token %}
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title" id="excluirModalLabel{{ chamado.id }}">
+                                            <i class="fas fa-trash-alt me-2"></i>Confirmar Exclusão
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" 
+                                                data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <strong>Atenção:</strong> Esta ação não pode ser desfeita.
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="motivo_{{ chamado.id }}" class="form-label fw-bold">
+                                                Motivo da exclusão:
+                                            </label>
+                                            <textarea name="motivo" id="motivo_{{ chamado.id }}" 
+                                                      class="form-control" rows="4" required 
+                                                      placeholder="Explique detalhadamente o motivo da exclusão deste chamado..."></textarea>
+                                            <small class="text-muted mt-2 d-block">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Este motivo será registrado para visualização do SESMT no backup do chamado.
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash-alt me-2"></i>Confirmar Exclusão
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="fas fa-times me-2"></i>Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
-                {% include 'formulario/include/modal_detalhes.html' %}
+                    <!-- Include do modal de detalhes -->
+                    {% include 'formulario/include/modal_detalhes.html' %}
 
                 {% endfor %}
-        
+            </div>
         </div>
+        {% else %}
+            <!-- Estado vazio melhorado -->
+            <div class="empty-state text-center py-5">
+                <div class="empty-icon mb-4">
+                    <i class="fas fa-inbox fa-5x text-muted"></i>
+                </div>
+                <h3 class="text-muted mb-3">Nenhum chamado em andamento</h3>
+                <p class="text-muted mb-4">
+                    Quando você criar novos chamados, eles aparecerão aqui para acompanhamento.
+                </p>
+                <button id="openModalBtnEmpty" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Criar Primeiro Chamado
+                </button>
+            </div>
         {% endif %}
         
-       <!-- Modal para Cadastro de Chamado -->
+        <!-- Modal para Cadastro de Chamado - CORRIGIDO -->
         <div id="chamadoModal" class="modal">
             <div class="modal-content scrollable">
-                <span class="close-btn" id="closeModalBtn">&times;</span>
-                <h2 class="modal-title">Cadastro de Chamado</h2>
+                <!-- Header do modal -->
+                <div class="modal-header-custom">
+                    <h2 class="modal-title">
+                        <i class="fas fa-file-plus"></i>
+                        Cadastro de Novo Chamado
+                    </h2>
+                    <button class="close-btn" id="closeModalBtn" type="button" aria-label="Fechar modal">
+                        &times;
+                    </button>
+                </div>
                 
-                <!-- Exibe erros de formulário (será interceptado pelo JavaScript) -->
+                <!-- Exibe erros de formulário -->
                 {% if gestor_form.errors %}
                     <div class="form-errors" style="display: none;">
                         {% for field, errors in gestor_form.errors.items %}
@@ -187,42 +338,50 @@
                     </div>
                 {% endif %}
                 
+                <!-- Formulário -->
                 <form method="post" enctype="multipart/form-data" class="styled-form" id="chamadoForm">
                     {% csrf_token %}
                     
-                    <!-- Renderiza os campos do formulário um por um -->
+                    <!-- Renderiza os campos do formulário -->
                     {% for field in gestor_form %}
                         {% if field.name == 'assinar_como_gestor' %}
-                            <!-- Renderização manual do checkbox futurista -->
+                            <!-- Checkbox futurista melhorado -->
                             <div class="form-group">
                                 <label class="futuristic-checkbox-container">
                                     {{ field }}
                                     <span class="futuristic-checkmark"></span>
                                     <div class="futuristic-checkbox-label">
-                                        <span>{{ field.label }}</span>
+                                        <span class="fw-bold">{{ field.label }}</span>
                                         <span class="futuristic-help-text">{{ field.help_text }}</span>
                                     </div>
                                 </label>
                                 {% if field.errors %}
                                     <div class="errorlist">
                                         {% for error in field.errors %}
-                                            <p>{{ error }}</p>
+                                            <p><i class="fas fa-exclamation-circle"></i>{{ error }}</p>
                                         {% endfor %}
                                     </div>
                                 {% endif %}
                             </div>
                         {% else %}
-                            <!-- Renderização dos outros campos do formulário -->
+                            <!-- Outros campos do formulário -->
                             <div class="form-group">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <label for="{{ field.id_for_label }}" class="form-label">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
                                 {{ field }}
                                 {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    <small class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>{{ field.help_text }}
+                                    </small>
                                 {% endif %}
                                 {% if field.errors %}
                                     <div class="errorlist">
                                         {% for error in field.errors %}
-                                            <p>{{ error }}</p>
+                                            <p><i class="fas fa-exclamation-circle"></i>{{ error }}</p>
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -230,107 +389,138 @@
                         {% endif %}
                     {% endfor %}
 
-                    <button type="submit" name="salvar_gestor" class="btn-submit">Salvar Chamado</button>
+                    <!-- Área de ações -->
+                    <div class="form-actions">
+                        <button type="submit" name="salvar_gestor" class="btn-submit">
+                            <i class="fas fa-save"></i>
+                            Salvar Chamado
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-
-
-    <!-- Antes do fechamento da tag </body>, ou em um bloco de JavaScript -->
+    <!-- Scripts -->
     <script src="{% static 'js/checkbox_futurista.js' %}"></script>
 
     <script>
-        // Script adicional para demonstração de status (opcional)
+        // Script para o checkbox
         document.addEventListener('DOMContentLoaded', function() {
             const checkbox = document.getElementById('assinar_como_gestor');
-            const statusDisplay = document.getElementById('status'); // Se você tiver um elemento para exibir o status
+            const statusDisplay = document.getElementById('status');
             
             if (checkbox && statusDisplay) {
                 checkbox.addEventListener('change', function() {
                     if (this.checked) {
                         statusDisplay.textContent = '✅ Status: Assinado como Gestor - Autorização confirmada!';
-                        statusDisplay.style.color = 'var(--highlight-color)';
+                        statusDisplay.style.color = 'var(--success-color)';
                     } else {
                         statusDisplay.textContent = '⏳ Status: Aguardando assinatura...';
                         statusDisplay.style.color = 'var(--text-color)';
                     }
                 });
-                // Inicializa o status ao carregar a página
+                
+                // Inicializa o status
                 if (checkbox.checked) {
                     statusDisplay.textContent = '✅ Status: Assinado como Gestor - Autorização confirmada!';
-                    statusDisplay.style.color = 'var(--highlight-color)';
+                    statusDisplay.style.color = 'var(--success-color)';
                 } else {
                     statusDisplay.textContent = '⏳ Status: Aguardando assinatura...';
                     statusDisplay.style.color = 'var(--text-color)';
                 }
             }
         });
-    </script>
-    <!-- Scripts existentes -->
-    <script>
-        // Abrir modal
-        document.getElementById('openModalBtn').addEventListener('click', function () {
-            document.getElementById('chamadoModal').style.display = 'block';
-        });
 
-        // Fechar modal
-        document.getElementById('closeModalBtn').addEventListener('click', function () {
-            document.getElementById('chamadoModal').style.display = 'none';
-        });
+        // Scripts do modal - CORRIGIDOS
+        function openModal() {
+            const modal = document.getElementById('chamadoModal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Foca no primeiro campo do formulário
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input, select, textarea');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            }, 300);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('chamadoModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners para abrir modal
+        document.getElementById('openModalBtn').addEventListener('click', openModal);
+        
+        // Para o botão do estado vazio (se existir)
+        const openModalBtnEmpty = document.getElementById('openModalBtnEmpty');
+        if (openModalBtnEmpty) {
+            openModalBtnEmpty.addEventListener('click', openModal);
+        }
+
+        // Event listener para fechar modal
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
 
         // Fechar clicando fora do conteúdo
-        window.onclick = function(event) {
+        window.addEventListener('click', function(event) {
             const modal = document.getElementById('chamadoModal');
-            if (event.target == modal) {
-            modal.style.display = 'none';
+            if (event.target === modal) {
+                closeModal();
             }
-        };
+        });
+
+        // Fechar com ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('chamadoModal');
+                if (modal.style.display === 'block') {
+                    closeModal();
+                }
+            }
+        });
+
+        // Animações de entrada para os cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.chamado-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Validação do formulário
+        document.getElementById('chamadoForm').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.btn-submit');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            submitBtn.disabled = true;
+        });
     </script>
 
-    <!-- NOVO: Script de notificação de erro para o gestor -->
+    <!-- Scripts de notificação -->
     <script src="{% static 'js/gestor-error-notification.js' %}"></script>
     
-    <!-- Script adicional para testar a notificação (remover em produção) -->
+    <!-- Script para testar notificação (remover em produção) -->
     <script>
-        // Função para testar a notificação (pode ser removida em produção)
         function testarNotificacaoErro() {
             showInvalidSignatureError();
         }
         
-        // Adiciona listener para capturar erros de upload de arquivo
+        // Listener para capturar erros
         document.addEventListener('DOMContentLoaded', function() {
-            const fileInputs = document.querySelectorAll('input[type="file"]');
-            fileInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (file) {
-                        // Validações básicas do lado cliente
-                        const maxSize = 5 * 1024 * 1024; // 5MB
-                        if (file.size > maxSize) {
-                            showGestorErrorNotification('Arquivo muito grande. Tamanho máximo: 5MB', 'warning');
-                            this.value = '';
-                            return;
-                        }
-                        
-                        // Verifica extensões permitidas para assinatura
-                        if (this.name.includes('assinatura')) {
-                            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                            if (!allowedTypes.includes(file.type)) {
-                                showGestorErrorNotification('Formato de arquivo inválido para assinatura. Use JPG ou PNG.', 'warning');
-                                this.value = '';
-                                return;
-                            }
-                        }
+            const djangoMessages = document.querySelector('.django-messages');
+            if (djangoMessages) {
+                const errorMessages = djangoMessages.querySelectorAll('.django-message.error');
+                errorMessages.forEach(function(message) {
+                    if (message.textContent.includes('assinatura')) {
+                        showInvalidSignatureError();
                     }
                 });
-            });
+            }
         });
     </script>
-
 </body>
-
 </html>
-
 

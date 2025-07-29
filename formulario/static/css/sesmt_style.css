@@ -249,10 +249,24 @@ h1::after {
 
 /* ===== GRID DE CHAMADOS ===== */
 .chamados-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: var(--space-xl);
-  margin: var(--space-xl) 0;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
+}
+
+/* ===== CARDS DE CHAMADOS ===== */
+.card.chamado-card {
+  width: auto !important;
+  max-width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .chamados-grid.grid-unico {
@@ -265,18 +279,7 @@ h1::after {
   width: 100%;
 }
 
-/* ===== CARDS DE CHAMADOS ===== */
-.chamado-card {
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  transition: var(--transition-base);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
+
 
 .chamado-card::before {
   content: '';

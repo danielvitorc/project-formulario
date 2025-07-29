@@ -11,7 +11,7 @@ def login_view(request):
         if user is not None:
             # Verificar se o usuário tem perfil
             if not hasattr(user, 'profile'):
-                from ..models import UserProfile
+                from ..admin_models import UserProfile
                 UserProfile.objects.create(user=user)
             
             # Verificar se o usuário está bloqueado

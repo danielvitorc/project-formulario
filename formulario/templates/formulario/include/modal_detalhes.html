@@ -1,172 +1,499 @@
-<!-- 🔥 Modal -->
-        <style>
-            .modal-body {
-                font-family: 'Segoe UI', sans-serif;
-                font-size: 15px;
-                color: #333;
-            }
-            .container-detalhes {
-              background: linear-gradient(135deg, var(--bg-color) 0%, #e0e0e0 100%);
-              padding: 30px;
-              border-radius: 15px;
-              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.353);
-              width: 100%;
-            }
-            .modal-content {
-                border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-                animation: fadeIn 0.5s ease-in-out;
-            }
+<!-- Modal de Detalhes Corrigido -->
+<style>
+    /* Estilos específicos para o modal de detalhes */
+    .modal-detalhes {
+        z-index: 2050 !important; /* Maior que outros modais */
+    }
+    
+    .modal-detalhes .modal-dialog {
+        max-width: 95% !important;
+        width: 95% !important;
+        margin: 1rem auto !important;
+    }
+    
+    .modal-detalhes .modal-content {
+        border-radius: 16px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+        animation: modalSlideIn 0.4s ease-out !important;
+        border: none !important;
+        max-height: 95vh !important;
+        overflow: hidden !important;
+    }
+    
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .modal-detalhes .modal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%) !important;
+        color: white !important;
+        border-bottom: none !important;
+        padding: 20px 30px !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+    
+    .modal-detalhes .modal-title {
+        color: white !important;
+        font-size: 1.4rem !important;
+        font-weight: 600 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+    
+    .modal-detalhes .btn-close {
+        background: none !important;
+        border: none !important;
+        color: white !important;
+        opacity: 1 !important;
+        font-size: 1.5rem !important;
+        padding: 8px !important;
+        border-radius: 50% !important;
+        transition: all 0.3s ease !important;
+        width: 35px !important;
+        height: 35px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .modal-detalhes .btn-close:hover {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        transform: rotate(90deg) !important;
+    }
+    
+    .modal-detalhes .modal-body {
+        padding: 0 !important;
+        font-family: 'Inter', 'Segoe UI', sans-serif !important;
+        font-size: 15px !important;
+        color: var(--text-color) !important;
+        max-height: calc(95vh - 140px) !important;
+        overflow-y: auto !important;
+    }
+    
+    .modal-detalhes .modal-body::-webkit-scrollbar {
+        width: 8px !important;
+    }
+    
+    .modal-detalhes .modal-body::-webkit-scrollbar-track {
+        background: #f1f5f9 !important;
+        border-radius: 4px !important;
+    }
+    
+    .modal-detalhes .modal-body::-webkit-scrollbar-thumb {
+        background: var(--primary-color) !important;
+        border-radius: 4px !important;
+    }
+    
+    .modal-detalhes .modal-body::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-color) !important;
+    }
+    
+    .container-detalhes {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        padding: 35px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+    
+    .modal-detalhes .row {
+        margin: 0 !important;
+    }
+    
+    .modal-detalhes .col-md-6,
+    .modal-detalhes .col-md-12 {
+        padding: 8px 15px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .modal-detalhes .mb-3 {
+        background: #ffffff !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .modal-detalhes .mb-3:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .modal-detalhes .mb-3 strong {
+        color: var(--primary-color) !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        display: block !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .modal-detalhes .assinatura-img {
+        max-width: 100% !important;
+        height: auto !important;
+        border: 2px solid var(--border-color) !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+        background: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        margin-top: 8px !important;
+    }
+    
+    .modal-detalhes .modal-footer {
+        background: #f8fafc !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding: 20px 30px !important;
+        border-radius: 0 0 16px 16px !important;
+    }
+    
+    .modal-detalhes .modal-footer .btn {
+        padding: 10px 25px !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .modal-detalhes .modal-footer .btn-secondary {
+        background: linear-gradient(135deg, var(--secondary-color), #9CA3AF) !important;
+        border: none !important;
+        color: white !important;
+    }
+    
+    .modal-detalhes .modal-footer .btn-secondary:hover {
+        background: linear-gradient(135deg, #6B7280, var(--secondary-color)) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .modal-detalhes .modal-dialog {
+            max-width: 98% !important;
+            width: 98% !important;
+            margin: 0.5rem auto !important;
+        }
+        
+        .modal-detalhes .modal-content {
+            max-height: 98vh !important;
+        }
+        
+        .modal-detalhes .modal-body {
+            max-height: calc(98vh - 120px) !important;
+        }
+        
+        .container-detalhes {
+            padding: 20px !important;
+        }
+        
+        .modal-detalhes .modal-header {
+            padding: 15px 20px !important;
+        }
+        
+        .modal-detalhes .modal-footer {
+            padding: 15px 20px !important;
+        }
+        
+        .modal-detalhes .modal-title {
+            font-size: 1.2rem !important;
+        }
+        
+        .modal-detalhes .col-md-6,
+        .modal-detalhes .col-md-12 {
+            padding: 5px 10px !important;
+        }
+    }
+    
+    /* Garantir que o backdrop funcione */
+    .modal-detalhes.show {
+        display: block !important;
+    }
+    
+    .modal-backdrop.show {
+        opacity: 0.7 !important;
+        z-index: 2040 !important;
+    }
+    
+    /* Animação de saída */
+    .modal-detalhes.fade:not(.show) .modal-content {
+        animation: modalSlideOut 0.3s ease-in !important;
+    }
+    
+    @keyframes modalSlideOut {
+        from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.95);
+        }
+    }
+</style>
 
-            .modal-header {
-                background-color: #f8f9fa;
-                border-bottom: 1px solid #ddd;
-            }
-
-            .modal-footer {
-                background-color: #f8f9fa;
-                border-top: 1px solid #ddd;
-            }
-
-            .assinatura-img {
-                max-width: 100%;
-                height: auto;
-                border: 1px solid #ddd;
-                padding: 5px;
-                border-radius: 5px;
-                background: white;
-            }
-
-            .mb-3 {
-                padding: 6px 0;
-            }
-
-            @keyframes fadeIn {
-                from {
-                opacity: 0;
-                transform: scale(0.97);
-                }
-                to {
-                opacity: 1;
-                transform: scale(1);
-                }
-            }
-            .modal-custom-width {
-                max-width: 90%; /* ou ex: 1200px */
-                width: 90%;
-            }
-
-        </style>
-
-        <div class="modal fade" id="modal{{ chamado.id }}" tabindex="-1" aria-labelledby="modalLabel{{ chamado.id }}" aria-hidden="true">
-        <div class="modal-dialog modal-custom-width">
-
-            <div class="modal-content">
+<div class="modal fade modal-detalhes" id="modal{{ chamado.id }}" tabindex="-1" 
+     aria-labelledby="modalLabel{{ chamado.id }}" aria-hidden="true" 
+     data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel{{ chamado.id }}">Detalhes do Chamado - {{ chamado.nome_colaborador }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <h5 class="modal-title" id="modalLabel{{ chamado.id }}">
+                    <i class="fas fa-file-alt"></i>
+                    Detalhes do Chamado - {{ chamado.nome_colaborador }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="container-detalhes">
                     <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <strong>Matrícula:</strong> {{ chamado.matricula }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Função:</strong> {{ chamado.funcao }}
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-id-card me-2"></i>Matrícula:</strong>
+                                {{ chamado.matricula }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-briefcase me-2"></i>Função:</strong>
+                                {{ chamado.funcao }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <strong>Departamento:</strong> {{ chamado.depto }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Gestor Imediato:</strong> {{ chamado.gestor_imediato }}
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-building me-2"></i>Departamento:</strong>
+                                {{ chamado.depto }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-user-tie me-2"></i>Gestor Imediato:</strong>
+                                {{ chamado.gestor_imediato }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <strong>Tipo de Exposição:</strong> {{ chamado.tipo_exposicao }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Natureza do Risco:</strong> {{ chamado.natureza_risco }}
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-exclamation-triangle me-2"></i>Tipo de Exposição:</strong>
+                                {{ chamado.tipo_exposicao }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-shield-alt me-2"></i>Natureza do Risco:</strong>
+                                {{ chamado.natureza_risco }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-12 mb-3">
-                        <strong>Descrição das Atividades:</strong> {{ chamado.descricao_atividades }}
-                    </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-list-alt me-2"></i>Descrição das Atividades:</strong>
+                                {{ chamado.descricao_atividades }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <strong>Atividade:</strong> {{ chamado.atividade }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Locais de Atuação:</strong> {{ chamado.locais_atuaçao }}
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-tasks me-2"></i>Atividade:</strong>
+                                {{ chamado.atividade }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-map-marker-alt me-2"></i>Locais de Atuação:</strong>
+                                {{ chamado.locais_atuaçao }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <strong>Frequência:</strong> {{ chamado.frequencia }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Data Autorização Gestor:</strong> {{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}
-                    </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-clock me-2"></i>Frequência:</strong>
+                                {{ chamado.frequencia }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-calendar-check me-2"></i>Data Autorização Gestor:</strong>
+                                {{ chamado.data_autorizacao_gestor|date:"d/m/Y" }}
+                            </div>
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <strong>Responsável:</strong> {{ chamado.responsavel }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>Aprovação do Diretor:</strong>
-                        {% if chamado.diretor_aprovacao == True %}
-                        Aprovado
-                        {% elif chamado.diretor_aprovacao == None %}
-                        Pendente
-                        {% else %}
-                        Reprovado                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-user-check me-2"></i>Responsável:</strong>
+                                {{ chamado.responsavel }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-user-tie me-2"></i>Aprovação do Diretor:</strong>
+                                {% if chamado.diretor_aprovacao == True %}
+                                    <span class="badge bg-success ms-2">
+                                        <i class="fas fa-check me-1"></i>Aprovado
+                                    </span>
+                                {% elif chamado.diretor_aprovacao == None %}
+                                    <span class="badge bg-warning ms-2">
+                                        <i class="fas fa-hourglass-half me-1"></i>Pendente
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger ms-2">
+                                        <i class="fas fa-times me-1"></i>Reprovado
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Seção SESMT -->
+                        <div class="col-md-12">
+                            <h6 class="text-primary mt-4 mb-3">
+                                <i class="fas fa-user-md me-2"></i>Informações SESMT
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-heartbeat me-2"></i>ASO:</strong>
+                                {{ chamado.aso|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-hard-hat me-2"></i>EPI/EPC:</strong>
+                                {{ chamado.epi_epc|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-bolt me-2"></i>Curso NR10:</strong>
+                                {{ chamado.curso_nr10|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-tools me-2"></i>Curso SEP:</strong>
+                                {{ chamado.curso_sep|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-hard-hat me-2"></i>Curso NR35:</strong>
+                                {{ chamado.curso_nr35|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-sticky-note me-2"></i>Observações de Cursos:</strong>
+                                {{ chamado.cursos_observacoes|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-calendar-check me-2"></i>Data Autorização SESMT:</strong>
+                                {{ chamado.data_autorizacao_sesmt|default:"Ainda não preenchido"|date:"d/m/Y" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-user-md me-2"></i>Nome SESMT:</strong>
+                                {{ chamado.nome_sesmt|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+
+                        <!-- Seção RH/DP -->
+                        <div class="col-md-12">
+                            <h6 class="text-primary mt-4 mb-3">
+                                <i class="fas fa-users me-2"></i>Informações RH/DP
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-clipboard-list me-2"></i>Procedimento RH/DP:</strong>
+                                {{ chamado.procedimento_rh_dp|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-calendar-check me-2"></i>Data Autorização RH/DP:</strong>
+                                {{ chamado.data_autorizacao_rh_dp|default:"Ainda não preenchido"|date:"d/m/Y" }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <strong><i class="fas fa-user me-2"></i>Nome RH/DP:</strong>
+                                {{ chamado.nome_rh_dp|default:"Ainda não preenchido" }}
+                            </div>
+                        </div>
+
+                        <!-- Seção de Assinaturas -->
+                        {% if chamado.imagem_assinatura_gestor or chamado.imagem_assinatura_diretor or chamado.imagem_assinatura_sesmt or chamado.imagem_assinatura_rh_dp %}
+                        <div class="col-md-12">
+                            <h6 class="text-primary mt-4 mb-3">
+                                <i class="fas fa-signature me-2"></i>Assinaturas
+                            </h6>
+                        </div>
+                        
+                        {% if chamado.imagem_assinatura_gestor %}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong><i class="fas fa-user-tie me-2"></i>Assinatura Gestor:</strong>
+                                    <img src="{{ chamado.imagem_assinatura_gestor.url }}" class="assinatura-img">
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if chamado.imagem_assinatura_diretor %}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong><i class="fas fa-crown me-2"></i>Assinatura Diretor:</strong>
+                                    <img src="{{ chamado.imagem_assinatura_diretor.url }}" class="assinatura-img">
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if chamado.imagem_assinatura_sesmt %}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong><i class="fas fa-user-md me-2"></i>Assinatura SESMT:</strong>
+                                    <img src="{{ chamado.imagem_assinatura_sesmt.url }}" class="assinatura-img">
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if chamado.imagem_assinatura_rh_dp %}
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong><i class="fas fa-users me-2"></i>Assinatura RH/DP:</strong>
+                                    <img src="{{ chamado.imagem_assinatura_rh_dp.url }}" class="assinatura-img">
+                                </div>
+                            </div>
+                        {% endif %}
                         {% endif %}
                     </div>
-
-                    <!-- Repetir para outros campos -->
-                    <div class="col-md-6 mb-3"><strong>ASO:</strong> {{ chamado.aso|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>EPI/EPC:</strong> {{ chamado.epi_epc|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Curso NR10:</strong> {{ chamado.curso_nr10|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Curso SEP:</strong> {{ chamado.curso_sep|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Curso NR35:</strong> {{ chamado.curso_nr35|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Observações de Cursos:</strong> {{ chamado.cursos_observacoes|default:"Ainda não preenchido" }}</div>
-
-                    <div class="col-md-6 mb-3"><strong>Data Autorização SESMT:</strong> {{ chamado.data_autorizacao_sesmt|default:"Ainda não preenchido"|date:"d/m/Y" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Nome SESMT:</strong> {{ chamado.nome_sesmt|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Procedimento RH/DP:</strong> {{ chamado.procedimento_rh_dp|default:"Ainda não preenchido" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Data Autorização RH/DP:</strong> {{ chamado.data_autorizacao_rh_dp|default:"Ainda não preenchido"|date:"d/m/Y" }}</div>
-                    <div class="col-md-6 mb-3"><strong>Nome RH/DP:</strong> {{ chamado.nome_rh_dp|default:"Ainda não preenchido" }}</div>
-
-                    <!-- Assinaturas -->
-                    {% if chamado.imagem_assinatura_gestor %}
-                        <div class="col-md-6 mb-3">
-                        <strong>Assinatura Gestor:</strong><br>
-                        <img src="{{ chamado.imagem_assinatura_gestor.url }}" class="assinatura-img">
-                        </div>
-                    {% endif %}
-                    {% if chamado.imagem_assinatura_diretor %}
-                        <div class="col-md-6 mb-3">
-                        <strong>Assinatura Diretor:</strong><br>
-                        <img src="{{ chamado.imagem_assinatura_diretor.url }}" class="assinatura-img">
-                        </div>
-                    {% endif %}
-                    {% if chamado.imagem_assinatura_sesmt %}
-                        <div class="col-md-6 mb-3">
-                        <strong>Assinatura SESMT:</strong><br>
-                        <img src="{{ chamado.imagem_assinatura_sesmt.url }}" class="assinatura-img">
-                        </div>
-                    {% endif %}
-                    {% if chamado.imagem_assinatura_rh_dp %}
-                        <div class="col-md-6 mb-3">
-                        <strong>Assinatura RH/DP:</strong><br>
-                        <img src="{{ chamado.imagem_assinatura_rh_dp.url }}" class="assinatura-img">
-                        </div>
-                    {% endif %}
-                    </div>
                 </div>
-                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Fechar
+                </button>
             </div>
         </div>
-        </div>
+    </div>
+</div>
+

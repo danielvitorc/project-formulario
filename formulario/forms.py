@@ -8,7 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from .models import CustomUser
 from django.forms.widgets import FileInput
-
+import os
+from django.conf import settings
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

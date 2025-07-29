@@ -66,6 +66,7 @@
                             <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
                                 {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
                             </article>
+                            {% include 'formulario/include/modal_detalhes.html' with chamado=chamado %}
                         {% endfor %}
                     </div>
                 {% else %}
@@ -96,6 +97,7 @@
                             <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
                                 {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
                             </article>
+                            {% include 'formulario/include/modal_detalhes.html' with chamado=chamado %}
                         {% endfor %}
                     </div>
                 {% else %}
@@ -126,6 +128,7 @@
                             <article class="chamado-card" role="gridcell" aria-labelledby="chamado-{{ chamado.id }}-title">
                                 {% include 'formulario/include/chamado_card.html' with chamado=chamado %}
                             </article>
+                            {% include 'formulario/include/modal_detalhes.html' with chamado=chamado %}
                         {% endfor %}
                     </div>
                 {% else %}
