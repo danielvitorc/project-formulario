@@ -136,18 +136,43 @@
                                 <div class="status-item mb-3">
                                     <h6 class="fw-bold text-primary mb-2">
                                         <i class="fas fa-file-pdf me-2"></i>
-                                        Documento de Avaliação GPM
+                                        {% if chamado.upload_gpm %}
+                                            Documento de Avaliação GPM
+                                        {% elif chamado.relatorio_gestor %}
+                                            Relatório de Atividade Perigosa - Fora do Sistema GPM
+                                        {% else %}
+                                            Documento de Avaliação GPM/RAP-GPM
+                                        {% endif %}
                                     </h6>
                                     <div class="status-content">
                                         {% if chamado.upload_gpm %}
                                             <a href="{{ chamado.upload_gpm.url }}" target="_blank" 
-                                               class="btn btn-outline-primary btn-sm">
+                                            class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-download me-1"></i>Baixar Documento
                                             </a>
+
+                                        {% elif chamado.relatorio_gestor %}
+                                            <a href="{{ chamado.relatorio_gestor.url }}" target="_blank" 
+                                            class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-download me-1"></i>Baixar Documento
+                                            </a>
+
+                                        {% elif request.user.role == "gestor" and chamado.assinatura_rh_dp %}
+                                            <div class="alert alert-warning mt-2">
+                                                ⚠️ Documento GPM não encontrado. Por favor, envie um relatório ou comprovante substituto.
+                                            </div>
+                                            <form method="post" enctype="multipart/form-data" action="{% url 'upload_relatorio_gestor' chamado.pk %}">
+                                                {% csrf_token %}
+                                                <div class="input-group mt-2">
+                                                    <input type="file" name="relatorio_gestor" class="form-control" required>
+                                                    <button class="btn btn-primary" type="submit">Enviar documento</button>
+                                                </div>
+                                            </form>
+
                                         {% else %}
                                             <span class="text-muted fst-italic">
                                                 <i class="fas fa-hourglass-half me-1"></i>
-                                                Aguardando envio do documento
+                                                Aguardando envio do documento pelo RH/DP
                                             </span>
                                         {% endif %}
                                     </div>
@@ -233,7 +258,7 @@
                             </div>
 
                             <!-- Botão Ciente (se necessário) -->
-                            {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp %}
+                           {% if not chamado.diretor_aprovacao or chamado.upload_gpm or chamado.relatorio_gestor and request.user.role == 'gestor' and chamado.assinatura_rh_dp %}
                                 <form method="post" action="{% url 'gestor_ciente' chamado.pk %}" class="mt-3">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-outline-secondary w-100">
@@ -241,6 +266,7 @@
                                     </button>
                                 </form>
                             {% endif %}
+
                         </div>
                     </div>
                     

@@ -308,3 +308,325 @@ document.addEventListener('DOMContentLoaded', function() {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CompactFuturisticCheckbox;
 }
+
+/**
+ * Sistema de Notificação Moderno
+ * Autor: Manus AI
+ * Versão: 1.0.0
+ */
+
+class NotificationSystem {
+    constructor(options = {}) {
+        this.options = {
+            position: 'top-right', // top-right, top-left, top-center, bottom-right, bottom-left, bottom-center
+            maxNotifications: 5,
+            defaultDuration: 5000,
+            ...options
+        };
+        
+        this.notifications = [];
+        this.init();
+    }
+
+    // Inicializar o sistema
+    init() {
+        this.createContainer();
+        this.createOverlay();
+        this.bindEvents();
+    }
+
+    // Criar container das notificações
+    createContainer() {
+        this.container = document.createElement('div');
+        this.container.className = `notification-container ${this.options.position}`;
+        this.container.id = 'notificationContainer';
+        document.body.appendChild(this.container);
+    }
+
+    // Criar overlay para notificações centrais
+    createOverlay() {
+        this.overlay = document.createElement('div');
+        this.overlay.className = 'notification-overlay';
+        this.overlay.id = 'notificationOverlay';
+        
+        this.modal = document.createElement('div');
+        this.modal.className = 'notification-modal';
+        this.modal.id = 'notificationModal';
+        
+        this.modal.innerHTML = `
+            <div class="notification-header">
+                <div class="notification-icon" id="modalIcon">!</div>
+                <div class="notification-title" id="modalTitle">Título</div>
+                <button class="notification-close" onclick="notificationSystem.closeCentral()">×</button>
+            </div>
+            <div class="notification-content" id="modalContent">Conteúdo da notificação</div>
+        `;
+        
+        this.overlay.appendChild(this.modal);
+        document.body.appendChild(this.overlay);
+    }
+
+    // Vincular eventos
+    bindEvents() {
+        // Fechar modal ao clicar no overlay
+        this.overlay.addEventListener('click', (e) => {
+            if (e.target === this.overlay) {
+                this.closeCentral();
+            }
+        });
+
+        // Suporte a tecla ESC para fechar modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeCentral();
+            }
+        });
+    }
+
+    // Método principal para mostrar notificações no canto
+    show(type = 'info', title = 'Notificação', message = '', duration = null) {
+        duration = duration !== null ? duration : this.options.defaultDuration;
+        
+        // Remove notificações antigas se exceder o limite
+        if (this.notifications.length >= this.options.maxNotifications) {
+            this.removeOldest();
+        }
+
+        const notification = this.createNotification(type, title, message, duration);
+        this.container.appendChild(notification);
+        this.notifications.push(notification);
+
+        // Trigger da animação
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        // Auto-remove se duration > 0
+        if (duration > 0) {
+            this.startProgressBar(notification, duration);
+            setTimeout(() => {
+                this.remove(notification);
+            }, duration);
+        }
+
+        return notification;
+    }
+
+    // Criar elemento de notificação
+    createNotification(type, title, message, duration) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '!',
+            info: 'i'
+        };
+
+        notification.innerHTML = `
+            <div class="notification-header">
+                <div class="notification-icon">${icons[type] || 'i'}</div>
+                <div class="notification-title">${title}</div>
+                <button class="notification-close">×</button>
+            </div>
+            <div class="notification-content">${message}</div>
+            ${duration > 0 ? '<div class="notification-progress"><div class="notification-progress-bar"></div></div>' : ''}
+        `;
+
+        // Adicionar evento de fechar
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.addEventListener('click', () => {
+            this.remove(notification);
+        });
+
+        // Adicionar eventos de hover
+        notification.addEventListener('mouseenter', () => {
+            notification.classList.add('pulse');
+        });
+
+        notification.addEventListener('mouseleave', () => {
+            notification.classList.remove('pulse');
+        });
+
+        return notification;
+    }
+
+    // Iniciar barra de progresso
+    startProgressBar(notification, duration) {
+        const progressBar = notification.querySelector('.notification-progress-bar');
+        if (progressBar) {
+            setTimeout(() => {
+                progressBar.style.transform = 'translateX(0)';
+                progressBar.style.transition = `transform ${duration}ms linear`;
+            }, 100);
+        }
+    }
+
+    // Remover notificação
+    remove(notification) {
+        if (!notification || !notification.parentNode) return;
+
+        notification.classList.add('hide');
+        notification.classList.add('shake');
+
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+                this.notifications = this.notifications.filter(n => n !== notification);
+            }
+        }, 400);
+    }
+
+    // Remover a mais antiga
+    removeOldest() {
+        if (this.notifications.length > 0) {
+            this.remove(this.notifications[0]);
+        }
+    }
+
+    // Mostrar notificação central (modal-style)
+    showCentral(type = 'info', title = 'Notificação', message = '', duration = 5000) {
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '!',
+            info: 'i'
+        };
+
+        // Atualizar conteúdo
+        modalIcon.textContent = icons[type] || 'i';
+        modalIcon.className = `notification-icon`;
+        modalTitle.textContent = title;
+        modalContent.textContent = message;
+
+        // Aplicar classe do tipo
+        this.modal.className = `notification-modal ${type}`;
+
+        // Mostrar overlay
+        this.overlay.classList.add('show');
+
+        // Auto-fechar se duration > 0
+        if (duration > 0) {
+            setTimeout(() => {
+                this.closeCentral();
+            }, duration);
+        }
+    }
+
+    // Fechar notificação central
+    closeCentral() {
+        this.overlay.classList.remove('show');
+    }
+
+    // Limpar todas as notificações
+    clearAll() {
+        this.notifications.forEach(notification => {
+            this.remove(notification);
+        });
+    }
+
+    // Alterar posição do container
+    setPosition(position) {
+        this.options.position = position;
+        this.container.className = `notification-container ${position}`;
+    }
+
+    // Métodos de conveniência
+    success(title, message, duration) {
+        return this.show('success', title, message, duration);
+    }
+
+    error(title, message, duration) {
+        return this.show('error', title, message, duration);
+    }
+
+    warning(title, message, duration) {
+        return this.show('warning', title, message, duration);
+    }
+
+    info(title, message, duration) {
+        return this.show('info', title, message, duration);
+    }
+}
+
+// Instância global (será criada quando o DOM estiver pronto)
+let notificationSystem;
+
+// Inicializar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    // Criar instância global do sistema de notificação
+    notificationSystem = new NotificationSystem({
+        position: 'top-right',
+        maxNotifications: 5,
+        defaultDuration: 5000
+    });
+});
+
+// Funções globais de conveniência para compatibilidade
+function showNotification(type, title, message, duration = 5000) {
+    if (!notificationSystem) {
+        console.error('Sistema de notificação não foi inicializado ainda.');
+        return;
+    }
+    return notificationSystem.show(type, title, message, duration);
+}
+
+function showCentralNotification(type, title, message, duration = 5000) {
+    if (!notificationSystem) {
+        console.error('Sistema de notificação não foi inicializado ainda.');
+        return;
+    }
+    return notificationSystem.showCentral(type, title, message, duration);
+}
+
+function closeCentralNotification() {
+    if (!notificationSystem) {
+        console.error('Sistema de notificação não foi inicializado ainda.');
+        return;
+    }
+    notificationSystem.closeCentral();
+}
+
+// Funções específicas para cada tipo
+function showSuccess(title, message, duration) {
+    return showNotification('success', title, message, duration);
+}
+
+function showError(title, message, duration) {
+    return showNotification('error', title, message, duration);
+}
+
+function showWarning(title, message, duration) {
+    return showNotification('warning', title, message, duration);
+}
+
+function showInfo(title, message, duration) {
+    return showNotification('info', title, message, duration);
+}
+
+// Integração com Django Messages
+function showDjangoMessages() {
+    // Esta função pode ser chamada para mostrar mensagens do Django
+    // Exemplo de uso no template Django:
+    /*
+    {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% for message in messages %}
+                    showNotification('{{ message.tags }}', 'Atenção', '{{ message|escapejs }}');
+                {% endfor %}
+            });
+        </script>
+    {% endif %}
+    */
+}
+
+// Exportar para uso em módulos (se necessário)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = NotificationSystem;
+}

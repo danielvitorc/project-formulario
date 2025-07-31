@@ -74,10 +74,24 @@
                             <div class="status-card p-4 rounded-4 bg-light mb-3">
                                 <!-- Status GPM -->
                                 <div class="status-item mb-3">
-                                    <h6 class="fw-bold text-primary mb-2"><i class="fas fa-file-pdf me-2"></i>Doc. Avaliação GPM</h6>
+                                    <h6 class="fw-bold text-primary mb-2"><i class="fas fa-file-pdf me-2"></i>
+                                        {% if chamado.upload_gpm %}
+                                            Documento de Avaliação GPM
+                                        {% elif chamado.relatorio_gestor %}
+                                            Relatório de Atividade Perigosa - Fora do Sistema GPM
+                                        {% else %}
+                                            Documento de Avaliação GPM/RAP-GPM
+                                        {% endif %}</h6>
                                     <div class="status-content">
                                         {% if chamado.upload_gpm %}
                                             <a href="{{ chamado.upload_gpm.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-download me-1"></i>Baixar Documento
+                                            </a>
+                                        {% elif chamado.assinatura_rh_dp and not chamado.upload_gpm and not chamado.relatorio_gestor %}
+                                            <span class="alert alert-warning mt-2">Aguardando envio de RAP</span>
+                                        {% elif chamado.relatorio_gestor %}
+                                            <a href="{{ chamado.relatorio_gestor.url }}" target="_blank" 
+                                            class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-download me-1"></i>Baixar Documento
                                             </a>
                                         {% else %}

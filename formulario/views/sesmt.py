@@ -18,7 +18,8 @@ def sesmt_view(request):
 
     # 3️⃣ Chamados com RH/DP preenchido
     rh_preenchidos = Chamado.objects.filter(
-        assinatura_rh_dp__isnull=False
+        assinatura_rh_dp__isnull=False,
+        sesmt_ciente = False
     ).order_by('-id')
 
     return render(request, 'formulario/sesmt.html', {
@@ -66,5 +67,5 @@ def lista_chamados_backup(request):
 
     return render(request, 'formulario/lista_backup.html', {
         'chamados_backup': chamados_backup,
-        'matricula_query': matricula_query  # envia de volta para manter no input
+        'matricula_query': matricula_query  
     })

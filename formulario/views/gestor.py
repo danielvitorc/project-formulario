@@ -6,10 +6,8 @@ from ..models import Chamado
 from docx import Document
 from django.contrib import messages
 
-
 @login_required
 def gestor_view(request):
-
     chamados = Chamado.objects.filter(
         assinatura_sesmt__isnull=False, 
         usuario_gestor=request.user,
@@ -81,6 +79,19 @@ def gestor_ciente(request, pk):
     chamado.gestor_ciente = True
     chamado.save()
     return redirect('gestor_view')  # Ou onde quiser redirecionar
+
+@login_required
+def upload_relatorio_gestor(request, pk):
+    chamado = get_object_or_404(Chamado, pk=pk)
+
+    if request.method == 'POST' and 'relatorio_gestor' in request.FILES:
+        chamado.relatorio_gestor = request.FILES['relatorio_gestor']
+        chamado.save()
+        messages.success(request, 'Relatório enviado com sucesso.')
+    else:
+        messages.error(request, 'Erro ao enviar o relatório.')
+
+    return redirect('gestor_view') 
 
 @require_POST
 def excluir_chamado(request, id):

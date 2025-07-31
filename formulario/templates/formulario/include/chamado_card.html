@@ -10,14 +10,36 @@
         <!-- Este é o card interno com fundo claro que você estilizou -->
         <div class="card p-3 shadow-sm rounded-3 bg-light mb-3">
             <div class="mb-2">
-                <h6 class="fw-bold text-primary mb-1">📄 Doc. Avaliação GPM:</h6>
-                {% if chamado.upload_gpm %}
-                    <a href="{{ chamado.upload_gpm.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-download"></i> Download
-                    </a>
-                {% else %}
-                    <span class="text-muted fst-italic">Aguardando envio</span>
-                {% endif %}
+                <h6 class="fw-bold text-primary mb-1">📄 
+                    {% if chamado.upload_gpm %}
+                        Documento de Avaliação GPM
+                    {% elif chamado.relatorio_gestor %}
+                        Relatório de Atividade Perigosa - Fora do Sistema GPM
+                    {% else %}
+                        Documento de Avaliação GPM/RAP-GPM
+                    {% endif %}</h6>
+                    {% if chamado.upload_gpm %}
+                        <a href="{{ chamado.upload_gpm.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-download"></i> Download
+                        </a>
+                    {% elif chamado.relatorio_gestor %}
+                        <a href="{{ chamado.relatorio_gestor.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-download me-1"></i>Baixar Documento
+                        </a>
+                    {% else %}
+                        {% if not chamado.upload_gpm and request.user.role == "gestor" and chamado.assinatura_rh_dp %}
+                            <div class="alert alert-warning mt-2">
+                                ⚠️ Documento GPM não encontrado. Por favor, envie um relatório ou comprovante substituto.
+                            </div>
+                            <form method="post" enctype="multipart/form-data" action="{% url 'upload_relatorio_gestor' chamado.pk %}">
+                                {% csrf_token %}
+                                <div class="input-group mt-2">
+                                    <input type="file" name="relatorio_gestor" class="form-control" required>
+                                    <button class="btn btn-primary" type="submit">Enviar documento</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    {% endif %}
             </div>
 
             <div class="mb-2">
@@ -46,7 +68,10 @@
                 <h6 class="fw-bold text-primary mb-1">🧾 Validação RH/DP:</h6>
                 {% if chamado.diretor_aprovacao == False %}
                     <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Reprovado</span>
-                {% elif chamado.assinatura_rh_dp %}
+                {% elif chamado.assinatura_rh_dp and not chamado.upload_gpm and not chamado.relatorio_gestor %}
+                    <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
+                    <span class="badge bg-warning">Pendência Documento GPM/RAP</span>
+                {% elif chamado.assinatura_rh_dp and chamado.upload_gpm or chamado.relatorio_gestor%}
                     <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Aprovado</span>
                 {% else %}
                     <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendente</span>
@@ -60,7 +85,8 @@
             {% endif %}
         </div>
 
-        {% if chamado.diretor_aprovacao == False or chamado.assinatura_rh_dp %}
+        <!-- Botão Ciente -->
+        {% if not chamado.diretor_aprovacao or chamado.upload_gpm or chamado.relatorio_gestor and request.user.role == 'sesmt' and chamado.assinatura_rh_dp %}
             <form method="post" action="{% url 'sesmt_ciente' chamado.pk %}">
                 {% csrf_token %}
                 <button type="submit">Ciente</button>

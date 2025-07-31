@@ -80,6 +80,8 @@ class Chamado(models.Model):
     sesmt_ciente =  models.BooleanField(default=False, null=True, blank=True)
     rh_dp_ciente =  models.BooleanField(default=False, null=True, blank=True)
 
+    relatorio_gestor = models.FileField(upload_to="registros/relatorio", null=True, blank=True)
+
     def __str__(self):
         return f"{self.nome_colaborador} - {self.responsavel}"
     
@@ -190,6 +192,8 @@ class ChamadoBackup(models.Model):
     gestor_ciente =  models.BooleanField(default=False, null=True, blank=True)
     sesmt_ciente =  models.BooleanField(default=False, null=True, blank=True)
     rh_dp_ciente =  models.BooleanField(default=False, null=True, blank=True)
+
+    relatorio_gestor = models.FileField(upload_to="registros/relatorio", null=True, blank=True)
 
     # Campos adicionais para controle do backup
     motivo_exclusao = models.TextField(null=True, blank=True)  # Novo campo

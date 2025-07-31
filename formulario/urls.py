@@ -6,6 +6,7 @@ urlpatterns = [
     path('logout/', auth.logout_view, name='logout'),
     path('gestor/', gestor.gestor_view, name='gestor_view'),
     path('registros-gestor/', gestor.registros_gestor, name='registros_gestor'),
+    path('chamado/<int:pk>/upload-relatorio/', gestor.upload_relatorio_gestor, name='upload_relatorio_gestor'),
     path('diretor/', diretor.diretor_view, name='diretor_view'),
     path('registros-diretor/', diretor.registros_diretor, name='registros_diretor'),
     path('sesmt/', sesmt.sesmt_view, name='sesmt_view'),

@@ -8,7 +8,7 @@ from ..models import Chamado
 
 @login_required
 def rh_dp_view(request):
-    chamados = Chamado.objects.filter(assinatura_diretor__isnull=False).order_by('-id')
+    chamados = Chamado.objects.filter(assinatura_diretor__isnull=False, rh_dp_ciente = False).order_by('-id')
 
     chamados_pendentes = Chamado.objects.filter(
     Q(aso='Não apto') |
